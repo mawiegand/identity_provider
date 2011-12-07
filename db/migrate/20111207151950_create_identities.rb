@@ -1,6 +1,6 @@
-class CreateIndentities < ActiveRecord::Migration
+class CreateIdentities < ActiveRecord::Migration
   def change
-    create_table :indentities do |t|
+    create_table :identities do |t|
       t.string :name
       t.string :email
       t.string :password

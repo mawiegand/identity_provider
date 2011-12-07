@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(:version => 20111207151950) do
 
-  create_table "indentities", :force => true do |t|
+  create_table "identities", :force => true do |t|
     t.string   "name"
     t.string   "email"
     t.string   "password"

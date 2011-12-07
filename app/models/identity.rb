@@ -1,8 +1,6 @@
-class Indentity < ActiveRecord::Base
-end
 # == Schema Information
 #
-# Table name: indentities
+# Table name: identities
 #
 #  id         :integer         not null, primary key
 #  name       :string(255)
@@ -12,4 +10,8 @@ end
 #  created_at :datetime
 #  updated_at :datetime
 #
+
+class Identity < ActiveRecord::Base
+  attr_accessible :name :email :password
+end
 
