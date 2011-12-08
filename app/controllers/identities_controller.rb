@@ -13,6 +13,7 @@ class IdentitiesController < ApplicationController
   def create
     @identity = Identity.new(params[:identity])
     if @identity.save
+      flash[:success] = "Welcome #{@identity.name}!"
       redirect_to @identity
     else 
       @title = "Register"
