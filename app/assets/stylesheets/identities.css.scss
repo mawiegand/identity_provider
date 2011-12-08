@@ -2,7 +2,49 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+body {
+  font-family: Helvetica, Arial, Lucida;
+  font-size: 12pt;
+  color: #333;
+}
+
+a {
+  color: #333;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.round {
+  border-radius: 8px;
+  -moz-border-radius: 8px;
+}
+
 .gravatar-float {
   float: left;
-  padding-right: 5px;
+  margin-right: 5px;
+  border-width: 1px;
+  broder-color: #333;
+  border-style: solid;
+  padding: 2px;
+  background-color: #FFF;
+}
+
+
+
+.identity-badge {
+  border-width: 4px;
+  border-color: #FA0;
+  border-style: solid;
+  padding: 5px;
+  width: 200px;
+  background-color: #FFEEDD;
+  margin: 5px;
+  float: left;
+}
+
+.container {
+  overflow: hidden;
 }

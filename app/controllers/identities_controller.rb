@@ -3,6 +3,11 @@ class IdentitiesController < ApplicationController
   def show
     @identity = Identity.find(params[:id])
     @title = @identity.name
+    
+    respond_to do |format|
+      format.html
+      format.json { render :json => @identity }
+    end
   end
   
   def new
