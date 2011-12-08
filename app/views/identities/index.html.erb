@@ -1,0 +1,7 @@
+<% @identities.each do |identity| %>
+  <p>
+    <%= gravatar_for identity, 'gravatar-float', :size => 35 %>
+    <%= identity.id %>: <br />
+    <%= link_to "#{identity.name}", identity %>
+  </p>
+<% end %>
