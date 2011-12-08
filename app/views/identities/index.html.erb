@@ -1,13 +1,17 @@
+<%= will_paginate %>
+
 <div class="container">
   
-  <% @identities.sort! { |a,b| a.name.downcase <=> b.name.downcase }.each do |identity| %>
+  <% @identities.each do |identity| %>
 
     <div class="round identity-badge">
-      <%= gravatar_for identity, 'gravatar-float', :size => 30 %>
-      <%= identity.id %>: <br />
-      <%= link_to "#{identity.name}", identity %>
+      <%= link_to (gravatar_for identity, 'gravatar-float', :size => 30), identity %>
+      <div class="topline"><span class="name"><%= link_to "#{identity.name}", identity %></span><span class="id">#<%= identity.id %></span> </div>
+      <div class="email"><%= identity.email %></div>
     </div>
 
   <% end %>
 
 </div>  
+
+<%= will_paginate %>
