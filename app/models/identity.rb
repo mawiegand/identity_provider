@@ -40,6 +40,12 @@ class Identity < ActiveRecord::Base
     return identity if identity.has_password?(submittedPassword)
   end
   
+  def self.authenticate_with_salt(id, cookie_salt)
+    identity = find_by_id(id)
+    return nil if identity.nil?
+    return identity if identity.salt == cookie_salt
+  end
+  
   private
   
     def set_encrypted_password
