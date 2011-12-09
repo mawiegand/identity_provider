@@ -1,4 +1,6 @@
 IdentityProvider::Application.routes.draw do
+  get "sessions/new"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -13,6 +15,10 @@ IdentityProvider::Application.routes.draw do
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
   resources :identities
+  resources :sessions, :only => [:new, :create, :destroy]
+  
+  match '/signin',  :to => 'sessions#new'
+  match '/signout', :to => 'sessions#destroy'
 
   # Sample resource route with options:
   #   resources :products do
