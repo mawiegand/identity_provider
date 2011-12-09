@@ -1,5 +1,7 @@
 class IdentitiesController < ApplicationController
 
+  before_filter :authenticate, :only => [:index]
+
   def show
     @identity = Identity.find(params[:id])
     @title = @identity.name
@@ -31,5 +33,11 @@ class IdentitiesController < ApplicationController
     @identities = Identity.paginate(:page => params[:page], :per_page => 60).order('name ASC')
     @title = 'Identities'
   end
+  
+  private
+    
+    def authenticate 
+      deny_access unless signed_in?
+    end
 
 end
