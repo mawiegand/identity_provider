@@ -1,5 +1,48 @@
 <%= will_paginate %>
 
+<p>Filters are combined by 'AND'. Use '%' to filter for partially matching strings, e.g. '%Sascha%'.</p>
+
+<div class="filter-form">
+  <%= form_tag '', :method => :get do %>
+  
+    <span class="field">
+      <%= label_tag :event_type %>
+      <%= text_field_tag :event_type, params[:event_type]  %>
+    </span>
+  
+    <span class="field">
+      <%= label_tag :description %>
+      <%= text_field_tag :description, params[:description] %>
+    </span>
+  
+    <span class="field">
+      <%= label_tag :affected_table %>
+      <%= text_field_tag :affected_table, params[:affected_table]  %>
+    </span>
+    
+    <span class="field">
+      <%= label_tag :affected_id, 'Affected ID' %>
+      <%= text_field_tag :affected_id, params[:affected_id]  %>
+    </span>
+  
+    <span class="field">
+      <%= label_tag :identity_id %>
+      <%= text_field_tag :identity_id, params[:identity_id]  %>
+    </span>
+  
+    <span class="actions">
+      <%= submit_tag "Filter" %>
+    </span>
+  
+  <% end %>
+  
+  <%= form_tag '', :method => :get do %>
+    <span class="actions">
+      <%= submit_tag "Clear" %>
+    </span>
+  <% end %>
+  
+</div>
 
 <table class="log_entries">
   <tr>

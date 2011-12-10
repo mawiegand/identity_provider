@@ -29,7 +29,7 @@ class SessionsController < ApplicationController
                     :role => 'user',
                     :affected_table => 'identity',
                     :affected_id => identity.id,
-                    :type => 'login_destroy',
+                    :event_type => 'signout_destroy',
                     :description => "User #{ identity.name } signed out.");
   end
   
@@ -41,7 +41,7 @@ class SessionsController < ApplicationController
     def logSigninFailure(email, as_identity)
       identity = Identity.find_by_email(email);
       entry = LogEntry.new(:affected_table => "identity",
-                           :type => 'login_success');
+                           :event_type => 'signin_failure');
       if !as_identity.nil?
         entry.identity = as_identity;
         entry.role = "user";
@@ -58,7 +58,7 @@ class SessionsController < ApplicationController
                            :role => 'user',
                            :affected_table => 'identity',
                            :affected_id => identity.id,
-                           :type => 'login_failure',
+                           :event_type => 'signin_success',
                            :description => "Sign-in with #{email} (user #{ identity.name }) did succeed.");
       entry.save
     end

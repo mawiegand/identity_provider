@@ -1,4 +1,6 @@
 IdentityProvider::Application.routes.draw do
+  get "log_entries/index"
+
   get "sessions/new"
 
   # The priority is based upon order of creation:
@@ -16,6 +18,7 @@ IdentityProvider::Application.routes.draw do
   #   resources :products
   resources :identities
   resources :sessions, :only => [:new, :create, :destroy]
+  resources :log_entries, :only => [:index]
   
   match '/signin',  :to => 'sessions#new'
   match '/signout', :to => 'sessions#destroy'
