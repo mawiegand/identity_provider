@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  identity: 
+  role: MyString
+  affected_table: MyString
+  affected_id: 1
+  type: 
+  description: MyString
+
+two:
+  identity: 
+  role: MyString
+  affected_table: MyString
+  affected_id: 1
+  type: 
+  description: MyString

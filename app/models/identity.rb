@@ -28,6 +28,8 @@ class Identity < ActiveRecord::Base
                        :confirmation => true,
                        :length       => { :within => 6..40 }
                        
+  has_many :log_entries;
+                       
   before_save :set_encrypted_password
   
   def has_password?(potentialPassword)
