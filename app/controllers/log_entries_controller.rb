@@ -33,7 +33,7 @@ class LogEntriesController < ApplicationController
       where_parameters  << params[:identity_id] 
     end
     
-    @log_entries = LogEntry.paginate(:page => params[:page], :per_page => 20).where(where_string, *where_parameters).order('created_at DESC')
+    @log_entries = LogEntry.paginate(:page => params[:page], :per_page => 20).where(where_string, *where_parameters)
   end
 
   private

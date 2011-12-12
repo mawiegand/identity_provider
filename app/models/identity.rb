@@ -29,6 +29,8 @@ class Identity < ActiveRecord::Base
                        :length       => { :within => 6..40 }
                        
   has_many :log_entries;
+  
+  default_scope :order => 'identities.name ASC'
                        
   before_save :set_encrypted_password
   

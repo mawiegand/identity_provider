@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+    
   def new
     @title = "Sign in"
   end
@@ -24,19 +25,18 @@ class SessionsController < ApplicationController
     redirect_to new_session_path
   end
   
-  def logSignout(identity)
-    LogEntry.create(:identity => identity,
-                    :role => 'user',
-                    :affected_table => 'identity',
-                    :affected_id => identity.id,
-                    :event_type => 'signout_destroy',
-                    :description => "User #{ identity.name } signed out.");
-  end
-  
-  
-  # Logging
   
   private 
+
+    # Logging  
+    def logSignout(identity)
+      LogEntry.create(:identity => identity,
+                      :role => 'user',
+                      :affected_table => 'identity',
+                      :affected_id => identity.id,
+                      :event_type => 'signout_destroy',
+                      :description => "User #{ identity.name } signed out.");
+    end
   
     def logSigninFailure(email, as_identity)
       identity = Identity.find_by_email(email);

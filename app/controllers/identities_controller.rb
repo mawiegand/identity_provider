@@ -32,7 +32,7 @@ class IdentitiesController < ApplicationController
   end
   
   def index
-    @identities = Identity.paginate(:page => params[:page], :per_page => 60).order('name ASC')
+    @identities = Identity.paginate(:page => params[:page], :per_page => 60)
     @title = 'Identities'
   end
   
