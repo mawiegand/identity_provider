@@ -19,6 +19,9 @@ class SessionsController < ApplicationController
     end
   end
   
+
+
+  
   def destroy
     logSignout(current_identity)
     sign_out
@@ -62,5 +65,6 @@ class SessionsController < ApplicationController
                            :description => "Sign-in with #{email} (user #{ identity.name }) did succeed.");
       entry.save
     end
+    
 
 end

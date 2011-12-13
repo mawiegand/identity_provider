@@ -29,7 +29,7 @@ $(document).ready(function()
         {
           'password' : password,
           'username' : username,
-          'url'      : '/sessions/1',
+          'url'      : '/identities',
           'type'     : 'GET',
           'success'  : function(){ window.location = '<%= identities_path %>'; },
           'error'    : function(){ alert('Bad Login Details');},

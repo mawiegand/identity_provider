@@ -1,6 +1,7 @@
 class LogEntriesController < ApplicationController
   
-  before_filter :authenticate, :only => [:index]
+  before_filter :authenticate
+  before_filter :authorize_staff
 
   def index
     @title = "Log"

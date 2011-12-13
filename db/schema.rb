@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111210183135) do
+ActiveRecord::Schema.define(:version => 20111213115213) do
 
   create_table "identities", :force => true do |t|
     t.string   "name"
@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(:version => 20111210183135) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "encrypted_password"
+    t.boolean  "admin",              :limit => 255
+    t.boolean  "staff",              :limit => 255
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true

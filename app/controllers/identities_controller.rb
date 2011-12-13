@@ -1,6 +1,7 @@
 class IdentitiesController < ApplicationController
 
-  before_filter :authenticate, :only => [:index]
+  before_filter :authenticate,    :only => [:index]   # must be logged-in to see these pages
+  before_filter :authorize_staff, :only => [:index]   # only staff can access these pages
 
   def show
     @identity = Identity.find(params[:id])
@@ -37,11 +38,6 @@ class IdentitiesController < ApplicationController
   end
   
   private
-    
-    def authenticate 
-      deny_access unless signed_in?
-    end
-    
     
     def logRegisterSuccess(identity)
       entry = LogEntry.new(:affected_table => 'identity',

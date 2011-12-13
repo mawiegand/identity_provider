@@ -1,5 +1,31 @@
 module SessionsHelper
   
+  def authenticate 
+    
+#    logger.debug("BASIC_AUTH: started,")   
+#    authenticate_or_request_with_http_basic "wackadoo" do | username, password |
+#      logger.debug("BASIC_AUTH: #{username} #{password},")
+#      identity = Identity.find(username)
+#      if (identity)
+#        @current_identity = Identity.authenticate(identity.email, password)
+#      end
+#      logger.debug("BASIC_AUTH: #{@current_identity}")
+#    end
+    deny_access unless signed_in?
+  end
+  
+  def authorize_admin
+    if !admin?
+      redirect_to signin_path, :notice => "The page you requested may only be accessed by admins."
+    end
+  end
+  
+  def authorize_staff
+    if !staff?
+      redirect_to signin_path, :notice => "The page you requested may only be accessed by staff."
+    end
+  end
+  
   def sign_in(identity)
     cookies.permanent.signed[:remember_token] = [identity.id, identity.salt]
     self.current_identity = identity
@@ -7,6 +33,14 @@ module SessionsHelper
   
   def signed_in?
     !current_identity.nil?
+  end
+  
+  def admin?
+    !current_identity.nil? && current_identity.admin
+  end
+  
+  def staff?
+    admin? || (!current_identity.nil? && current_identity.staff)  # admin is always staff
   end
   
   def sign_out
