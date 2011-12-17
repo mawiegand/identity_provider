@@ -49,7 +49,7 @@ class IdentitiesController < ApplicationController
         entry.role = 'none'
       else
         entry.identity_id = current_identity.id
-        entry.role = 'user'
+        entry.role = current_identity.role_string
       end                     
       
       entry.save
@@ -64,7 +64,7 @@ class IdentitiesController < ApplicationController
         entry.role = 'none'
       else
         entry.identity_id = current_identity.id
-        entry.role = 'user'
+        entry.role = current_identity.role_string
       end
 
       entry.save

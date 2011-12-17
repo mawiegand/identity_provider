@@ -13,7 +13,6 @@ module SessionsHelper
     deny_access "The page you requested may only be accessed by admins." unless admin?
   end
   
-  
   # Checks whether the present user has staff-status and redirects to
   # sign-in otherwise. Admin users always have staff-status.
   def authorize_staff

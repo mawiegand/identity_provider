@@ -50,6 +50,13 @@ class Identity < ActiveRecord::Base
     return identity if identity.salt == cookie_salt
   end
   
+  # returns a string representation of the identities role
+  def role_string
+    return "admin" if admin
+    return "staff" if staff
+    return "user"
+  end
+  
   private
   
     def set_encrypted_password
