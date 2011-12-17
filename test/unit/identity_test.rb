@@ -5,11 +5,15 @@ class IndentityTest < ActiveSupport::TestCase
  test "empty identity is not valid" do
    identity = Identity.new
    assert !identity.valid?
+   assert !Identity.new(:name => "minimal", 
+                        :email =>"minimal@min.de", 
+                        :password=>"minimal", 
+                        :password_confirmation=>"minimal2").valid?
  end
  
  test "minimal valid identity is valid" do
    identity = Identity.new(:name => "minimal", 
-                           :email =>"minimal@haus.de", 
+                           :email =>"minimal@min.de", 
                            :password=>"minimal", 
                            :password_confirmation=>"minimal")
                            
@@ -31,25 +35,14 @@ class IndentityTest < ActiveSupport::TestCase
  end
  
  test "has correct password" do
-   identity = Identity.new(:name => "minimal", 
-                           :email =>"minimal@haus.de", 
-                           :password=>"minimal", 
-                           :password_confirmation=>"minimal") 
- 
-   assert identity.save   
-   assert identity.has_password?('minimal')
+   assert identities(:user).has_password?('sonnen')
  end
  
  test "does not have wrong passwords" do
-   identity = Identity.new(:name => "minimal", 
-                           :email =>"minimal@haus.de", 
-                           :password=>"minimal", 
-                           :password_confirmation=>"minimal") 
- 
-   assert identity.save   
-   assert !identity.has_password?('Minimal')
-   assert !identity.has_password?('maximal')
-   assert !identity.has_password?('minimal ')
+   identity = identities(:user)
+   assert !identity.has_password?('Sonnen')
+   assert !identity.has_password?('sonne')
+   assert !identity.has_password?('sonnen ')
    assert !identity.has_password?('')
    assert !identity.has_password?(nil)
  end

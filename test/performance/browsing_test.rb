@@ -6,7 +6,11 @@ class BrowsingTest < ActionDispatch::PerformanceTest
   # self.profile_options = { :runs => 5, :metrics => [:wall_time, :memory]
   #                          :output => 'tmp/performance', :formats => [:flat] }
 
+  def setup
+  end
+
   def test_homepage
     get '/'
   end
+  
 end

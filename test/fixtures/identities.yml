@@ -14,3 +14,29 @@
 #  updated_at :datetime
 #
 
+
+admin:
+  name: Hans Meyer
+  email: hans@meyer.de
+  salt: abcd
+  encrypted_password: <%= Digest::SHA2.hexdigest("abcd--sonnen") %>
+  admin: true
+  staff: true
+  
+staff:
+  name: Frank Pagelsdorf
+  email: frank@pagelsdorf
+  salt: abcde
+  encrypted_password: <%= Digest::SHA2.hexdigest("abcde--sonnen") %>
+  admin: false
+  staff: true
+  
+user:
+  name: Jürgen Klopp
+  email: kloppo@bvb.de
+  salt: abcd
+  encrypted_password: <%= Digest::SHA2.hexdigest("abcd--sonnen") %>
+  admin: false
+  staff: false
+  
+

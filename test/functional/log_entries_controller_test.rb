@@ -1,9 +1,15 @@
 require 'test_helper'
+require 'sessions_helper'
 
 class LogEntriesControllerTest < ActionController::TestCase
-  test "should get index" do
+  
+  test "no unauthorized access to index" do
     get :index
-    assert_response :success
+    assert_response :redirect    
+    assert_redirected_to signin_path
   end
+
+  
+  
 
 end

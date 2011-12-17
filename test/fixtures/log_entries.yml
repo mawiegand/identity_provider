@@ -5,7 +5,7 @@ one:
   role: MyString
   affected_table: MyString
   affected_id: 1
-  type: 
+  event_type: 
   description: MyString
 
 two:
@@ -13,5 +13,5 @@ two:
   role: MyString
   affected_table: MyString
   affected_id: 1
-  type: 
+  event_type: 
   description: MyString
