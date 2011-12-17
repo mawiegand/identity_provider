@@ -50,14 +50,16 @@ class IndentityTest < ActiveSupport::TestCase
 end
 # == Schema Information
 #
-# Table name: indentities
+# Table name: identities
 #
-#  id         :integer         not null, primary key
-#  name       :string(255)
-#  email      :string(255)
-#  password   :string(255)
-#  salt       :string(255)
-#  created_at :datetime
-#  updated_at :datetime
+#  id                 :integer         not null, primary key
+#  name               :string(255)
+#  email              :string(255)
+#  salt               :string(255)
+#  created_at         :datetime
+#  updated_at         :datetime
+#  encrypted_password :string(255)
+#  admin              :boolean(255)
+#  staff              :boolean(255)
 #
 

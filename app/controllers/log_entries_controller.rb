@@ -1,8 +1,18 @@
+# The LogEntriesController provides an interface to browse
+# and filter entries of type LogEntry. Presently, it provides
+# a paginated index as its only action that comes with a form
+# to filter the entries for specific values in their attributes.
+# Input to the form fields is sanitized before being send to 
+# the database, but it's possible to use SQL's special '%' 
+# character to look for partial matches in strings.
 class LogEntriesController < ApplicationController
   
   before_filter :authenticate
   before_filter :authorize_staff
 
+  # Returns a view containing a paginated index of all 
+  # LogEntries. Allows to filter for specific values
+  # in attributes.
   def index
     @title = "Log"
     
@@ -37,9 +47,4 @@ class LogEntriesController < ApplicationController
     @log_entries = LogEntry.paginate(:page => params[:page], :per_page => 20).where(where_string, *where_parameters)
   end
 
-  private
-
-    def authenticate 
-      deny_access unless signed_in?
-    end
 end

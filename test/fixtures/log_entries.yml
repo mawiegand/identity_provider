@@ -15,3 +15,18 @@ two:
   affected_id: 1
   event_type: 
   description: MyString
+# == Schema Information
+#
+# Table name: log_entries
+#
+#  id             :integer         not null, primary key
+#  identity_id    :integer
+#  role           :string(255)
+#  affected_table :string(255)
+#  affected_id    :integer
+#  event_type     :string(255)
+#  description    :string(255)
+#  created_at     :datetime
+#  updated_at     :datetime
+#
+

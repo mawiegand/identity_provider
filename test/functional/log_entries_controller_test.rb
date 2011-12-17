@@ -9,7 +9,4 @@ class LogEntriesControllerTest < ActionController::TestCase
     assert_redirected_to signin_path
   end
 
-  
-  
-
 end
