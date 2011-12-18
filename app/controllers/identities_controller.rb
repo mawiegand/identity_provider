@@ -21,7 +21,7 @@ class IdentitiesController < ApplicationController
   # send the sign-up form
   def new
     @identity = Identity.new
-    @title = 'Register'    
+    @title = I18n.t('identities.signup.title')    
   end
   
   # create a new identity from the posted form data
@@ -30,11 +30,11 @@ class IdentitiesController < ApplicationController
     if @identity.save
       logRegisterSuccess(@identity)
       sign_in @identity
-      flash[:success] = "Welcome #{@identity.name}!"
+      flash[:success] = I18n.t('identities.signup.flash.welcome', :name => @identity.name)
       redirect_to @identity
     else 
       logRegisterFailure(params[:identity][:email], params[:identity][:name])
-      @title = "Register"
+      @title = I18n.t('identities.signup.title')
       render :new
     end
   end
@@ -42,7 +42,7 @@ class IdentitiesController < ApplicationController
   # show a paginated list of all identities in the system
   def index
     @identities = Identity.paginate(:page => params[:page], :per_page => 60)
-    @title = 'Identities'
+    @title = I18n.t('identities.index.title')
   end
   
   private

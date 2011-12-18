@@ -12,10 +12,10 @@
 <nav class="round">
   <ul>
     <% if signed_in? %>
-      <li><%= link_to "Profile", current_identity %></li>
-      <li><%= link_to "Sign out", signout_path, :method => :delete %></li>
+      <li><%= link_to I18n.translate("application.layout.profile"), current_identity %></li>
+      <li><%= link_to I18n.translate("application.layout.signout"), signout_path, :method => :delete %></li>
     <% else %>
-      <li><%= link_to "Sign in", signin_path %></li>
+      <li><%= link_to I18n.translate("application.layout.signin"), signin_path %></li>
     <% end %>
   </ul>
 </nav>  

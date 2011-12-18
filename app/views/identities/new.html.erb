@@ -1,30 +1,30 @@
-<h1>Register</h1>
+<h1><%= I18n.t 'identities.signup.heading' %></h1>
 
 <%= form_for(@identity) do |f| %>
   <%= render 'shared/error_messages' %>
 
   <div class="field">
-    <%= f.label :name %><br/>
+    <%= f.label I18n.t 'identities.signup.form.name' %><br/>
     <%= f.text_field :name %>
   </div>
   
   <div class="field">
-    <%= f.label :email %><br/>
+    <%= f.label I18n.t 'identities.signup.form.email' %><br/>
     <%= f.text_field :email %>
   </div>
   
   <div class="field">
-    <%= f.label :password %><br/>
+    <%= f.label I18n.t 'identities.signup.form.password' %><br/>
     <%= f.password_field :password %>
   </div>
   
   <div class="field">
-    <%= f.label :password_confirmation %><br/>
+    <%= f.label I18n.t 'identities.signup.form.password_confirmation' %><br/>
     <%= f.password_field :password_confirmation %>
   </div>
   
   <div class="actions">
-    <%= f.submit "Register" %>
+    <%= f.submit I18n.t 'identities.signup.form.submit_button' %>
   </div>
   
 <% end %>

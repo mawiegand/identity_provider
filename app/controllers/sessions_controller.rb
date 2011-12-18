@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
     
   # Display a sign-in form
   def new
-    @title = "Sign in"
+    @title = I18n.translate('sessions.signin.title')
   end
   
   # Receives user credentials via post and creates a session,
@@ -15,8 +15,8 @@ class SessionsController < ApplicationController
                                      params[:session][:password])
     if identity.nil?
       logSigninFailure(params[:session][:email], current_identity)
-      flash.now[:error] = "Invalid email/password combination."
-      @title = "Sign in"
+      flash.now[:error] = I18n.translate('sessions.signin.flash.invalid')
+      @title = I18n.translate('sessions.signin.title')
       render 'new'
     else 
       logSigninSuccess(params[:session][:email], identity)

@@ -1,1 +1,54 @@
+# Localization file for German. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
 de:
+  
+  application:
+    layout:
+      profile: Profil
+      signin: Anmelden
+      signout: Abmelden
+  
+  
+  identities:
+    
+    signup:
+      title: Registrieren
+      
+      heading: Registrieren
+      form:
+        name: Name 
+        email: Email
+        password: Passwort
+        password_confirmation: Passwortbestätigung
+        submit_button: Absenden
+        
+      flash:
+        welcome: "Willkommen %{name}!"
+        
+    index:
+      title: Identitäten
+      
+  sessions:
+        
+    signin:
+      title: Anmelden
+      
+      heading: Anmelden
+      form:
+        email: Email
+        password: Passwort
+        submit_button: Anmelden
+        
+      new_user:
+        question: Neuer Benutzer?
+        link: Jetzt registrieren!
+        
+      flash:
+        invalid: Email und Passwort passen nicht.
+        
+    authorization:
+      access_denied:
+        admin: "Die angefragte Seite kann nur von Administratoren besucht werden."
+        staff: "Die angefragte Seite kann nur von Mitarbeitern besucht werden."
+        

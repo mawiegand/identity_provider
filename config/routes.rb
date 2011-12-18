@@ -1,7 +1,4 @@
 IdentityProvider::Application.routes.draw do
-  # get "log_entries/index"
-  # get "sessions/new"
-
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -16,52 +13,16 @@ IdentityProvider::Application.routes.draw do
   # all resources and paths are scoped in an optional path_prefix determining the
   # locale to use. Presently only available: en, de
   scope "(:locale)", :locale => /en|de/ do   
-    resources :identities
-    resources :sessions, :only => [:new, :create, :destroy]
+    resources :identities,  :only => [:new, :create, :show, :index]
+    resources :sessions,    :only => [:new, :create, :destroy]
     resources :log_entries, :only => [:index]
 
     match '/signin',  :to => 'sessions#new'
     match '/signout', :to => 'sessions#destroy'
   end
-
-
-
-  # Sample resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Sample resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Sample resource route with more complex sub-resources
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', :on => :collection
-  #     end
-  #   end
-
-  # Sample resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
-
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
-  #root :to => 'signin'
+   
+  match '/:locale' => 'sessions#new'         # match e.g. /de/
+  root :to => 'sessions#new'                 # redirect to signin
 
   # See how all your routes lay out with "rake routes"
 

@@ -1,5 +1,54 @@
-# Sample localization file for English. Add more files in this directory for other locales.
+# Localization file for English. Add more files in this directory for other locales.
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+
+  application:
+    layout:
+      profile: Profile
+      signin: Sign In
+      signout: Sing Out
+  
+  
+  identities:
+    
+    signup:
+      title: Sign Up
+      
+      heading: Sign Up
+      form:
+        name: Name 
+        email: Email
+        password: Password
+        password_confirmation: Password confirmation
+        submit_button: Sign Up
+      
+      flash:
+        welcome: "Welcome %{name}!"
+        
+    index:
+      title: Identities
+      
+  sessions:
+        
+    signin:
+      title: Sign In
+      
+      heading: Sign In
+      form:
+        email: Email
+        password: Password
+        submit_button: Sign In
+        
+      new_user:
+        question: New user?
+        link: Sign up now!
+        
+      flash:
+        invalid: Invalid email/password combination.
+        
+    authorization:
+      access_denied:
+        admin: "The page you requested may only be accessed by admins."
+        staff: "The page you requested may only be accessed by staff."
+
