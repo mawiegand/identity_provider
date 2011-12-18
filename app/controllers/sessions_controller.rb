@@ -1,9 +1,15 @@
+# The SessionsController creates, tracks (by its helpers) and 
+# and finally destroys a session for an authenticated user. 
+#
 class SessionsController < ApplicationController
     
+  # Display a sign-in form
   def new
     @title = "Sign in"
   end
   
+  # Receives user credentials via post and creates a session,
+  # if the provided credentials could be verified.
   def create
     identity = Identity.authenticate(params[:session][:email],
                                      params[:session][:password])
@@ -19,9 +25,7 @@ class SessionsController < ApplicationController
     end
   end
   
-
-
-  
+  # Sings the user out by destroying the session.
   def destroy
     logSignout(current_identity)
     sign_out

@@ -1,3 +1,25 @@
+# Managing, authenticating and serving the identities is the main
+# purpose of the IdentityProvider. Each identity represents a 
+# registered user of the system, where the users register and
+# authenticate with their credentials consisting of email or
+# nick and matching password.
+#
+# For security reasons, plain-text passwords are *not* stored in 
+# the database. Instead, the passwords are salted (to prevent
+# attacks with rainbow tables) and hashed before storing them.
+# User-sent passwords are salted and hashed in exactly the 
+# same way and then compared to the stored hash; if both match
+# we can assume the user has sent the correct password. See the
+# SessionsController's helpers for details of this matching
+# procedure.
+#
+# To make things secure and prevent several knwown attacks,
+# the implementation has to make sure the following things:
+# * salts are long enough and have high enough entropy
+# * different salts are used for each user
+# * the hashing function must be cryptographic
+# * plain-text passwords must not be stored in log files!
+#
 # == Schema Information
 #
 # Table name: identities
@@ -35,16 +57,29 @@ class Identity < ActiveRecord::Base
                        
   before_save :set_encrypted_password
   
+  # checks a potentialPassword (plain-text) against the "stored"
+  # password of the identity. This is done by salting and hashing
+  # the potentialPassword in the same way as the real password
+  # has been encrypted and stored in the database. 
   def has_password?(potentialPassword)
     encrypted_password == encrypt_password(potentialPassword)
   end
   
+  # authenticates the email and password and returns an identity
+  # iff
+  # * the email matches an identity in the database
+  # * the submittedPassword matches the password of that identity.
+  # It returns nil otherwise.
   def self.authenticate(email, submittedPassword)
     identity = find_by_email(email)
     return nil if identity.nil?
     return identity if identity.has_password?(submittedPassword)
   end
   
+  # authenticates the current user with the salt that has been
+  # stored in his cookie. This method is needed for session 
+  # tracking and permanent login (remember token) in order to not 
+  # have to remember password and email for the session. 
   def self.authenticate_with_salt(id, cookie_salt)
     identity = find_by_id(id)
     return nil if identity.nil?
@@ -60,19 +95,27 @@ class Identity < ActiveRecord::Base
   
   private
   
+    # create salt, if not already set, and set the encrypted
+    # password by salting and encrypting the plain-text
+    # password sent by the user.
     def set_encrypted_password
       self.salt = make_salt if new_record?
       self.encrypted_password = encrypt_password(self.password)
     end
     
+    # combine password and salt and then call the encryption
+    # function on the string.
     def encrypt_password(string)
       encrypt("#{self.salt}--#{string}")
     end
     
+    # encrypt the given string using a cryptographic hash 
+    # function
     def encrypt(string)
       Digest::SHA2.hexdigest(string)
     end  
     
+    # create a random-string with 64-chars to be used as salt
     def make_salt
       chars = ('a'..'z').to_a + ('A'..'Z').to_a
       (0..64).collect { chars[Kernel.rand(chars.length)] }.join
