@@ -7,6 +7,9 @@
 # or admin) and the table and table-row affected by the
 # change. 
 #
+# Attributes are read only so the log can not be manipulated
+# through the rails application.
+#
 # Log entries can be easily browsed and filtered by accessing
 # the LogEntriesController at /log_entries . 
 #
