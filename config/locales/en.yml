@@ -8,6 +8,10 @@ en:
       mr: Mr.
       mrs: Mrs.
       mrmrs: Mr. or Mrs.
+      user: user
+      staff: staff member
+      admin: administrator
+
 
   application:
     layout:

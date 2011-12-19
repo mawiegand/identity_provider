@@ -57,7 +57,7 @@ class Identity < ActiveRecord::Base
                        
   has_many  :log_entries;
   
-  default_scope :order => 'identities.nickname ASC'
+  default_scope :order => 'identities.email ASC'
                        
   before_save :set_encrypted_password
   
@@ -106,20 +106,30 @@ class Identity < ActiveRecord::Base
 
   # returns the most informal address that could be constructed
   # from the known user data
-  def address_informal
+  def address_informal(fallback_to_email = true)
     return nickname unless nickname.blank?
     return firstname unless firstname.blank?
-    return email
+    return email if fallback_to_email
+    return address_role
   end
   
   # Returns the most formal address that could be constructed from the
   # known user data. Does contain a translated (and possibly gendered)
   # address-prefix (Mr. / Mrs.).
-  def address_formal
+  def address_formal(fallback_to_email = true)
     return I18n.translate(address_prefix) + " #{surname}" unless surname.blank?
     return firstname unless firstname.blank?
     return nickname unless nickname.blank?
-    return email
+    return email if fallback_to_email
+    return address_role
+  end
+  
+  # Returns a string addressing the user according to his role
+  # (user, admin, staff)
+  def address_role 
+    return I18n.translate('general.address.admin') if admin?
+    return I18n.translate('general.address.staff') if staff?
+    return I18n.translate('general.address.user')
   end
   
   # Returns a gendered and translated address prefix (Mr. / Mrs.) 
