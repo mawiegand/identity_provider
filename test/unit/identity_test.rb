@@ -2,18 +2,16 @@ require 'test_helper'
 
 class IndentityTest < ActiveSupport::TestCase
 
- test "empty identity is not valid" do
+ test "invalid identities are invalid" do
    identity = Identity.new
    assert !identity.valid?
-   assert !Identity.new(:name => "minimal", 
-                        :email =>"minimal@min.de", 
+   assert !Identity.new(:email =>"minimal@min.de", 
                         :password=>"minimal", 
                         :password_confirmation=>"minimal2").valid?
  end
  
  test "minimal valid identity is valid" do
-   identity = Identity.new(:name => "minimal", 
-                           :email =>"minimal@min.de", 
+   identity = Identity.new(:email =>"minimal@min.de", 
                            :password=>"minimal", 
                            :password_confirmation=>"minimal")
                            
@@ -26,9 +24,9 @@ class IndentityTest < ActiveSupport::TestCase
  end
  
   test "can save valid identity" do
-   identity = Identity.new(:name => "minimal", 
-                           :email =>"minimal@haus.de", 
-                           :password=>"minimal", 
+   identity = Identity.new(:nickname =>"minimal", 
+                           :email    =>"minimal@haus.de", 
+                           :password =>"minimal", 
                            :password_confirmation=>"minimal")
                            
    assert identity.save

@@ -11,10 +11,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111213115213) do
+ActiveRecord::Schema.define(:version => 20111219131521) do
 
   create_table "identities", :force => true do |t|
-    t.string   "name"
+    t.string   "nickname"
     t.string   "email"
     t.string   "salt"
     t.datetime "created_at"
@@ -22,10 +22,12 @@ ActiveRecord::Schema.define(:version => 20111213115213) do
     t.string   "encrypted_password"
     t.boolean  "admin",              :limit => 255
     t.boolean  "staff",              :limit => 255
+    t.string   "firstname"
+    t.string   "surname"
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true
-  add_index "identities", ["name"], :name => "index_identities_on_name", :unique => true
+  add_index "identities", ["nickname"], :name => "index_identities_on_name", :unique => true
 
   create_table "log_entries", :force => true do |t|
     t.integer  "identity_id"

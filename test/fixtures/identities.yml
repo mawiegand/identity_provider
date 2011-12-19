@@ -18,7 +18,9 @@
 
 
 admin:
-  name: Hans Meyer
+  nickname: Hansi
+  firstname: Hans
+  surname: Meyer
   email: hans@meyer.de
   salt: abcd
   encrypted_password: <%= Digest::SHA2.hexdigest("abcd--sonnen") %>
@@ -26,7 +28,7 @@ admin:
   staff: true
   
 staff:
-  name: Frank Pagelsdorf
+  surname: Pagelsdorf
   email: frank@pagelsdorf
   salt: abcde
   encrypted_password: <%= Digest::SHA2.hexdigest("abcde--sonnen") %>
@@ -34,7 +36,9 @@ staff:
   staff: true
   
 user:
-  name: Jürgen Klopp
+  nickname: kloppo
+  firstname: Jürgen
+  surname: Klopp
   email: kloppo@bvb.de
   salt: abcd
   encrypted_password: <%= Digest::SHA2.hexdigest("abcd--sonnen") %>

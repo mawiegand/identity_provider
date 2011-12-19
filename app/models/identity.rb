@@ -44,16 +44,20 @@ class Identity < ActiveRecord::Base
                     :format     => { :with => email_regex },
                     :uniqueness => { :case_sensitive => false }
                     
-  validates :name,  :length     => { :maximum => 20 },
-                    :uniqueness => { :case_sensitive => false }
+  validates :nickname,  :length       => { :maximum => 20 },
+                        :uniqueness   => { :case_sensitive => false }
                     
-  validates :password, :presence     => true,
-                       :confirmation => true,
-                       :length       => { :within => 6..40 }
+  validates :password,  :presence     => true,
+                        :confirmation => true,
+                        :length       => { :within  => 6..40 }
                        
-  has_many :log_entries;
+  validates :firstname, :length       => { :maximum => 20 } 
   
-  default_scope :order => 'identities.name ASC'
+  validates :surname,   :length       => { :maximum => 30 }
+                       
+  has_many  :log_entries;
+  
+  default_scope :order => 'identities.nickname ASC'
                        
   before_save :set_encrypted_password
   
