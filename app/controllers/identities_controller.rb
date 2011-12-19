@@ -10,7 +10,7 @@ class IdentitiesController < ApplicationController
   # display the profile of an individual identity
   def show
     @identity = Identity.find(params[:id])
-    @title = @identity.name
+    @title = @identity.nickname
     
     respond_to do |format|
       format.html
@@ -30,10 +30,11 @@ class IdentitiesController < ApplicationController
     if @identity.save
       logRegisterSuccess(@identity)
       sign_in @identity
-      flash[:success] = I18n.t('identities.signup.flash.welcome', :name => @identity.name)
+      flash[:success] = 
+        I18n.t('identities.signup.flash.welcome', :name => @identity.address_informal)
       redirect_to @identity
     else 
-      logRegisterFailure(params[:identity][:email], params[:identity][:name])
+      logRegisterFailure(params[:identity][:email], params[:identity][:nickname])
       @title = I18n.t('identities.signup.title')
       render :new
     end
@@ -51,7 +52,7 @@ class IdentitiesController < ApplicationController
       entry = LogEntry.new(:affected_table => 'identity',
                            :affected_id => identity.id,
                            :event_type => 'register_success',
-                           :description => "Registered new user for #{identity.email} as #{ identity.name } with id #{ identity.id }.");
+                           :description => "Registered new user for #{identity.email} as #{ identity.nickname } with id #{ identity.id }.");
 
       if current_identity.nil? 
         entry.role = 'none'

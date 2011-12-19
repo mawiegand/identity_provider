@@ -48,7 +48,7 @@ class LoggingTest < ActionDispatch::IntegrationTest
     
     post_via_redirect "/identities", :identity => { 
       :email    => "my@email.de", 
-      :name     => "My Name",
+      :nickname => "MyName",
       :password => "a password",
       :password_confirmation => "doesn't match"
     }
@@ -61,7 +61,7 @@ class LoggingTest < ActionDispatch::IntegrationTest
     
     post_via_redirect "/identities", :identity => { 
       :email    => "my@email.de", 
-      :name     => "My Name",
+      :nickname => "MyName",
       :password => "a password",
       :password_confirmation => "a password"
     }

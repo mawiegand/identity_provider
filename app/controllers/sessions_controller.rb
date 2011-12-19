@@ -42,7 +42,7 @@ class SessionsController < ApplicationController
                       :affected_table => 'identity',
                       :affected_id => identity.id,
                       :event_type => 'signout_destroy',
-                      :description => "User #{ identity.name } signed out.");
+                      :description => "User #{ !identity.nickname.nil? ? identity.nickname : identity.email } signed out.");
     end
   
     def logSigninFailure(email, as_identity)
@@ -58,7 +58,7 @@ class SessionsController < ApplicationController
       if !identity.nil?
         entry.affected_id = identity.id
       end
-      entry.description = "Sign-in with email #{email}  (#{ identity.nil? ? 'unknown user' : 'user ' + identity.name  }) did fail#{ as_identity.nil? ? '' : ' for current_user ' + as_identity.name }."
+      entry.description = "Sign-in with email #{email}  (#{ identity.nil? || identity.nickname.nil? ? 'unknown user' : 'user ' + identity.nickname  }) did fail#{ as_identity.nil? ? '' : ' for current_user ' + (as_identity.nickname.nil ? as_identity.email : as_identity.email) }."
       entry.save
     end
   
@@ -68,7 +68,7 @@ class SessionsController < ApplicationController
                            :affected_table => 'identity',
                            :affected_id => identity.id,
                            :event_type => 'signin_success',
-                           :description => "Sign-in with #{email} (user #{ identity.name }) did succeed.");
+                           :description => "Sign-in with #{email} (user #{ identity.nickname }) did succeed.");
       entry.save
     end
     

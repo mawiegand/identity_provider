@@ -36,7 +36,7 @@
 #
 class Identity < ActiveRecord::Base
   attr_accessor :password
-  attr_accessible :name, :email, :password, :password_confirmation
+  attr_accessible :nickname, :firstname, :surname, :email, :password, :password_confirmation
   
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   
@@ -95,6 +95,40 @@ class Identity < ActiveRecord::Base
     return "admin" if admin
     return "staff" if staff
     return "user"
+  end
+  
+  # this is just a stub and most be replaced by an appropriate
+  # implementation that tries to somehow return the correct
+  # gender of the user.
+  def gender?
+    return :unknown
+  end
+
+  # returns the most informal address that could be constructed
+  # from the known user data
+  def address_informal
+    return nickname unless nickname.nil?
+    return firstname unless firstname nil?
+    return email
+  end
+  
+  # Returns the most formal address that could be constructed from the
+  # known user data. Does contain a translated (and possibly gendered)
+  # address-prefix (Mr. / Mrs.).
+  def address_formal
+    return I18n.translate(address_prefix) + " #{surname}" unless surname.nil?
+    return firstname unless firstname.nil?
+    return nickname unless nickname.nil?
+    return email
+  end
+  
+  # Returns a gendered and translated address prefix (Mr. / Mrs.) 
+  # matching the present user. If gender is unkown, returns something
+  # in the line of "Mr. or Mrs. Lange".
+  def address_prefix
+    return I18n.translate('general.address.mr') if gender? == :male
+    return I18n.translate('general.address.mrs') if gender? == :unknwon
+    return I18n.translate('general.address.mrmrs') 
   end
   
   private

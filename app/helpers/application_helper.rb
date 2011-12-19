@@ -18,7 +18,7 @@ module ApplicationHelper
     
     options = { :size => 100, :default => :identicon }.merge(options) # merge 'over' default values
     
-    gravatar_image_tag(identity.email.strip.downcase, :alt      => identity.name,
+    gravatar_image_tag(identity.email.strip.downcase, :alt      => identity.nickname,
                                                       :class    => css_class,
                                                       :gravatar => options )
   end

@@ -3,6 +3,12 @@
 
 de:
   
+  general:
+    address:
+      mr: Herr
+      mrs: Frau
+      mrmrs: Frau oder Herr
+  
   application:
     layout:
       profile: Profil
@@ -17,7 +23,7 @@ de:
       
       heading: Registrieren
       form:
-        name: Name 
+        nickname: Spitzname 
         email: Email
         password: Passwort
         password_confirmation: Passwortbestätigung
