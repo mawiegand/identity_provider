@@ -69,13 +69,15 @@ class Identity < ActiveRecord::Base
     encrypted_password == encrypt_password(potentialPassword)
   end
   
-  # authenticates the email and password and returns an identity
-  # iff
-  # * the email matches an identity in the database
+  # authenticates login (email or nickname) and password and 
+  # returns an identity iff
+  # * the login matches an email or nickname in the database
   # * the submittedPassword matches the password of that identity.
   # It returns nil otherwise.
-  def self.authenticate(email, submittedPassword)
-    identity = find_by_email(email)
+  def self.authenticate(login, submittedPassword)
+    return nil if login.blank? || submittedPassword.blank?    
+    identity = find_by_email(login)
+    identity = find_by_nickname(login) if identity.nil? # user may have specified valid nickname?
     return nil if identity.nil?
     return identity if identity.has_password?(submittedPassword)
   end
@@ -117,7 +119,7 @@ class Identity < ActiveRecord::Base
   # known user data. Does contain a translated (and possibly gendered)
   # address-prefix (Mr. / Mrs.).
   def address_formal(fallback_to_email = true)
-    return I18n.translate(address_prefix) + " #{surname}" unless surname.blank?
+    return address_prefix + " #{surname}" unless surname.blank?
     return firstname unless firstname.blank?
     return nickname unless nickname.blank?
     return email if fallback_to_email

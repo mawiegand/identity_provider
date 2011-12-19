@@ -10,7 +10,7 @@ class IdentitiesController < ApplicationController
   # display the profile of an individual identity
   def show
     @identity = Identity.find(params[:id])
-    @title = @identity.nickname
+    @title = @identity.address_informal
     
     respond_to do |format|
       format.html

@@ -1,3 +1,3 @@
-<h1><%= @identity.nickname %></h1>
-<p><%= @identity.address_formal %></p>
+<h1><%= I18n.translate('identities.attributes.nickname').capitalize + ": #{@identity.nickname}" %></h1>
+<p><%=  I18n.translate('identities.attributes.name').capitalize     + ": #{@identity.firstname} #{@identity.surname}" %></p>
 <%= gravatar_for @identity %>

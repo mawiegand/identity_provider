@@ -11,15 +11,15 @@ class SessionsController < ApplicationController
   # Receives user credentials via post and creates a session,
   # if the provided credentials could be verified.
   def create
-    identity = Identity.authenticate(params[:session][:email],
+    identity = Identity.authenticate(params[:session][:login],
                                      params[:session][:password])
     if identity.nil?
-      logSigninFailure(params[:session][:email], current_identity)
+      logSigninFailure(params[:session][:login], current_identity)
       flash.now[:error] = I18n.translate('sessions.signin.flash.invalid')
       @title = I18n.translate('sessions.signin.title')
       render 'new'
     else 
-      logSigninSuccess(params[:session][:email], identity)
+      logSigninSuccess(params[:session][:login], identity)
       sign_in identity
       redirect_to identity
     end

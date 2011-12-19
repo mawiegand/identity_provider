@@ -22,6 +22,10 @@ en:
   
   identities:
     
+    attributes:
+      nickname: nickanme
+      name: full name
+    
     signup:
       title: Sign Up
       
@@ -46,7 +50,7 @@ en:
       
       heading: Sign In
       form:
-        email: Email
+        login: Email or Nickname
         password: Password
         submit_button: Sign In
         

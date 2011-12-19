@@ -21,6 +21,10 @@ de:
   
   identities:
     
+    attributes:
+      nickname: Spitzname
+      name: Name
+
     signup:
       title: Registrieren
       
@@ -45,7 +49,7 @@ de:
       
       heading: Anmelden
       form:
-        email: Email
+        login: Email oder Spitzname
         password: Passwort
         submit_button: Anmelden
         

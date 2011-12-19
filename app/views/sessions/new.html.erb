@@ -2,8 +2,8 @@
 
 <%= form_for(:session, :url => sessions_path, :html => { :id => 'loginForm'}) do |f| %>
   <div class="field">
-    <%= f.label I18n.translate 'sessions.signin.form.email' %><br/>
-    <%= f.text_field :email %>
+    <%= f.label I18n.translate 'sessions.signin.form.login' %><br/>
+    <%= f.text_field :login %>
   </div>
   <div class="field">
     <%= f.label I18n.translate 'sessions.signin.form.password' %><br/>
