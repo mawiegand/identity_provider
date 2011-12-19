@@ -3,7 +3,7 @@ require 'test_helper'
 class LoggingTest < ActionDispatch::IntegrationTest
   fixtures :all
 
-  test "sign-in and sign-out create correct log entries" do
+  test "sign-in and sign-out create correct log entries" do    
     # sign-in failure
     identity = identities(:staff)
     num_log_entries = LogEntry.count
@@ -37,7 +37,6 @@ class LoggingTest < ActionDispatch::IntegrationTest
 
     delete signout_path
     assert_response :redirect
-    assert_redirected_to new_session_path
     assert_equal num_log_entries+1, LogEntry.count
     assert_equal 'staff',           LogEntry.first.role
     assert_match /signed out/i,     LogEntry.first.description
