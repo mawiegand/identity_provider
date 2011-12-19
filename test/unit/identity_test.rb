@@ -44,6 +44,44 @@ class IndentityTest < ActiveSupport::TestCase
    assert !identity.has_password?('')
    assert !identity.has_password?(nil)
  end
+ 
+ test "nil_nicknames are accepted" do
+   identity = Identity.new(:email    => "email1@email.com", 
+                           :password => "minimal",
+                           :password_confirmation => "minimal")
+   assert identity.valid?
+   assert identity.save
+
+   identity = Identity.new(:nickname => "",
+                              :email    => "email2@email.com", 
+                              :password => "minimal",
+                              :password_confirmation => "minimal")
+   assert identity.valid?
+   assert identity.save
+
+   identity = Identity.new(:nickname => "",
+                              :email    => "email3@email.com", 
+                              :password => "minimal",
+                              :password_confirmation => "minimal")
+   assert identity.valid?
+   assert identity.save
+ end
+ 
+ test "nicknames must be unique if specified" do
+    identity = Identity.new(:nickname => "nick",
+                            :email    => "email2@email.com", 
+                            :password => "minimal",
+                            :password_confirmation => "minimal")
+   assert identity.valid?
+   assert identity.save
+
+   identity = Identity.new(:nickname => "nick",
+                           :email    => "email3@email.com", 
+                           :password => "minimal",
+                           :password_confirmation => "minimal")
+   assert !identity.valid?
+   assert !identity.save  
+ end
 
 end
 # == Schema Information

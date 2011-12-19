@@ -45,7 +45,7 @@ class Identity < ActiveRecord::Base
                     :uniqueness => { :case_sensitive => false }
                     
   validates :nickname,  :length       => { :maximum => 20 },
-                        :uniqueness   => { :case_sensitive => false }
+                        :uniqueness   => { :case_sensitive => false, :allow_blank => true }
                     
   validates :password,  :presence     => true,
                         :confirmation => true,
@@ -107,8 +107,8 @@ class Identity < ActiveRecord::Base
   # returns the most informal address that could be constructed
   # from the known user data
   def address_informal
-    return nickname unless nickname.nil?
-    return firstname unless firstname nil?
+    return nickname unless nickname.blank?
+    return firstname unless firstname.blank?
     return email
   end
   
@@ -116,9 +116,9 @@ class Identity < ActiveRecord::Base
   # known user data. Does contain a translated (and possibly gendered)
   # address-prefix (Mr. / Mrs.).
   def address_formal
-    return I18n.translate(address_prefix) + " #{surname}" unless surname.nil?
-    return firstname unless firstname.nil?
-    return nickname unless nickname.nil?
+    return I18n.translate(address_prefix) + " #{surname}" unless surname.blank?
+    return firstname unless firstname.blank?
+    return nickname unless nickname.blank?
     return email
   end
   
