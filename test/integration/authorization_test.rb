@@ -15,7 +15,7 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
     identity = identities(:user)
     
     post_via_redirect "/sessions", :session => { 
-      :email => identity.email, 
+      :login => identity.email, 
       :password => "sonnen"
     }
     assert_response :success
@@ -35,7 +35,7 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
     identity = identities(:staff)
     
     post_via_redirect "/sessions", :session => { 
-      :email => identity.email, 
+      :login => identity.email, 
       :password => "sonnen"
     }
     assert_response :success
@@ -54,7 +54,7 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
     identity = identities(:admin)
     
     post_via_redirect "/sessions", :session => { 
-      :email => identity.email, 
+      :login => identity.email, 
       :password => "sonnen"
     }
     assert_response :success

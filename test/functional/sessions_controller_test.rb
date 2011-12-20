@@ -12,7 +12,7 @@ class SessionsControllerTest < ActionController::TestCase
     identity = identities(:user)
 
     post :create, :session => { 
-      :email => identity.email, 
+      :login => identity.email, 
       :password => "sonnen"
     }
     assert_response :redirect
@@ -26,7 +26,7 @@ class SessionsControllerTest < ActionController::TestCase
     identity = identities(:user)
 
     post :create, :session => { 
-      :email => identity.email, 
+      :login => identity.email, 
       :password => "falsch"
     }
     assert_response :success
@@ -45,7 +45,7 @@ class SessionsControllerTest < ActionController::TestCase
     identity = identities(:user)
 
     post :create, :session => { 
-      :email => identity.email, 
+      :login => identity.email, 
       :password => "sonnen"
     }   
     assert @controller.signed_in?
@@ -57,7 +57,7 @@ class SessionsControllerTest < ActionController::TestCase
     identity = identities(:staff)
 
     post :create, :session => { 
-      :email => identity.email, 
+      :login => identity.email, 
       :password => "sonnen"
     }   
     assert @controller.signed_in?
@@ -69,7 +69,7 @@ class SessionsControllerTest < ActionController::TestCase
     identity = identities(:admin)
 
     post :create, :session => { 
-      :email => identity.email, 
+      :login => identity.email, 
       :password => "sonnen"
     }   
     assert @controller.signed_in?

@@ -13,6 +13,7 @@ class SessionsController < ApplicationController
   def create
     identity = Identity.authenticate(params[:session][:login],
                                      params[:session][:password])
+                                     
     if identity.nil?
       logSigninFailure(params[:session][:login], current_identity)
       flash.now[:error] = I18n.translate('sessions.signin.flash.invalid')
