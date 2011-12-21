@@ -8,6 +8,10 @@ en:
       mr: Mr.
       mrs: Mrs.
       mrmrs: Mr. or Mrs.
+      user: user
+      staff: staff member
+      admin: administrator
+
 
   application:
     layout:
@@ -18,6 +22,10 @@ en:
       index: Profile List
   
   identities:
+    
+    attributes:
+      nickname: nickanme
+      name: full name
     
     signup:
       title: Sign Up
@@ -72,7 +80,7 @@ en:
       
       heading: Sign In
       form:
-        email: Email
+        login: Email or Nickname
         password: Password
         submit_button: Sign In
         

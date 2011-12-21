@@ -23,4 +23,10 @@ module ApplicationHelper
                                                       :gravatar => options )
   end
   
+  
+  # renders a 404 error
+  def render_404
+    raise ActionController::RoutingError.new('Not Found')
+  end
+  
 end

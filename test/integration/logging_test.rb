@@ -9,7 +9,7 @@ class LoggingTest < ActionDispatch::IntegrationTest
     num_log_entries = LogEntry.count
     
     post_via_redirect "/sessions", :session => { 
-      :email => identity.email, 
+      :login => identity.email, 
       :password => "falsches"
     }
     assert_response :success
@@ -23,7 +23,7 @@ class LoggingTest < ActionDispatch::IntegrationTest
     num_log_entries = LogEntry.count
     
     post_via_redirect "/sessions", :session => { 
-      :email => identity.email, 
+      :login => identity.email, 
       :password => "sonnen"
     }
     assert_response :success

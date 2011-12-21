@@ -8,6 +8,9 @@ de:
       mr: Herr
       mrs: Frau
       mrmrs: Frau oder Herr
+      user: Benutzer
+      staff: Kollege
+      admin: Administrator
   
   application:
     layout:
@@ -19,6 +22,10 @@ de:
   
   identities:
     
+    attributes:
+      nickname: Spitzname
+      name: Name
+
     signup:
       title: Registrieren
       
@@ -70,7 +77,7 @@ de:
       
       heading: Anmelden
       form:
-        email: Email
+        login: Email oder Spitzname
         password: Passwort
         submit_button: Anmelden
         

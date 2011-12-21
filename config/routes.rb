@@ -19,6 +19,9 @@ IdentityProvider::Application.routes.draw do
         
     match '/signin',  :to => 'sessions#new'
     match '/signout', :to => 'sessions#destroy'
+
+    match '/identities/:id/validation', :to => 'identities#validation'
+    
   end
    
   match '/:locale' => 'sessions#new'         # match e.g. /de/

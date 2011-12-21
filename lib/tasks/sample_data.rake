@@ -29,9 +29,10 @@ namespace :db do
       surname   = Faker::Name.last_name
       name      = "#{firstname} #{surname}"
       password = "password"
-      identity = Identity.create(:nickname  => Faker::Internet.user_name(name),
-                                 :firstname => firstname,
-                                 :surname   => surname,
+      name_number = rand(20)
+      identity = Identity.create(:nickname  => ((1..3).include?(name_number) ? "" : Faker::Internet.user_name(name)),
+                                 :firstname => ((1..2).include?(name_number) ? "" : firstname),
+                                 :surname   => (name_number == 1    ? "" : surname),
                                  :email     => Faker::Internet.email(name),
                                  :password  => password,
                                  :password_confirmation => password)

@@ -82,8 +82,34 @@ class IndentityTest < ActiveSupport::TestCase
    assert !identity.valid?
    assert !identity.save  
  end
-
+ 
+ test "new users are not activated by default" do
+   identity = Identity.create(:email => "email@email.com",
+                              :password => "minimal",
+                              :password_confirmation => "minimal")
+   assert identity.activated.nil? 
+ end
+ 
+ test "generated activation code is validated correctly" do
+   identity1 = identities(:user)
+   identity2 = identities(:admin)
+                           
+   code = identity1.validation_code
+   
+   assert !code.blank?
+   assert identity1.has_validation_code?(code)
+   assert !identity2.has_validation_code?(code)
+   assert !identity1.has_validation_code?("")
+   assert !identity1.has_validation_code?(nil)
+   
+   assert !code.include?('\n')
+   assert !code.include?('\r')
+   assert !code.include?(' ')
+ end
+ 
 end
+
+
 # == Schema Information
 #
 # Table name: identities

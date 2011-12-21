@@ -1,0 +1,44 @@
+<h1><%= I18n.t 'identities.edit.heading' %></h1>
+
+<%= form_for(@identity) do |f| %>
+  <%= render 'shared/error_messages' %>
+
+  <div class="field">
+	<%= gravatar_for @identity %>
+  </div>
+
+  <div class="field">
+    <%= f.label I18n.t 'identities.edit.form.nickname' %><br/>
+    <%= f.text_field :nickname %>
+  </div>
+  
+  <div class="field">
+    <%= f.label I18n.t 'identities.edit.form.firstname' %><br/>
+    <%= f.text_field :firstname %>
+  </div>
+  
+  <div class="field">
+    <%= f.label I18n.t 'identities.edit.form.surname' %><br/>
+    <%= f.text_field :surname %>
+  </div>
+  
+  <div class="field">
+    <%= f.label I18n.t 'identities.edit.form.email' %><br/>
+    <%= f.text_field :email %>
+  </div>
+  
+  <div class="field">
+    <%= f.label I18n.t 'identities.edit.form.password' %><br/>
+    <%= f.password_field :password %>
+  </div>
+  
+  <div class="field">
+    <%= f.label I18n.t 'identities.edit.form.password_confirmation' %><br/>
+    <%= f.password_field :password_confirmation %>
+  </div>
+  
+  <div class="actions">
+    <%= f.submit I18n.t 'identities.edit.form.submit_button' %>
+  </div>
+  
+<% end %>

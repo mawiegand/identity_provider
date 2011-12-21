@@ -11,17 +11,18 @@ class SessionsController < ApplicationController
   # Receives user credentials via post and creates a session,
   # if the provided credentials could be verified.
   def create
-    identity = Identity.authenticate(params[:session][:email],
+    identity = Identity.authenticate(params[:session][:login],
                                      params[:session][:password])
+                                     
     if identity.nil?
-      logSigninFailure(params[:session][:email], current_identity)
+      logSigninFailure(params[:session][:login], current_identity)
       flash.now[:error] = I18n.translate('sessions.signin.flash.invalid')
       @title = I18n.translate('sessions.signin.title')
       render 'new'
     else 
-      logSigninSuccess(params[:session][:email], identity)
+      logSigninSuccess(params[:session][:login], identity)
       sign_in identity
-      redirect_to identity
+      redirect_back_or identity
     end
   end
   
@@ -37,12 +38,12 @@ class SessionsController < ApplicationController
 
     # Logging  
     def logSignout(identity)
-      LogEntry.create(:identity => identity,
+      LogEntry.create(:identity_id => identity.id,
                       :role => identity.role_string,
                       :affected_table => 'identity',
                       :affected_id => identity.id,
                       :event_type => 'signout_destroy',
-                      :description => "User #{ !identity.nickname.nil? ? identity.nickname : identity.email } signed out.");
+                      :description => "User #{ identity.address_informal } signed out.");
     end
   
     def logSigninFailure(email, as_identity)
@@ -50,7 +51,7 @@ class SessionsController < ApplicationController
       entry = LogEntry.new(:affected_table => "identity",
                            :event_type => 'signin_failure');
       if !as_identity.nil?
-        entry.identity = as_identity;
+        entry.identity_id = as_identity.id;
         entry.role = as_identity.role_string;
       else
         entry.role = 'none'
@@ -63,7 +64,7 @@ class SessionsController < ApplicationController
     end
   
     def logSigninSuccess(email, identity)
-      entry = LogEntry.new(:identity => identity,
+      entry = LogEntry.new(:identity_id => identity.id,
                            :role => identity.role_string,
                            :affected_table => 'identity',
                            :affected_id => identity.id,

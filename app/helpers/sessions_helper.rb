@@ -84,7 +84,30 @@ module SessionsHelper
   # displays the given notice (using the flash) and redirects to the
   # sign-in form.
   def deny_access(notice = "You are not allowed to access this page.")
+    store_location
     redirect_to signin_path, :notice => notice
   end
+  
+  # Redirects a user to the stored location, if stored, and to a 
+  # default location otherwise. Is used for friendly redirecting
+  # after signin.
+  def redirect_back_or(default)
+    redirect_to(stored_location || default)
+    clear_return_to
+  end
+  
+  private
+    
+    def stored_location
+      return session[:return_to]
+    end
+    
+    def store_location
+      session[:return_to] = request.fullpath
+    end
+    
+    def clear_return_to
+      session[:return_to] = nil
+    end
   
 end

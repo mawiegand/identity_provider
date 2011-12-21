@@ -1,3 +1,5 @@
+require 'base64'
+
 # Managing, authenticating and serving the identities is the main
 # purpose of the IdentityProvider. Each identity represents a 
 # registered user of the system, where the users register and
@@ -74,13 +76,21 @@ class Identity < ActiveRecord::Base
     encrypted_password == encrypt_password(potentialPassword)
   end
   
-  # authenticates the email and password and returns an identity
-  # iff
-  # * the email matches an identity in the database
+  # returns true, when the user has clicked on the validation link
+  # in the email that has been sent to him.
+  def activated?
+    return !activated.nil?
+  end
+  
+  # authenticates login (email or nickname) and password and 
+  # returns an identity iff
+  # * the login matches an email or nickname in the database
   # * the submittedPassword matches the password of that identity.
   # It returns nil otherwise.
-  def self.authenticate(email, submittedPassword)
-    identity = find_by_email(email)
+  def self.authenticate(login, submittedPassword)
+    return nil if login.blank? || submittedPassword.blank?    
+    identity = find_by_email(login)
+    identity = find_by_nickname(login) if identity.nil? # user may have specified valid nickname?
     return nil if identity.nil?
     return identity if identity.has_password?(submittedPassword)
   end
@@ -111,20 +121,30 @@ class Identity < ActiveRecord::Base
 
   # returns the most informal address that could be constructed
   # from the known user data
-  def address_informal
+  def address_informal(fallback_to_email = true)
     return nickname unless nickname.blank?
     return firstname unless firstname.blank?
-    return email
+    return email if fallback_to_email
+    return address_role
   end
   
   # Returns the most formal address that could be constructed from the
   # known user data. Does contain a translated (and possibly gendered)
   # address-prefix (Mr. / Mrs.).
-  def address_formal
-    return I18n.translate(address_prefix) + " #{surname}" unless surname.blank?
+  def address_formal(fallback_to_email = true)
+    return address_prefix + " #{surname}" unless surname.blank?
     return firstname unless firstname.blank?
     return nickname unless nickname.blank?
-    return email
+    return email if fallback_to_email
+    return address_role
+  end
+  
+  # Returns a string addressing the user according to his role
+  # (user, admin, staff)
+  def address_role 
+    return I18n.translate('general.address.admin') if admin?
+    return I18n.translate('general.address.staff') if staff?
+    return I18n.translate('general.address.user')
   end
   
   # Returns a gendered and translated address prefix (Mr. / Mrs.) 
@@ -135,6 +155,22 @@ class Identity < ActiveRecord::Base
     return I18n.translate('general.address.mrs') if gender? == :unknwon
     return I18n.translate('general.address.mrmrs') 
   end
+  
+  # generates a validation code for this identitie's email address.
+  # The implementation relies on the identitie's salt to never change.
+  # Since the identity's random-generated salt can not be deduced from 
+  # other values of the identity, it can be used as validation-token.
+  def validation_code
+    str = "#{email}.#{salt}"  
+    strb64 = Base64.encode64(str);   # Base 64 encoding just to make sure it can be part of an URL. No encryption neceesary!
+    return strb64.gsub(/[\n\r ]/,'') # no line breaks and spaces...
+  end
+
+  # checks whether the given activation code matches the identity.
+  def has_validation_code?(code)
+    return validation_code().eql? code
+  end
+  
   
   private
   
@@ -165,6 +201,8 @@ class Identity < ActiveRecord::Base
       chars = ('a'..'z').to_a + ('A'..'Z').to_a
       (0..64).collect { chars[Kernel.rand(chars.length)] }.join
     end
+    
+    
     
 end
 
