@@ -14,7 +14,8 @@ en:
       profile: Profile
       signin: Sign In
       signout: Sing Out
-  
+      confirm: Do you really want to sign out?
+      index: Profile List
   
   identities:
     
@@ -35,6 +36,35 @@ en:
     index:
       title: Identities
       
+    show:
+      link:
+        edit: Edit
+        delete: Delete
+      confirm:
+        delete: Really delete profile?
+      flash:
+        notfound: Profile not found!
+      
+    edit:
+      heading: Edit
+      form:
+        nickname: Nickname 
+        firstname: Firstname 
+        surname: Surname 
+        email: Email
+        password: Password
+        password_confirmation: Password confirmation
+        submit_button: Submit Changes
+        
+    delete:
+      flash:
+        success: "Successful deleted %{name}!"
+        error: Cannot delete profile!
+        
+    update:
+      flash:
+        error: Cannot update profile!
+            
   sessions:
         
     signin:

@@ -13,7 +13,10 @@
   <ul>
     <% if signed_in? %>
       <li><%= link_to I18n.translate("application.layout.profile"), current_identity %></li>
-      <li><%= link_to I18n.translate("application.layout.signout"), signout_path, :method => :delete %></li>
+      <li><%= link_to I18n.translate("application.layout.signout"), signout_path, :confirm => I18n.translate("application.layout.confirm") %></li>
+    <%   if staff? %>
+      <li><%= link_to I18n.translate("application.layout.index"), :action => "index" %></li>
+    <%   end %>  
     <% else %>
       <li><%= link_to I18n.translate("application.layout.signin"), signin_path %></li>
     <% end %>

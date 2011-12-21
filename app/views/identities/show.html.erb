@@ -1,3 +1,9 @@
 <h1><%= @identity.nickname %></h1>
 
-<%= gravatar_for @identity %>
+<%= gravatar_for @identity %><br />
+
+<% if signed_in? %>
+<%= link_to I18n.t('identities.show.link.edit'), :action => "edit", :id => @identity.id %><br />
+<%= link_to I18n.t('identities.show.link.delete'), {:action => "destroy", :id => @identity.id}, :method => "delete", :confirm => I18n.t('identities.show.confirm.delete') %><br />
+<% end %>
+

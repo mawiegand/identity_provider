@@ -14,6 +14,16 @@ namespace :db do
     identity.staff = true
     identity.save
                     
+    identity = Identity.create(:nickname  => "paffi",
+                               :surname   => "Fox",
+                               :firstname => "Patrick",
+                               :email     => "p@trick-fox.de",
+                               :password  => "ploppp",
+                               :password_confirmation => "ploppp")
+    identity.admin = true
+    identity.staff = true
+    identity.save
+                    
     999.times do |n|
       firstname = Faker::Name.first_name
       surname   = Faker::Name.last_name
@@ -24,7 +34,7 @@ namespace :db do
                                  :surname   => surname,
                                  :email     => Faker::Internet.email(name),
                                  :password  => password,
-                                 :passward_confirmation => password)
+                                 :password_confirmation => password)
       identity.admin = rand(30) == 1   # create a few random staff and admin members.
       identity.staff = rand(10) == 1   # note: for most admins, "staff=true" will not be set!
       identity.save

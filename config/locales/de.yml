@@ -14,7 +14,8 @@ de:
       profile: Profil
       signin: Anmelden
       signout: Abmelden
-  
+      confirm: Wirklich abmelden?
+      index: Profilliste
   
   identities:
     
@@ -35,6 +36,33 @@ de:
     index:
       title: Identitäten
       
+    show:
+      link:
+        edit: Bearbeiten
+        delete: Löschen
+      confirm:
+        delete: Profil wirklich löschen?
+        
+    edit:
+      heading: Bearbeiten
+      form:
+        nickname: Spitzname 
+        firstname: Vorname 
+        surname: Nachname 
+        email: Email
+        password: Passwort
+        password_confirmation: Passwortbestätigung
+        submit_button: Absenden
+
+    delete:
+      flash:
+        success: "%{name} erfolgreich gelöscht!"
+        
+    update:
+      flash:
+        error: Alarma!
+      
+
   sessions:
         
     signin:

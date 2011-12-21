@@ -49,15 +49,20 @@ class Identity < ActiveRecord::Base
                     
   validates :password,  :presence     => true,
                         :confirmation => true,
-                        :length       => { :within  => 6..40 }
+                        :length       => { :within  => 6..40 },
+                        :on           => :create
+                       
+  validates :password,  :confirmation => true,
+                        :length       => { :within  => 6..40, :allow_blank => true },
+                        :on           => :update
                        
   validates :firstname, :length       => { :maximum => 20 } 
   
   validates :surname,   :length       => { :maximum => 30 }
-                       
+  
   has_many  :log_entries;
   
-  default_scope :order => 'identities.nickname ASC'
+  default_scope :order => 'identities.id ASC'
                        
   before_save :set_encrypted_password
   
@@ -137,8 +142,10 @@ class Identity < ActiveRecord::Base
     # password by salting and encrypting the plain-text
     # password sent by the user.
     def set_encrypted_password
-      self.salt = make_salt if new_record?
-      self.encrypted_password = encrypt_password(self.password)
+      if !password.blank?
+        self.salt = make_salt if new_record?
+        self.encrypted_password = encrypt_password(self.password)
+      end
     end
     
     # combine password and salt and then call the encryption
