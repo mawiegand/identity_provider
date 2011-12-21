@@ -38,12 +38,12 @@ class SessionsController < ApplicationController
 
     # Logging  
     def logSignout(identity)
-      LogEntry.create(:identity => identity,
+      LogEntry.create(:identity_id => identity.id,
                       :role => identity.role_string,
                       :affected_table => 'identity',
                       :affected_id => identity.id,
                       :event_type => 'signout_destroy',
-                      :description => "User #{ !identity.nickname.nil? ? identity.nickname : identity.email } signed out.");
+                      :description => "User #{ identity.address_informal } signed out.");
     end
   
     def logSigninFailure(email, as_identity)
@@ -51,7 +51,7 @@ class SessionsController < ApplicationController
       entry = LogEntry.new(:affected_table => "identity",
                            :event_type => 'signin_failure');
       if !as_identity.nil?
-        entry.identity = as_identity;
+        entry.identity_id = as_identity.id;
         entry.role = as_identity.role_string;
       else
         entry.role = 'none'
@@ -64,7 +64,7 @@ class SessionsController < ApplicationController
     end
   
     def logSigninSuccess(email, identity)
-      entry = LogEntry.new(:identity => identity,
+      entry = LogEntry.new(:identity_id => identity.id,
                            :role => identity.role_string,
                            :affected_table => 'identity',
                            :affected_id => identity.id,

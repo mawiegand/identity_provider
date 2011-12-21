@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111219154246) do
+ActiveRecord::Schema.define(:version => 20111221094027) do
 
   create_table "identities", :force => true do |t|
     t.string   "email"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(:version => 20111219154246) do
     t.string   "firstname"
     t.string   "surname"
     t.string   "nickname"
+    t.datetime "activated"
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true

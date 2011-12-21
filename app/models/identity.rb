@@ -1,3 +1,5 @@
+require 'base64'
+
 # Managing, authenticating and serving the identities is the main
 # purpose of the IdentityProvider. Each identity represents a 
 # registered user of the system, where the users register and
@@ -67,6 +69,12 @@ class Identity < ActiveRecord::Base
   # has been encrypted and stored in the database. 
   def has_password?(potentialPassword)
     encrypted_password == encrypt_password(potentialPassword)
+  end
+  
+  # returns true, when the user has clicked on the validation link
+  # in the email that has been sent to him.
+  def activated?
+    return !activated.nil?
   end
   
   # authenticates login (email or nickname) and password and 
@@ -143,6 +151,22 @@ class Identity < ActiveRecord::Base
     return I18n.translate('general.address.mrmrs') 
   end
   
+  # generates a validation code for this identitie's email address.
+  # The implementation relies on the identitie's salt to never change.
+  # Since the identity's random-generated salt can not be deduced from 
+  # other values of the identity, it can be used as validation-token.
+  def validation_code
+    str = "#{email}.#{salt}"  
+    strb64 = Base64.encode64(str);   # Base 64 encoding just to make sure it can be part of an URL. No encryption neceesary!
+    return strb64.gsub(/[\n\r ]/,'') # no line breaks and spaces...
+  end
+
+  # checks whether the given activation code matches the identity.
+  def has_validation_code?(code)
+    return validation_code().eql? code
+  end
+  
+  
   private
   
     # create salt, if not already set, and set the encrypted
@@ -170,6 +194,8 @@ class Identity < ActiveRecord::Base
       chars = ('a'..'z').to_a + ('A'..'Z').to_a
       (0..64).collect { chars[Kernel.rand(chars.length)] }.join
     end
+    
+    
     
 end
 

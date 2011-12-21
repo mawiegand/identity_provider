@@ -13,12 +13,16 @@ IdentityProvider::Application.routes.draw do
   # all resources and paths are scoped in an optional path_prefix determining the
   # locale to use. Presently only available: en, de
   scope "(:locale)", :locale => /en|de/ do   
+
     resources :identities,  :only => [:new, :create, :show, :index]
     resources :sessions,    :only => [:new, :create, :destroy]
     resources :log_entries, :only => [:index]
 
     match '/signin',  :to => 'sessions#new'
     match '/signout', :to => 'sessions#destroy'
+
+    match '/identities/:id/validation', :to => 'identities#validation'
+    
   end
    
   match '/:locale' => 'sessions#new'         # match e.g. /de/
