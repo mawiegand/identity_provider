@@ -58,3 +58,13 @@ footer.site-footer {
 section.content {
   padding: 6px 60px 6px 60px;
 }
+
+.site-name {
+  font-size: 24pt;
+}
+
+nav.site-navigation {
+  float: right;
+}
+
+
