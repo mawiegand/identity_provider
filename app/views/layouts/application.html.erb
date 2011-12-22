@@ -7,9 +7,13 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+
+<div class=wrapper>
   
-<header>
-<nav class="round">
+<header class="site-header">
+  <span class="site-name">Identity Provider</span>
+  
+  <nav class="round">  
   <ul>
     <% if signed_in? %>
       <li><%= link_to I18n.translate("application.layout.profile"), current_identity %></li>
@@ -21,17 +25,22 @@
       <li><%= link_to I18n.translate("application.layout.signin"), signin_path %></li>
     <% end %>
   </ul>
-</nav>  
+  </nav>  
 </header>
   
-<section class="round">
+<section class="content">
   <% flash.each do |key, value| %>
     <div class="flash <%= key %>"><%= value %></div>
   <% end %>
   <%= yield %>  
 </section>
 
-<%= debug(params) if Rails.env.development? %>
+<div class="push"></div>
+</div>
+
+<footer class="site-footer">
+  <%= debug(params) if Rails.env.development? %>
+</footer>
 
 </body>
 </html>

@@ -24,8 +24,8 @@ ActiveRecord::Schema.define(:version => 20111221094027) do
     t.string   "firstname"
     t.string   "surname"
     t.string   "nickname"
-    t.boolean  "deleted",                           :default => false
     t.datetime "activated"
+    t.boolean  "deleted",                           :default => false
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true

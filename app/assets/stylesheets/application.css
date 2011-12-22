@@ -5,3 +5,57 @@
  *= require_self
  *= require_tree . 
 */
+
+html {
+  height: 100%;
+}
+
+body {
+  background-image: url("/assets/background.jpg");
+  padding: 0px;
+  margin: 0px;
+  min-height: 100%;
+  height: 100%;
+}
+
+header.site-header {
+  width: 100%;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-bottom: 1px;
+  border-color: #AAA;
+  border-style: solid;
+  
+  padding: 6px 60px 6px 60px;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #FFF), color-stop(1.0, #DDD));
+}
+
+.wrapper {
+  width: 100%;
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -200px;
+}
+
+.site-footer, .push {
+  height: 200px;
+}
+
+footer.site-footer {
+  width: 100%;
+  border-top: 1px;
+  border-left: 0px;
+  border-right: 0px;
+  border-bottom: 0px;
+  border-color: #AAA;
+  border-style: solid;
+  
+  padding: 6px 60px 6px 60px;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #DDD), color-stop(1.0, #FFF));
+}
+
+section.content {
+  padding: 6px 60px 6px 60px;
+}
