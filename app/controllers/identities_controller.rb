@@ -9,7 +9,7 @@ class IdentitiesController < ApplicationController
 
   # display the profile of an individual identity
   def show
-    @identity = Identity.find_by_id_and_deleted(params[:id], false) || render_404
+    @identity = Identity.find_by_id_and_deleted(params[:id], false) || render_404()
     @title = @identity.address_informal
     
     respond_to do |format|

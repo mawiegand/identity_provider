@@ -25,4 +25,10 @@ class ApplicationController < ActionController::Base
       return nil unless params[:locale]
       I18n.available_locales.include?(params[:locale].to_sym) ? params[:locale] : nil
     end
+      
+    # renders a 404 error
+    def render_404
+      raise ActionController::RoutingError.new('Not Found')
+    end
+
 end
