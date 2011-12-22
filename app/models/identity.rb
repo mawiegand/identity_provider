@@ -89,8 +89,8 @@ class Identity < ActiveRecord::Base
   # It returns nil otherwise.
   def self.authenticate(login, submittedPassword)
     return nil if login.blank? || submittedPassword.blank?    
-    identity = find_by_email(login)
-    identity = find_by_nickname(login) if identity.nil? # user may have specified valid nickname?
+    identity = find_by_email_and_deleted(login, false)
+    identity = find_by_nickname_and_deleted(login, false) if identity.nil? # user may have specified valid nickname?
     return nil if identity.nil?
     return identity if identity.has_password?(submittedPassword)
   end
@@ -100,7 +100,7 @@ class Identity < ActiveRecord::Base
   # tracking and permanent login (remember token) in order to not 
   # have to remember password and email for the session. 
   def self.authenticate_with_salt(id, cookie_salt)
-    identity = find_by_id(id)
+    identity = find_by_id_and_deleted(id, false)
     return nil if identity.nil?
     return identity if identity.salt == cookie_salt
   end

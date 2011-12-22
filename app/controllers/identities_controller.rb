@@ -4,7 +4,7 @@
 # the system.
 class IdentitiesController < ApplicationController
 
-  before_filter :authenticate,    :only => [:edit, :delete]   # must be logged-in to see these pages
+  before_filter :authenticate,    :only => [:edit, :delete, :update]   # must be logged-in to see these pages
   before_filter :authorize_staff, :only => [:index]   # only staff can access these pages
 
   # display the profile of an individual identity
@@ -61,7 +61,8 @@ class IdentitiesController < ApplicationController
       @identity = Identity.find(params[:id])
     else
       if params[:id].to_i != current_identity.id
-        redirect_to :action => "edit", :id => current_identity.id, :error => I18n.t('identities.update.flash.error', :name => @identity.address_informal)
+        @identity = Identity.find(params[:id])
+        redirect_to :action => "edit", :id => current_identity.id, :error => I18n.t('identities.update.flash.error', :name => @identity.address_informal), :status => 500 and return
       else
         @identity = current_identity
       end
@@ -82,7 +83,7 @@ class IdentitiesController < ApplicationController
       redirect_to :action => "show"
     else
       flash[:error] = I18n.t('identities.update.flash.error', :name => @identity.address_informal)
-      render :action => "edit"
+      render :action => "edit", :status => 500
     end
   end
   
@@ -94,7 +95,7 @@ class IdentitiesController < ApplicationController
       if params[:id].to_i != current_identity.id
         flash[:error] = I18n.t('identities.delete.flash.error')
         @identity = Identity.find(params[:id])
-        return render :action => "show"      
+        render :action => "show" and return      
       else
         @identity = current_identity
       end

@@ -29,7 +29,7 @@ admin:
   
 staff:
   surname: Pagelsdorf
-  email: frank@pagelsdorf
+  email: frank@pagelsdorf.de
   salt: abcde
   encrypted_password: <%= Digest::SHA2.hexdigest("abcde--sonnen") %>
   admin: false
@@ -45,4 +45,24 @@ user:
   admin: false
   staff: false
   
-
+other_user:
+  nickname: jupp
+  firstname: Jupp
+  surname: Heynckes
+  email: jupp@bayern.de
+  salt: abcd
+  encrypted_password: <%= Digest::SHA2.hexdigest("abcd--sonnen") %>
+  admin: false
+  staff: false
+  
+deleted:
+  nickname: babbel
+  firstname: Markus
+  surname: Babbel
+  email: babbel@raus.de
+  salt: abcd
+  encrypted_password: <%= Digest::SHA2.hexdigest("abcd--sonnen") %>
+  admin: false
+  staff: false
+  deleted: true
+  
