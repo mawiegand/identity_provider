@@ -1,4 +1,6 @@
-<h1><%= I18n.translate 'sessions.signin.heading' %></h1>
+<div class="signin-panel-wrapper">
+<div class="signin-heading"><%= I18n.translate 'sessions.signin.heading' %></div> 
+<div class="signin-panel">
 
 <%= form_for(:session, :url => sessions_path, :html => { :id => 'loginForm'}) do |f| %>
   <div class="field">
@@ -10,12 +12,14 @@
     <%= f.password_field :password %>
   </div>
   <div class="actions">
-    <%= f.submit I18n.translate 'sessions.signin.form.submit_button' %>
+    <%= f.submit I18n.translate('sessions.signin.form.submit_button'), :class => "button-on-white" %>
   </div>
 <% end %>
-<p><%= I18n.translate 'sessions.signin.new_user.question' %>
-   <%= link_to I18n.translate('sessions.signin.new_user.link'), new_identity_path %>  
-  
+</div>
+
+<div class="register-link"><%= I18n.translate 'sessions.signin.new_user.question' %>
+   <%= link_to I18n.translate('sessions.signin.new_user.link'), new_identity_path %>  </div>
+ </div>
   
 <script>
 /*

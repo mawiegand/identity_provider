@@ -2,11 +2,6 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-body {
-  font-family: Helvetica, Arial, Lucida;
-  font-size: 12pt;
-  color: #333;
-}
 
 a {
   color: #333;
@@ -22,6 +17,29 @@ a:hover {
   -moz-border-radius: 8px;
 }
 
+
+div.profile {
+#  background-color: #FFF;
+  padding: 1px 20px  20px;
+  width: 500px;
+  
+#  -moz-box-shadow: 2px 2px 2px RGBA(0,0,0,.1) ;
+#  -webkit-box-shadow: 2px 2px 2px RGBA(0,0,0,.1);
+#  box-shadow: 2px 2px 2px RGBA(0,0,0,.1);  
+
+  border-radius: 6px;
+  
+  min-height: 300px;
+}
+
+div.profile-info {
+  margin-left:140px;
+}
+
+div.profile-button-bar {
+  padding-top: 20px;
+}
+
 .gravatar-float {
   float: left;
   width: 30px;
@@ -33,6 +51,21 @@ a:hover {
   padding: 2px;
   background-color: #FFF;
 }
+
+div.profile .gravatar-float {
+  width: 120px;
+  height: 120px;
+  margin-right: 10px;
+  margin-top: 18px;
+}
+
+.profile h1 {
+  font-size: 36px;
+  padding-top: 0px;
+  margin-top: 14px;
+}
+
+
 
 
 .identity-badge {

@@ -1,8 +1,19 @@
-<h1><%= I18n.translate('identities.attributes.nickname').capitalize + ": #{@identity.nickname}" %></h1>
-<p><%=  I18n.translate('identities.attributes.name').capitalize     + ": #{@identity.firstname} #{@identity.surname}" %></p>
-<%= gravatar_for @identity %>
 
+
+<div class="profile">
+<%= gravatar_for @identity, 'gravatar-float', :size => 120 %>
+<div class="profile-info">
+<h1><%="#{@identity.address_informal}" %></h1>
+   <%="#{@identity.firstname} #{@identity.surname}" %><br/>
+   <%="#{@identity.email}" %><br/>
+   <%="joined #{ time_ago_in_words @identity.created_at} ago"%>
+</div>
+
+
+<div class="profile-button-bar">
 <% if signed_in? %>
-<%= link_to I18n.t('identities.show.link.edit'), :action => "edit", :id => @identity.id %><br />
-<%= link_to I18n.t('identities.show.link.delete'), {:action => "destroy", :id => @identity.id}, :method => "delete", :confirm => I18n.t('identities.show.confirm.delete') %><br />
+  <%= link_to I18n.t('identities.show.link.edit'), {:action => "edit", :id => @identity.id}, :class => 'button-on-white' %>
+  <%= link_to I18n.t('identities.show.link.delete'), {:action => "destroy", :id => @identity.id}, :method => "delete", :confirm => I18n.t('identities.show.confirm.delete'), :class => 'button-on-white' %><br />
 <% end %>
+</end>
+</end>
