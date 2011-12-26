@@ -115,7 +115,7 @@ class IdentitiesController < ApplicationController
   
   # show a paginated list of all identities in the system
   def index
-    @identities = Identity.where(:deleted => false).paginate(:page => params[:page], :per_page => 60)
+    @identities = Identity.paginate(:page => params[:page], :per_page => 60)
     @title = I18n.t('identities.index.title')
   end
   
