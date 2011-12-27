@@ -7,7 +7,7 @@
 
   <div class="field">
     <%= f.label I18n.t 'identities.signup.form.nickname' %><br/>
-    <%= f.text_field :nickname %>
+    <%= f.text_field :nickname, :class => 'inline' %> <div class="inline" id="nickname_response"></div>
   </div>
   
   <div class="field">

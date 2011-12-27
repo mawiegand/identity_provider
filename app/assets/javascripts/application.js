@@ -12,4 +12,23 @@ $(document).ready(function() {
   
   $("div.flash").delay(3000).fadeOut('slow');
   
+  $('#identity_nickname').focusout(function(eventObject) {
+    value = $('#identity_nickname').val();
+    $.ajax({
+      url: "/identities/"+value,
+      statusCode: {
+        200: function() {
+          $("#nickname_response").html('already taken').css('color', '#E66');
+        },
+        404: function() {
+          $("#nickname_response").html('ok').css('color', '#6D6');
+        }
+      }
+    })
+  });
+  
+  $('#identity_nickname').focusin(function(eventObject) {
+    $("#nickname_response").html('');
+  });
+
 });

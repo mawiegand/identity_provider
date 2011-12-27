@@ -9,12 +9,18 @@ class IdentitiesController < ApplicationController
 
   # display the profile of an individual identity
   def show
-    @identity = Identity.find_by_id_and_deleted(params[:id], false) || render_404()
-    @title = @identity.address_informal
+    @identity = Identity.find_by_id_and_deleted(params[:id], false)
+    @identity = Identity.find_by_nickname_and_deleted(params[:id], false) if @identity.nil?
     
     respond_to do |format|
-      format.html
-      format.json { render :json => @identity }
+      format.html {
+        render_404() and return if @identity.nil?
+        @title = @identity.address_informal
+      }
+      format.json { 
+        head :not_found and return if @identity.nil?
+        render :json => @identity
+      }
     end
   end
   
