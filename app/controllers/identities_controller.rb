@@ -4,8 +4,8 @@
 # the system.
 class IdentitiesController < ApplicationController
 
-  before_filter :authenticate,    :only => [:edit, :delete, :update]   # must be logged-in to see these pages
-  before_filter :authorize_staff, :only => [:index]   # only staff can access these pages
+  before_filter :authenticate,    :except   => [:new, :show]   # these pages can be seen withou logging-in
+  before_filter :authorize_staff, :only   => [:index]   # only staff can access these pages
 
   # display the profile of an individual identity
   def show
