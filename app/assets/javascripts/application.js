@@ -34,7 +34,7 @@ $(document).ready(function() {
   
   // // Checking availability of nickname
   $('#identity_nickname').focusout(function(eventObject) {
-    value = $('#identity_nickname').val();
+    var value = $('#identity_nickname').val();
     $.ajax({
       url: "/identities/"+value,
       dataType: "json",

@@ -53,7 +53,12 @@ header.site-header {
   height: 200px;
 }
 
+.clear {
+  clear: both;
+}
+
 footer.site-footer {
+  clear: both;
   height: 188px;
   border-top: 1px;
   border-left: 0px;
