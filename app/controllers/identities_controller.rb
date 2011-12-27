@@ -10,7 +10,9 @@ class IdentitiesController < ApplicationController
   # display the profile of an individual identity
   def show
     @identity = Identity.find_by_id_and_deleted(params[:id], false)
-    @identity = Identity.find_by_nickname_and_deleted(params[:id], false) if @identity.nil?
+    @identity = Identity.find(:first, :conditions => ["lower(nickname) = lower(?) AND deleted = ?", params[:id], false]) if @identity.nil?
+    # article about a method to generate a case-insensitive dynamic finder to replace the
+    # code above: http://devblog.aoteastudios.com/2009/12/add-case-insensitive-finders-by.html
     
     respond_to do |format|
       format.html {

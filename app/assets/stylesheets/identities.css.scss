@@ -4,6 +4,7 @@
 
 
 div.signup-panel {
+  float: left;
   min-height: 490px;
   border-radius: 20px;
   border: #777 12px solid;
@@ -13,12 +14,27 @@ div.signup-panel {
 div.signup-panel-wrapper {
   color: #777;
   width: 600px;
+  min-height: 600px;
 }
 
 div.signup-heading {
   font-size: 32pt;
   padding: 6px 16px;
 }
+
+img#gravatar-image {
+  float: right;
+  width: 120px;
+  height: 120px;
+  margin-right: 5px;
+  border-width: 1px;
+  broder-color: #333;
+  border-style: solid;
+  padding: 2px;
+  background-color: #FFF;
+  display: none;
+}
+
 
 a {
   color: #333;
@@ -81,6 +97,8 @@ div.profile .gravatar-float {
   padding-top: 0px;
   margin-top: 14px;
 }
+
+
 
 
 
