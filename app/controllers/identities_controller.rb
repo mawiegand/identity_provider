@@ -18,6 +18,7 @@ class IdentitiesController < ApplicationController
         @title = @identity.address_informal
       }
       format.json { 
+        head :bad_request and return if name_blacklisted? params[:id]
         head :not_found and return if @identity.nil?
         render :json => @identity
       }
@@ -152,6 +153,11 @@ class IdentitiesController < ApplicationController
   end
   
   private
+  
+    def name_blacklisted?(name)
+      black_list = %w{index edit new admin staff user adolf hitler}
+      black_list.include? name.downcase
+    end
     
     def logRegisterSuccess(identity)
       entry = LogEntry.new(:affected_table => 'identity',

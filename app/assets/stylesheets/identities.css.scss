@@ -3,6 +3,23 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 
+div.signup-panel {
+  min-height: 490px;
+  border-radius: 20px;
+  border: #777 12px solid;
+}
+
+
+div.signup-panel-wrapper {
+  color: #777;
+  width: 600px;
+}
+
+div.signup-heading {
+  font-size: 32pt;
+  padding: 6px 16px;
+}
+
 a {
   color: #333;
   text-decoration: none;

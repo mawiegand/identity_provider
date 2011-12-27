@@ -16,13 +16,17 @@ $(document).ready(function() {
     value = $('#identity_nickname').val();
     $.ajax({
       url: "/identities/"+value,
+      dataType: "json",
       statusCode: {
         200: function() {
           $("#nickname_response").html('already taken').css('color', '#E66');
         },
+        400: function() {
+          $("#nickname_response").html('forbidden').css('color', '#E66');
+        },
         404: function() {
           $("#nickname_response").html('ok').css('color', '#6D6');
-        }
+        },
       }
     })
   });

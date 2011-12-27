@@ -1,6 +1,7 @@
 
-
-<h1><%= I18n.t 'identities.signup.heading' %></h1>
+<div class="signup-panel-wrapper">
+<div class="signup-heading"><%= I18n.translate 'identities.signup.heading' %></div> 
+<div class="signup-panel">
 
 <%= form_for(@identity) do |f| %>
   <%= render 'shared/error_messages' %>
@@ -26,6 +27,9 @@
   </div>
   
   <div class="actions">
-    <%= f.submit I18n.t 'identities.signup.form.submit_button' %>
+    <%= f.submit I18n.t('identities.signup.form.submit_button'), :class => "button-on-white" %>
   </div>
 <% end %>
+
+</div>
+</div>
