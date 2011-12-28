@@ -2,11 +2,23 @@
 # new identities, displays profiles of identities and allows
 # staff members to browse a sorted list of all identities in
 # the system.
-class IdentitiesController < ApplicationController
+class IdentitiesController < AttributeAuthorizationController
 
   before_filter :authenticate,    :except   => [:new, :show]   # these pages can be seen withou logging-in
-  before_filter :authorize_staff, :only   => [:index]   # only staff can access these pages
+  before_filter :authorize_staff, :only     => [:index]        # only staff can access these pages
+  
+  attr_access :nickname, :id, :admin, :staff,          :as => :default, :mode => :read 
+  attr_access *accessible_attributes(:default, :read), :as => :user,    :mode => :read
+  attr_access *accessible_attributes(:user,    :read), :email, :firstname, :surname, :activated, :created_at, :updated_at, :deleted,         :as => :owner,   :mode => :read
+  attr_access *accessible_attributes(:user,    :read), :email, :firstname, :surname, :activated, :created_at, :updated_at, :deleted, :salt,  :as => :staff,   :mode => :read
+  attr_access *accessible_attributes(:staff,   :read), :as => :admin,   :mode => :read
 
+  attr_access :nickname, :firstname, :surname, :password, :password_confirmation,                                  :as => :owner,   :mode => :update
+  attr_access *accessible_attributes(:owner, :update), :firstname, :surname, :activated, :deleted, :staff, :salt,  :as => :staff,   :mode => :update
+  attr_access *accessible_attributes(:staff, :update), :email, :admin,                                             :as => :admin,   :mode => :update
+
+  attr_access :nickname, :firstname, :surname, :email, :password, :password_confirmation,   :as => [ :default, :user, :owner, :staff, :admin ],   :mode => :create
+  
   # display the profile of an individual identity
   def show
     @identity = Identity.find_by_id_and_deleted(params[:id], false)
