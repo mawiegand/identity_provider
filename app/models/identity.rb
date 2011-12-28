@@ -1,5 +1,4 @@
 require 'base64'
-
 # Managing, authenticating and serving the identities is the main
 # purpose of the IdentityProvider. Each identity represents a 
 # registered user of the system, where the users register and
@@ -38,7 +37,14 @@ require 'base64'
 #
 class Identity < ActiveRecord::Base
   attr_accessor :password
-  attr_accessible :nickname, :firstname, :surname, :email, :password, :password_confirmation
+  attr_accessible :nickname, :firstname, :surname, :password, :password_confirmation
+  attr_readonly :email
+  
+  attr_readable :nickname, :id, :admin, :staff, :as => :default 
+  attr_readable *readable_attributes(:default), :created_at,  :as => :user
+  attr_readable *readable_attributes(:user), :email, :firstname, :surname, :activated, :updated_at, :deleted,         :as => :owner
+  attr_readable *readable_attributes(:user), :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt,  :as => :staff
+  attr_readable *readable_attributes(:staff),   :as => :admin
   
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   
