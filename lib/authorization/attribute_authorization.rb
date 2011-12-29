@@ -1,4 +1,3 @@
-
 # The AttributeAuthorizationController's design goal is to provide a mechanism
 # for role-based authorizing access to indiviual attributes of the controlled
 # resource, where the mechanism closely resembles the interface of the 
@@ -7,6 +6,10 @@ module FiveDAuthorization
   
   def self.included(base)
     base.extend(ClassMethods)
+  end
+  
+  def sanitized_hash(role = :default)
+    self.class.sanitized_hash_from_model(self, role)
   end
   
   module ClassMethods
@@ -42,9 +45,22 @@ module FiveDAuthorization
     def readable_attributes(role = :default)
       readable_attributes_configs[role]            # map arguments to an access to a hash of roles
     end
-  
+    
+    def sanitized_hash_from_model(object, role = :default)
+      sanitized_hash_from_keys_and_whitelist(object.attribute_names, object, readable_attributes(role))
+    end
+    
+    def sanitized_hash_from_hash(hash, role = :default)
+      sanitized_hash_from_keys_and_whitelist(hash.keys, hash, readable_attributes(role))
+    end
   
     private
+  
+      def sanitized_hash_from_keys_and_whitelist(keys, hash, whitelist)
+        result = {}
+        keys.each { |attr| result[attr] = hash[attr] if whitelist.include? attr.to_s }
+        return result
+      end
   
       # Private method managing the access to the attributes hash of hashes. 
       # Automatically constructs a new hash, if there hasn't been any.
