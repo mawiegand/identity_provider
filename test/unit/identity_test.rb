@@ -5,15 +5,15 @@ class IndentityTest < ActiveSupport::TestCase
  test "invalid identities are invalid" do
    identity = Identity.new
    assert !identity.valid?
-   assert !Identity.new(:email =>"minimal@min.de", 
-                        :password=>"minimal", 
-                        :password_confirmation=>"minimal2").valid?
+   assert !Identity.new({:email =>"minimal@min.de", 
+                         :password=>"minimal", 
+                         :password_confirmation=>"minimal2"}, :as => :default).valid?
  end
  
  test "minimal valid identity is valid" do
-   identity = Identity.new(:email =>"minimal@min.de", 
-                           :password=>"minimal", 
-                           :password_confirmation=>"minimal")
+   identity = Identity.new({:email =>"minimal@min.de", 
+                            :password=>"minimal", 
+                            :password_confirmation=>"minimal"}, :as => :creator)
                            
    assert identity.valid?
  end
@@ -23,11 +23,20 @@ class IndentityTest < ActiveSupport::TestCase
    assert !identity.save
  end
  
-  test "can save valid identity" do
-   identity = Identity.new(:nickname =>"minimal", 
-                           :email    =>"minimal@haus.de", 
-                           :password =>"minimal", 
-                           :password_confirmation=>"minimal")
+  test "can save valid identity without protection" do
+   identity = Identity.new({:nickname =>"minimal", 
+                            :email    =>"minimal@haus.de", 
+                            :password =>"minimal", 
+                            :password_confirmation=>"minimal"}, :without_protection => true)
+   assert identity.save
+ end
+ 
+ 
+ test "can save valid identity with protection" do
+   identity = Identity.new({:nickname =>"minimal", 
+                            :email    =>"minimal@haus.de", 
+                            :password =>"minimal", 
+                            :password_confirmation=>"minimal"}, :as => :creator)
                            
    assert identity.save
  end
@@ -46,47 +55,49 @@ class IndentityTest < ActiveSupport::TestCase
  end
  
  test "nil_nicknames are accepted" do
-   identity = Identity.new(:email    => "email1@email.com", 
-                           :password => "minimal",
-                           :password_confirmation => "minimal")
+   identity = Identity.new({:email    =>"minimal@haus.de", 
+                            :password =>"minimal", 
+                            :password_confirmation=>"minimal"}, :as => :creator)
    assert identity.valid?
    assert identity.save
 
-   identity = Identity.new(:nickname => "",
-                              :email    => "email2@email.com", 
-                              :password => "minimal",
-                              :password_confirmation => "minimal")
+   identity = Identity.new({:nickname =>"", 
+                            :email    =>"minimal@haus2.de", 
+                            :password =>"minimal", 
+                            :password_confirmation=>"minimal"}, :as => :creator)
    assert identity.valid?
    assert identity.save
 
-   identity = Identity.new(:nickname => "",
-                              :email    => "email3@email.com", 
-                              :password => "minimal",
-                              :password_confirmation => "minimal")
+   identity = Identity.new({:nickname =>"",              # second (third) user wihtout nick
+                            :email    =>"minimal@haus3.de", 
+                            :password =>"minimal", 
+                            :password_confirmation=>"minimal"}, :as => :creator)
    assert identity.valid?
    assert identity.save
  end
  
  test "nicknames must be unique if specified" do
-    identity = Identity.new(:nickname => "nick",
-                            :email    => "email2@email.com", 
-                            :password => "minimal",
-                            :password_confirmation => "minimal")
+   identity = Identity.new({:nickname =>"nick", 
+                            :email    =>"minimal@haus.de", 
+                            :password =>"minimal", 
+                            :password_confirmation=>"minimal"}, :as => :creator)
    assert identity.valid?
    assert identity.save
 
-   identity = Identity.new(:nickname => "nick",
-                           :email    => "email3@email.com", 
-                           :password => "minimal",
-                           :password_confirmation => "minimal")
+   identity = Identity.new({:nickname =>"nick", 
+                            :email    =>"minimal@haus2.de", 
+                            :password =>"minimal", 
+                            :password_confirmation=>"minimal"}, :as => :creator)
    assert !identity.valid?
    assert !identity.save  
  end
  
  test "new users are not activated by default" do
-   identity = Identity.create(:email => "email@email.com",
-                              :password => "minimal",
-                              :password_confirmation => "minimal")
+   identity = Identity.new({:nickname =>"minimal", 
+                            :email    =>"minimal@haus.de", 
+                            :password =>"minimal", 
+                            :password_confirmation=>"minimal"}, :as => :creator)
+   assert identity.valid?
    assert identity.activated.nil? 
  end
  
@@ -106,6 +117,40 @@ class IndentityTest < ActiveSupport::TestCase
    assert !code.include?('\r')
    assert !code.include?(' ')
  end
+ 
+ 
+ 
+  test "read access properly set" do
+    assert Identity.readable_attributes(:default).include?  'nickname'
+    assert Identity.readable_attributes(:default).include?  'id'
+    assert Identity.readable_attributes(:owner).include?  'email'
+    assert Identity.readable_attributes(:admin).include? 'created_at'
+
+    assert !Identity.readable_attributes(:user).include?('email')
+    assert !Identity.readable_attributes(:default).include?('email')    
+    assert !Identity.readable_attributes(:default).include?('salt')    
+    assert !Identity.readable_attributes(:user).include?('salt')    
+    assert !Identity.readable_attributes(:owner).include?('salt')    
+    assert !Identity.readable_attributes(:user).include?('surname')
+    assert !Identity.readable_attributes(:default).include?('surname')
+    assert !Identity.readable_attributes(:unknown).include?('nickname')
+  end
+  
+  test "no-one cann read encrypted password" do
+    assert !Identity.readable_attributes(:default).include?('encrypted_password')    
+    assert !Identity.readable_attributes(:user).include?('encrypted_password')    
+    assert !Identity.readable_attributes(:owner).include?('encrypted_password')    
+    assert !Identity.readable_attributes(:staff).include?('encrypted_password')    
+    assert !Identity.readable_attributes(:admin).include?('encrypted_password')    
+    assert !Identity.readable_attributes.include?('encrypted_password')    
+    assert !Identity.readable_attributes(:unknown).include?('encrypted_password')    
+  end
+
+  test "write access properly set" do
+    assert !Identity.accessible_attributes(:user).include?('surname')
+    assert !Identity.accessible_attributes(:default).include?('nickname')
+    assert !Identity.accessible_attributes(:unknown).include?('nickname')
+  end
  
 end
 
