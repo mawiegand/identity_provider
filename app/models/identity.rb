@@ -114,11 +114,27 @@ class Identity < ActiveRecord::Base
     return identity if identity.salt == cookie_salt
   end
   
+  def self.valid_identifer?(identifer)
+    self.valid_id?(identifer) || self.valid_nickname?(identifer)
+  end
+  
+  def self.valid_id?(id)
+    id.index(/^[1-9]\d*$/) != nil
+  end
+  
+  def self.valid_nickname?(name)
+    false
+  end
+  
   # returns a string representation of the identities role
   def role_string
-    return "admin" if admin
-    return "staff" if staff
-    return "user"
+    return role.to_s
+  end
+  
+  def role
+    return :admin if admin
+    return :staff if staff
+    return :user
   end
   
   # this is just a stub and most be replaced by an appropriate

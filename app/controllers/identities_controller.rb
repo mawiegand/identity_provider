@@ -9,20 +9,35 @@ class IdentitiesController < ApplicationController
     
   # display the profile of an individual identity
   def show
-    @identity = Identity.find_by_id_and_deleted(params[:id], false)
-    @identity = Identity.find(:first, :conditions => ["lower(nickname) = lower(?) AND deleted = ?", params[:id], false]) if @identity.nil?
+    identity = nil
+    bad_request = (name_blacklisted?(params[:id]) && !staff?) || !Identity.valid_identifer?(params[:id])
+  
+    raise BadRequestError.new('Bad Request for Identity %s' % params[:id]) if bad_request
+    
+    identity = Identity.find_by_id(params[:id]) if Identity.valid_id?(params[:id])
+    identity = Identity.find(:first, :conditions => ["lower(nickname) = lower(?)", params[:id]]) if identity.nil? && Identity.valid_nickname?(params[:id])
     # article about a method to generate a case-insensitive dynamic finder to replace the
     # code above: http://devblog.aoteastudios.com/2009/12/add-case-insensitive-finders-by.html
     
+    if identity && identity.deleted == true && !staff?         # only staff can see deleted users
+      identity = nil
+    end
+    
+    raise NotFoundError.new('Page Not Found') if identity.nil?
+    
+    role = current_identity ? current_identity.role : :default
+    role = :owner if !admin? && current_identity && current_identity.id == identity.id
+    
+    if identity
+      @sanitized_identity = identity.sanitized_hash(role)
+    end
+  
     respond_to do |format|
       format.html {
-        render_404() and return if @identity.nil?
-        @title = @identity.address_informal
+        @title = identity.address_informal
       }
       format.json { 
-        head :bad_request and return if name_blacklisted? params[:id]
-        head :not_found and return if @identity.nil?
-        render :json => @identity
+        render :json => @sanitized_identity
       }
     end
   end

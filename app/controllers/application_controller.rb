@@ -1,8 +1,12 @@
+require 'exception/http_exceptions'
+
 class ApplicationController < ActionController::Base
   protect_from_forgery
   include SessionsHelper     # session helpers must be available to all controllers
   
   before_filter :set_locale  # get the locale from the user parameters
+  
+  rescue_from NotFoundError, BadRequestError, :with => :render_response_for_exception
   
   # This method adds the locale to all rails-generated path, e.g. root_path.
   # Based on I18n documentation in rails guides:
@@ -26,9 +30,35 @@ class ApplicationController < ActionController::Base
       I18n.available_locales.include?(params[:locale].to_sym) ? params[:locale] : nil
     end
       
+    def render_response_for_exception(exception)  
+      logger.info("%s: '%s', for request '%s' from %s" % [exception.class, exception.message, request.url, request.remote_ip] )
+      respond_to do |format|
+        format.html {
+          render_html_for_exception exception
+        }
+        format.json { 
+          render_json_for_exception exception
+        }
+      end
+    end
+    
+    def render_json_for_exception(exception)
+      head :bad_request if exception.class == BadRequestError
+      head :not_found if exception.class == NotFoundError
+    end
+    
+    def render_html_for_exception(exception)
+      render :text => exception.message, :status => :bad_request if exception.class == BadRequestError
+      render :text => exception.message, :status => :not_found if exception.class == NotFoundError
+    end
+      
     # renders a 404 error
     def render_404
       raise ActionController::RoutingError.new('Not Found')
+    end
+    
+    def render_400
+      raise ActionController::RoutingError.new('Bad Request')
     end
 
 end
