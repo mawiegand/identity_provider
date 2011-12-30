@@ -1,13 +1,6 @@
 require 'exception/http_exceptions'
 
 
-    class SimpleFormatter < ::Logger::Formatter
-      # This method is invoked when a log event occurs
-      def call(severity, timestamp, progname, msg)
-        "#{String === msg ? msg : msg.inspect}\n"
-      end
-    end
-
 class ApplicationController < ActionController::Base
   protect_from_forgery
   include SessionsHelper     # session helpers must be available to all controllers
