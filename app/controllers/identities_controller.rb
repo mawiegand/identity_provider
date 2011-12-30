@@ -98,6 +98,8 @@ class IdentitiesController < ApplicationController
 
     deny_access("You're not allowed to edit identity %s." % params[:id]) unless role == :owner || staff?  
        
+    # ACHTUNG!  THE FOLLOWING CODE IS NOT SAVE; SINCE IT DOES _NOT_ MASS ASSIGN ATTRIBUTES ->
+    #           THEREFORE IT DOES NOT APPLY ATTTIBUTES_ACCESSIBLE
     @identity.nickname  = params[:identity][:nickname] unless params[:identity][:nickname].nil?
     @identity.firstname = params[:identity][:firstname] unless params[:identity][:firstname].nil?
     @identity.surname   = params[:identity][:surname] unless params[:identity][:surname].nil?
