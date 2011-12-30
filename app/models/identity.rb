@@ -79,11 +79,18 @@ class Identity < ActiveRecord::Base
                        
   before_save :set_encrypted_password
   
-  def self.find_by_id_or_nickname(identifer)
+  def self.find_by_id_or_nickname(identifer, options = {})
+    options = { 
+      :find_deleted => false,    # by default: don't return deleted users
+    }.merge(options).delete_if { |key, value| value.nil? }  # merge 'over' default values
+    
     identity = Identity.find_by_id(identifer) if Identity.valid_id?(identifer)
     identity = Identity.find(:first, :conditions => ["lower(nickname) = lower(?)", identifer]) if identity.nil? && Identity.valid_nickname?(identifer)
     # article about a method to generate a case-insensitive dynamic finder to replace the
     # code above: http://devblog.aoteastudios.com/2009/12/add-case-insensitive-finders-by.html
+    
+    identity = nil if identity && identity.deleted && options[:find_deleted] == false    #don't return delted users if not explicitly being told so
+    
     return identity
   end
 

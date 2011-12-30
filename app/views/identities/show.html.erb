@@ -1,18 +1,18 @@
 
 
 <div class="profile">
-  <%= gravatar_img_tag_for @sanitized_identity[:gravatar_url], :class => 'gravatar-float', :alt => @sanitized_identity[:address_informal] %>
+  <%= gravatar_img_tag_for @options[:gravatar_url], :class => 'gravatar-float', :alt => @options[:address_informal] %>
   <div class="profile-info">
-    <h1><%="#{@sanitized_identity[:address_informal]}" %></h1>
-        <%="#{@sanitized_identity[:firstname]} #{@sanitized_identity[:surname]}" unless @sanitized_identity[:firstname].blank?  && @sanitized_identity[:surname].blank?   %><br />
-        <%="#{@sanitized_identity[:email]}" unless @sanitized_identity[:email].blank? %><br />
-        <%="joined #{ time_ago_in_words @sanitized_identity[:created_at]} ago" if @sanitized_identity[:created_at] %><br />
+    <h1><%="#{@options[:address_informal]}" %></h1>
+        <%="#{@attributes[:firstname]} #{@attributes[:surname]}" unless @attributes[:firstname].blank?  && @attributes[:surname].blank?   %><br />
+        <%="#{@attributes[:email]}" unless @attributes[:email].blank? %><br />
+        <%="joined #{ time_ago_in_words @attributes[:created_at]} ago" if @attributes[:created_at] %><br />
   </div>
 
   <div class="profile-button-bar">
     <% if signed_in? %>
-      <%= link_to I18n.t('identities.show.link.edit'), {:action => "edit", :id => @sanitized_identity[:id]}, :class => 'button-on-white' if @sanitized_identity[:show_edit_link] %>
-      <%= link_to I18n.t('identities.show.link.delete'), {:action => "destroy", :id => @sanitized_identity[:id]}, :method => "delete", :confirm => I18n.t('identities.show.confirm.delete'), :class => 'button-on-white' if @sanitized_identity[:show_delete_link] %><br />
+      <%= link_to I18n.t('identities.show.link.edit'), {:action => "edit", :id => @attributes[:id]}, :class => 'button-on-white' if @options[:show_edit_link] %>
+      <%= link_to I18n.t('identities.show.link.delete'), {:action => "destroy", :id => @attributes[:id]}, :method => "delete", :confirm => I18n.t('identities.show.confirm.delete'), :class => 'button-on-white' if @options[:show_delete_link] %><br />
     <% end %>
   </end>
 </end>

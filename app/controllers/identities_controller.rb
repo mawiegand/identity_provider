@@ -4,36 +4,38 @@
 # the system.
 class IdentitiesController < ApplicationController
 
-  before_filter :authenticate,    :except   => [:new, :show, :create]   # these pages can be seen withou logging-in
+  before_filter :authenticate,    :except   => [:new, :show, :create]   # these pages can be seen without logging-in
   before_filter :authorize_staff, :only     => [:index]                 # only staff can access these pages
     
   # display the profile of an individual identity
   def show
-    identity = nil
     bad_request = (name_blacklisted?(params[:id]) && !staff?) || !Identity.valid_identifer?(params[:id])
     raise BadRequestError.new('Bad Request for Identity %s' % params[:id]) if bad_request
 
-    identity = Identity.find_by_id_or_nickname(params[:id])
-    raise NotFoundError.new('Page Not Found') if identity.nil? || (identity.deleted && !staff?)  # only staff can see deleted users
+    identity = Identity.find_by_id_or_nickname(params[:id], :find_deleted => staff?) # only staff can see deleted users
+    raise NotFoundError.new('Page Not Found') if identity.nil?
     
     role = current_identity ? current_identity.role : :default
     role = :owner if !admin? && current_identity && current_identity.id == identity.id
-    
-    @sanitized_identity = identity.sanitized_hash(role)
-    @sanitized_identity[:address_informal] = identity.address_informal(role)
-    
+        
     respond_to do |format|
       format.html {
-        @sanitized_identity[:gravatar_url]                 = identity.gravatar_url :size => 120
-        @sanitized_identity[:show_edit_link]               = [ :owner, :staff, :admin ].include?(role)
-        @sanitized_identity[:show_delete_link]             = [ :owner, :staff, :admin ].include?(role)
-        @sanitized_identity[:show_delete_immediately_link] = [ :admin ].include?(role)
+        @options = {
+          :address_informal              => identity.address_informal(role),
+          :gravatar_url                 => identity.gravatar_url(:size => 120),
+          :show_edit_link               => [ :owner, :staff, :admin ].include?(role),
+          :show_delete_link             => [ :owner, :staff, :admin ].include?(role),
+          :show_delete_immediately_link => [ :admin ].include?(role)
+        }
+        
+        @attributes = identity.sanitized_hash(role)
 
-        @title = @sanitized_identity[:address_informal]
+        @title = @options[:address_informal]
       }
       format.json { 
-        @sanitized_identity[:gravatar_hash] = identity.gravatar_hash
-        render :json => @sanitized_identity
+        @attributes = identity.sanitized_hash(role)           # only those, that may be read by present user
+        @attributes[:gravatar_hash] = identity.gravatar_hash
+        render :json => @attributes.delete_if { |k,v| v.blank? }
       }
     end
   end
