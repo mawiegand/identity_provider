@@ -1,20 +1,18 @@
 
 
 <div class="profile">
-<%= # gravatar_for @sanitized_identity, 'gravatar-float', :size => 120 
-%>
-<div class="profile-info">
-<h1><%="#{@sanitized_identity['nickname']}" %></h1>
-    <%="#{@sanitized_identity['firstname']} #{@sanitized_identity['surname']}" %><br/>
-    <%="#{@sanitized_identity['email']}" %><br/>
-    <%="joined #{ time_ago_in_words @sanitized_identity['created_at']} ago" if @sanitized_identity['created_at']%>
-</div>
+  <%= gravatar_img_tag_for @sanitized_identity[:gravatar_url], :class => 'gravatar-float', :alt => @sanitized_identity[:address_informal] %>
+  <div class="profile-info">
+    <h1><%="#{@sanitized_identity[:address_informal]}" %></h1>
+        <%="#{@sanitized_identity[:firstname]} #{@sanitized_identity[:surname]}" unless @sanitized_identity[:firstname].blank?  && @sanitized_identity[:surname].blank?   %><br />
+        <%="#{@sanitized_identity[:email]}" unless @sanitized_identity[:email].blank? %><br />
+        <%="joined #{ time_ago_in_words @sanitized_identity[:created_at]} ago" if @sanitized_identity[:created_at] %><br />
+  </div>
 
-
-<div class="profile-button-bar">
-<% if signed_in? %>
-  <%= link_to I18n.t('identities.show.link.edit'), {:action => "edit", :id => @sanitized_identity['id']}, :class => 'button-on-white' %>
-  <%= link_to I18n.t('identities.show.link.delete'), {:action => "destroy", :id => @sanitized_identity['id']}, :method => "delete", :confirm => I18n.t('identities.show.confirm.delete'), :class => 'button-on-white' %><br />
-<% end %>
-</end>
+  <div class="profile-button-bar">
+    <% if signed_in? %>
+      <%= link_to I18n.t('identities.show.link.edit'), {:action => "edit", :id => @sanitized_identity[:id]}, :class => 'button-on-white' %>
+      <%= link_to I18n.t('identities.show.link.delete'), {:action => "destroy", :id => @sanitized_identity[:id]}, :method => "delete", :confirm => I18n.t('identities.show.confirm.delete'), :class => 'button-on-white' %><br />
+    <% end %>
+  </end>
 </end>

@@ -58,7 +58,7 @@ module FiveDAuthorization
   
       def sanitized_hash_from_keys_and_whitelist(keys, hash, whitelist)
         result = {}
-        keys.each { |attr| result[attr] = hash[attr] if whitelist.include? attr.to_s }
+        keys.each { |attr| result[attr.to_sym] = hash[attr] if whitelist.include? attr.to_s }
         return result
       end
   

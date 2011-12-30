@@ -77,6 +77,15 @@ class Identity < ActiveRecord::Base
                        
   before_save :set_encrypted_password
   
+  def self.find_by_id_or_nickname(identifer)
+    identity = Identity.find_by_id(identifer) if Identity.valid_id?(identifer)
+    identity = Identity.find(:first, :conditions => ["lower(nickname) = lower(?)", identifer]) if identity.nil? && Identity.valid_nickname?(identifer)
+    # article about a method to generate a case-insensitive dynamic finder to replace the
+    # code above: http://devblog.aoteastudios.com/2009/12/add-case-insensitive-finders-by.html
+    return identity
+  end
+
+  
   # checks a potentialPassword (plain-text) against the "stored"
   # password of the identity. This is done by salting and hashing
   # the potentialPassword in the same way as the real password
@@ -123,7 +132,7 @@ class Identity < ActiveRecord::Base
   end
   
   def self.valid_nickname?(name)
-    false
+    name.index(/^[^\d\s]+[^\s]*$/) != nil    # does not start with digit, no whitespaces
   end
   
   # returns a string representation of the identities role
@@ -143,13 +152,27 @@ class Identity < ActiveRecord::Base
   def gender?
     return :unknown
   end
+  
+  def gravatar_hash
+    return Digest::MD5.hexdigest(email.strip.downcase)
+  end
+  
+  def gravatar_url(options = {})
+    options = { 
+      :size => 100, 
+      :default => :identicon,
+    }.merge(options).delete_if { |key, value| value.nil? }  # merge 'over' default values
+    
+    GravatarImageTag::gravatar_url( email.strip.downcase, options )
+  end
 
   # returns the most informal address that could be constructed
   # from the known user data
-  def address_informal(fallback_to_email = true)
-    return nickname unless nickname.blank?
-    return firstname unless firstname.blank?
-    return email if fallback_to_email
+  def address_informal(role = :default, fallback_to_email = true)
+    hash = sanitized_hash(role)
+    return hash[:nickname] unless hash[:nickname].blank?
+    return hash[:firstname] unless hash[:firstname].blank?
+    return hash[:email] if fallback_to_email && !hash[:email].blank?
     return address_role
   end
   

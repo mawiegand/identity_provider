@@ -2,12 +2,12 @@
 
 <div class="container">
   
-  <% @identities.each do |identity| %>
+  <% @sanitized_identities.each do |identity| %>
 
-    <div class="round identity-badge <%= "role-#{identity.role_string}" %>">
-      <%= link_to (gravatar_for identity, 'gravatar-float', :size => 30), identity %>
-      <div class="topline"><span class="name"><%= link_to "#{identity.address_informal(false) }", identity %></span><span class="id">#<%= identity.id %></span> </div>
-      <div class="email"><%= identity.email %></div>
+    <div class="round identity-badge <%= "role-#{identity[:role_string]}" %>">
+      <%= link_to (gravatar_img_tag_for identity[:gravatar_url], :class => 'gravatar-float'), { :action => :show, :id => identity[:id] } %>
+      <div class="topline"><span class="name"><%= link_to "#{identity[:address_informal] }",  { :action => :show, :id => identity[:id] } %></span><span class="id">#<%= identity[:id] %></span> </div>
+      <div class="email"><%= identity[:email] %></div>
     </div>
 
   <% end %>

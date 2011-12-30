@@ -4,39 +4,31 @@
 # the system.
 class IdentitiesController < ApplicationController
 
-  before_filter :authenticate,    :except   => [:new, :show]   # these pages can be seen withou logging-in
-  before_filter :authorize_staff, :only     => [:index]        # only staff can access these pages
+  before_filter :authenticate,    :except   => [:new, :show, :create]   # these pages can be seen withou logging-in
+  before_filter :authorize_staff, :only     => [:index]                 # only staff can access these pages
     
   # display the profile of an individual identity
   def show
     identity = nil
     bad_request = (name_blacklisted?(params[:id]) && !staff?) || !Identity.valid_identifer?(params[:id])
-  
     raise BadRequestError.new('Bad Request for Identity %s' % params[:id]) if bad_request
-    
-    identity = Identity.find_by_id(params[:id]) if Identity.valid_id?(params[:id])
-    identity = Identity.find(:first, :conditions => ["lower(nickname) = lower(?)", params[:id]]) if identity.nil? && Identity.valid_nickname?(params[:id])
-    # article about a method to generate a case-insensitive dynamic finder to replace the
-    # code above: http://devblog.aoteastudios.com/2009/12/add-case-insensitive-finders-by.html
-    
-    if identity && identity.deleted == true && !staff?         # only staff can see deleted users
-      identity = nil
-    end
-    
-    raise NotFoundError.new('Page Not Found') if identity.nil?
+
+    identity = Identity.find_by_id_or_nickname(params[:id])
+    raise NotFoundError.new('Page Not Found') if identity.nil? || (identity.deleted && !staff?)  # only staff can see deleted users
     
     role = current_identity ? current_identity.role : :default
     role = :owner if !admin? && current_identity && current_identity.id == identity.id
     
-    if identity
-      @sanitized_identity = identity.sanitized_hash(role)
-    end
-  
+    @sanitized_identity = identity.sanitized_hash(role)
+    @sanitized_identity[:address_informal] = identity.address_informal(role)
+    
     respond_to do |format|
       format.html {
-        @title = identity.address_informal
+        @sanitized_identity[:gravatar_url] = identity.gravatar_url :size => 120
+        @title = @sanitized_identity[:address_informal]
       }
       format.json { 
+        @sanitized_identity[:gravatar_hash] = identity.gravatar_hash
         render :json => @sanitized_identity
       }
     end
@@ -50,16 +42,15 @@ class IdentitiesController < ApplicationController
   
   # create a new identity from the posted form data
   def create
-    @identity = Identity.new(params[:identity])
+    @identity = Identity.new(params[:identity], :as => :creator)
     
-    if @identity.save                                # created successfully
-      logRegisterSuccess(@identity)                  # log creation
-      IdentityMailer.validation_email(@identity).deliver # send email validation email
-      sign_in @identity                              # sign in with newly created identity
+    if @identity.save                                      # created successfully
+      logRegisterSuccess(@identity)                        # log creation
+      IdentityMailer.validation_email(@identity).deliver   # send email validation email
+      sign_in @identity                                    # sign in with newly created identity
       flash[:success] =    
-        I18n.t('identities.signup.flash.welcome', :name => @identity.address_informal)
-      redirect_to @identity                          # redirect to new identity
-      
+        I18n.t('identities.signup.flash.welcome', :name => @identity.address_informal(:owner))
+      redirect_to @identity                                # redirect to new identity
     else 
       logRegisterFailure(params[:identity][:email], params[:identity][:nickname])
       @title = I18n.t('identities.signup.title')
@@ -139,7 +130,20 @@ class IdentitiesController < ApplicationController
   
   # show a paginated list of all identities in the system
   def index
-    @identities = Identity.paginate(:page => params[:page], :per_page => 60)
+    role = current_identity ? current_identity.role : :default
+
+    @identities = Identity.paginate(:page => params[:page], :per_page => 60)  # here also show deleted users! (index is staff only)
+    
+    @sanitized_identities = []
+    
+    @identities.each do |identity|
+      sanitized_identity = identity.sanitized_hash(role)
+      sanitized_identity[:address_informal] = identity.address_informal(role, false)
+      sanitized_identity[:gravatar_url] = identity.gravatar_url :size => 30
+      sanitized_identity[:role_string] = identity.role_string
+      @sanitized_identities << sanitized_identity
+    end
+    
     @title = I18n.t('identities.index.title')
   end
   

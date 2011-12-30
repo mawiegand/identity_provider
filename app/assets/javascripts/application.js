@@ -35,6 +35,7 @@ $(document).ready(function() {
   // // Checking availability of nickname
   $('#identity_nickname').focusout(function(eventObject) {
     var value = $('#identity_nickname').val();
+    if (!value || value === "") return ;
     $.ajax({
       url: "/identities/"+value,
       dataType: "json",
