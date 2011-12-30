@@ -76,5 +76,11 @@ $(document).ready(function() {
       .attr('src', 'http://www.gravatar.com/avatar/' + calc_gravatar_hash(value) + '?s=120&d=identicon');
     }
   });
+  
+  var grav_src = $('#gravatar-image').attr('src');
+  if (grav_src && grav_src != "") {
+    $('#gravatar-image')
+    .show()
+  }
 
 });

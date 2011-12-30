@@ -3,7 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 
-div.signup-panel {
+div.panel {
   float: left;
   min-height: 490px;
   width: 590px;
@@ -12,15 +12,19 @@ div.signup-panel {
 }
 
 
-div.signup-panel-wrapper {
+div.panel-wrapper {
   color: #777;
   width: 760px;
   min-height: 600px;
 }
 
-div.signup-heading {
+div.panel-heading {
   font-size: 32pt;
   padding: 6px 16px;
+}
+
+div.panel div.actions {
+  padding-bottom: 20px;
 }
 
 img#gravatar-image {

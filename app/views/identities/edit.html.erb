@@ -1,32 +1,56 @@
-<h1><%= I18n.t 'identities.edit.heading' %></h1>
+
+<div class="panel-wrapper">
+<div class="panel-heading"><%= I18n.translate 'identities.edit.heading' %></div> 
+
+<%= gravatar_img_tag_for @sanitized_identity[:gravatar_url], :id => 'gravatar-image', :alt => @sanitized_identity[:address_informal], :title => "This is your personal profile image associated with your email. It can be changed later." %>
+<div class="panel">
 
 <%= form_for(@identity) do |f| %>
   <%= render 'shared/error_messages' %>
 
-  <div class="field">
-	<%= gravatar_for @identity %>
-  </div>
-
+  <% if @accessible_attributes.include?(:nickname)%>
   <div class="field">
     <%= f.label I18n.t 'identities.edit.form.nickname' %><br/>
     <%= f.text_field :nickname %>
   </div>
+  <% end %>
   
+  <% if @accessible_attributes.include?(:staff)%>
+  <div class="field">
+    <%= f.check_box :staff %>
+    <%= f.label I18n.t 'identities.edit.form.staff' %>
+  </div>
+  <% end %>
+
+  <% if @accessible_attributes.include?(:admin)%>
+  <div class="field">
+    <%= f.check_box :admin %>
+    <%= f.label I18n.t 'identities.edit.form.admin' %>
+  </div>
+  <% end %>
+
+  <% if @accessible_attributes.include?(:firstname)%>  
   <div class="field">
     <%= f.label I18n.t 'identities.edit.form.firstname' %><br/>
     <%= f.text_field :firstname %>
   </div>
+  <% end %>
   
+  <% if @accessible_attributes.include?(:surname)%>
   <div class="field">
     <%= f.label I18n.t 'identities.edit.form.surname' %><br/>
     <%= f.text_field :surname %>
   </div>
+  <% end %>
   
+  <% if @accessible_attributes.include?(:email)%>
   <div class="field">
     <%= f.label I18n.t 'identities.edit.form.email' %><br/>
     <%= f.text_field :email %>
   </div>
+  <% end %>
   
+  <% if @accessible_attributes.include?(:password)%>
   <div class="field">
     <%= f.label I18n.t 'identities.edit.form.password' %><br/>
     <%= f.password_field :password %>
@@ -36,9 +60,11 @@
     <%= f.label I18n.t 'identities.edit.form.password_confirmation' %><br/>
     <%= f.password_field :password_confirmation %>
   </div>
+  <% end %>
   
   <div class="actions">
-    <%= f.submit I18n.t 'identities.edit.form.submit_button' %>
+    <%= f.submit I18n.t('identities.edit.form.submit_button'), :class => 'button-on-white' %>
   </div>
-  
 <% end %>
+
+</div>

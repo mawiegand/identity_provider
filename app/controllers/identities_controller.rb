@@ -24,7 +24,11 @@ class IdentitiesController < ApplicationController
     
     respond_to do |format|
       format.html {
-        @sanitized_identity[:gravatar_url] = identity.gravatar_url :size => 120
+        @sanitized_identity[:gravatar_url]                 = identity.gravatar_url :size => 120
+        @sanitized_identity[:show_edit_link]               = [ :owner, :staff, :admin ].include?(role)
+        @sanitized_identity[:show_delete_link]             = [ :owner, :staff, :admin ].include?(role)
+        @sanitized_identity[:show_delete_immediately_link] = [ :admin ].include?(role)
+
         @title = @sanitized_identity[:address_informal]
       }
       format.json { 
@@ -60,33 +64,46 @@ class IdentitiesController < ApplicationController
   
   # edit an existing user
   def edit
-    if staff?
-      @identity = Identity.find(params[:id])
-    else
-      if params[:id].to_i != current_identity.id
-        redirect_to :action => "edit", :id => current_identity.id
-      else
-        @identity = current_identity
-      end
-    end
+    @identity = nil
+    bad_request = (name_blacklisted?(params[:id]) && !staff?) || !Identity.valid_identifer?(params[:id])
+    raise BadRequestError.new('Bad Request for Identity %s' % params[:id]) if bad_request
+
+    @identity = Identity.find_by_id_or_nickname(params[:id])
+    raise NotFoundError.new('Page Not Found') if @identity.nil? || (@identity.deleted && !staff?)  # only staff can see deleted users
+    
+    role = current_identity ? current_identity.role : :default
+    role = :owner if !admin? && current_identity && current_identity.id == @identity.id
+
+    deny_access("You're not allowed to edit identity %s." % params[:id]) unless role == :owner || staff?  
+
+    @sanitized_identity = @identity.sanitized_hash(role)
+    @sanitized_identity[:gravatar_url] = @identity.gravatar_url :size => 120
+    @sanitized_identity[:address_informal] = @identity.address_informal(role)
+
+    @accessible_attributes = Identity.accessible_attributes(role)
+    
+    @title = I18n.t('identities.edit.title')    
   end
   
   def update
-    if staff?
-      @identity = Identity.find(params[:id])
-    else
-      if params[:id].to_i != current_identity.id
-        @identity = Identity.find(params[:id])
-        redirect_to :action => "edit", :id => current_identity.id, :error => I18n.t('identities.update.flash.error', :name => @identity.address_informal), :status => 500 and return
-      else
-        @identity = current_identity
-      end
-    end
+    @identity = nil
+    bad_request = (name_blacklisted?(params[:id]) && !staff?) || !Identity.valid_identifer?(params[:id])
+    raise BadRequestError.new('Bad Request for Identity %s' % params[:id]) if bad_request
+
+    @identity = Identity.find_by_id_or_nickname(params[:id])
+    raise NotFoundError.new('Page Not Found') if @identity.nil? || (@identity.deleted && !staff?)  # only staff can see deleted users
     
-    @identity.nickname = params[:identity][:nickname] unless params[:identity][:nickname].blank?
-    @identity.firstname = params[:identity][:firstname] unless params[:identity][:firstname].blank?
-    @identity.surname = params[:identity][:surname] unless params[:identity][:surname].blank?
-    @identity.email = params[:identity][:email] unless params[:identity][:email].blank?
+    role = current_identity ? current_identity.role : :default
+    role = :owner if !admin? && current_identity && current_identity.id == @identity.id
+
+    deny_access("You're not allowed to edit identity %s." % params[:id]) unless role == :owner || staff?  
+       
+    @identity.nickname  = params[:identity][:nickname] unless params[:identity][:nickname].nil?
+    @identity.firstname = params[:identity][:firstname] unless params[:identity][:firstname].nil?
+    @identity.surname   = params[:identity][:surname] unless params[:identity][:surname].nil?
+    @identity.email     = params[:identity][:email] unless params[:identity][:email].blank?
+    @identity.admin     = params[:identity][:admin] unless params[:identity][:admin].nil?
+    @identity.staff     = params[:identity][:staff] unless params[:identity][:staff].nil?
 
     # validation will not be executed, if confirmation is nil    
     if !params[:identity][:password].blank? || !params[:identity][:password_confirmation].blank?
@@ -98,6 +115,13 @@ class IdentitiesController < ApplicationController
       redirect_to :action => "show"
     else
       flash[:error] = I18n.t('identities.update.flash.error', :name => @identity.address_informal)
+      
+      @sanitized_identity = @identity.sanitized_hash(role)
+      @sanitized_identity[:gravatar_url] = @identity.gravatar_url :size => 120
+      @sanitized_identity[:address_informal] = @identity.address_informal(role)
+
+      @accessible_attributes = Identity.accessible_attributes(role) 
+      
       render :action => "edit", :status => 500
     end
   end

@@ -11,8 +11,8 @@
 
   <div class="profile-button-bar">
     <% if signed_in? %>
-      <%= link_to I18n.t('identities.show.link.edit'), {:action => "edit", :id => @sanitized_identity[:id]}, :class => 'button-on-white' %>
-      <%= link_to I18n.t('identities.show.link.delete'), {:action => "destroy", :id => @sanitized_identity[:id]}, :method => "delete", :confirm => I18n.t('identities.show.confirm.delete'), :class => 'button-on-white' %><br />
+      <%= link_to I18n.t('identities.show.link.edit'), {:action => "edit", :id => @sanitized_identity[:id]}, :class => 'button-on-white' if @sanitized_identity[:show_edit_link] %>
+      <%= link_to I18n.t('identities.show.link.delete'), {:action => "destroy", :id => @sanitized_identity[:id]}, :method => "delete", :confirm => I18n.t('identities.show.confirm.delete'), :class => 'button-on-white' if @sanitized_identity[:show_delete_link] %><br />
     <% end %>
   </end>
 </end>

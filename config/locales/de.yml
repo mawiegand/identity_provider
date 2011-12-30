@@ -36,7 +36,7 @@ de:
         password: Passwort
         password_confirmation: Passwortbestätigung
         submit_button: Absenden
-        
+
       flash:
         welcome: "Willkommen %{name}!"
         
@@ -60,6 +60,9 @@ de:
         password: Passwort
         password_confirmation: Passwortbestätigung
         submit_button: Absenden
+        admin: Administrator
+        staff: Mitarbeiter
+
 
     delete:
       flash:

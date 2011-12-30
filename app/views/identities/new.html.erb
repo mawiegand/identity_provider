@@ -1,10 +1,10 @@
 
 
-<div class="signup-panel-wrapper">
-<div class="signup-heading"><%= I18n.translate 'identities.signup.heading' %></div> 
+<div class="panel-wrapper">
+<div class="panel-heading"><%= I18n.translate 'identities.signup.heading' %></div> 
 
 <img id="gravatar-image" title="This is your personal profile image associated with your email. It can be changed later."></img>
-<div class="signup-panel">
+<div class="panel">
 
 <%= form_for(@identity) do |f| %>
   <%= render 'shared/error_messages' %>

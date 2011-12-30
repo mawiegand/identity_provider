@@ -41,7 +41,7 @@ class Identity < ActiveRecord::Base
   attr_accessible :nickname, :firstname, :surname, :password, :password_confirmation, :as => :owner
   attr_accessible *accessible_attributes(:owner), :email, :as => :creator # fields accesible during creation
   attr_accessible :nickname, :firstname, :surname, :activated, :deleted, :staff, :as => :staff
-  attr_accessible *accessible_attributes(:staff), :admin, :password, :password_confirmation, :as => :admin
+  attr_accessible *accessible_attributes(:staff), :email, :admin, :password, :password_confirmation, :as => :admin
     
   attr_readable :nickname, :id, :admin, :staff,               :as => :default 
   attr_readable *readable_attributes(:default), :created_at,  :as => :user
@@ -49,13 +49,15 @@ class Identity < ActiveRecord::Base
   attr_readable *readable_attributes(:user), :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt,  :as => :staff
   attr_readable *readable_attributes(:staff),   :as => :admin
   
-  email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  email_regex    = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  nickname_regex = /^[^\d\s]+[^\s]*$/i
   
   validates :email, :presence   => true,
                     :format     => { :with => email_regex },
                     :uniqueness => { :case_sensitive => false }
                     
   validates :nickname,  :length       => { :maximum => 20 },
+                        :format       => { :with => nickname_regex, :allow_blank => true },
                         :uniqueness   => { :case_sensitive => false, :allow_blank => true }
                     
   validates :password,  :presence     => true,
@@ -132,7 +134,7 @@ class Identity < ActiveRecord::Base
   end
   
   def self.valid_nickname?(name)
-    name.index(/^[^\d\s]+[^\s]*$/) != nil    # does not start with digit, no whitespaces
+    name.index(nickname_regex) != nil    # does not start with digit, no whitespaces
   end
   
   # returns a string representation of the identities role
