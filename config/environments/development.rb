@@ -1,3 +1,5 @@
+require 'five_d_logger'  
+
 IdentityProvider::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -26,7 +28,15 @@ IdentityProvider::Application.configure do
     :password       => "PASSWORD_HERE",
     :enable_starttls_auto => true
   }
-
+  
+  # set log level of logger
+  config.log_level = ActiveSupport::BufferedLogger::Severity::DEBUG  
+  
+  config.log_path = 'log/development.log'
+  
+  # initializing custom logger  
+  config.logger = FiveDLogger.new(config.log_path, config.log_level)
+  
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 

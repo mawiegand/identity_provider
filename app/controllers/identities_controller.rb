@@ -6,7 +6,7 @@ class IdentitiesController < ApplicationController
 
   before_filter :authenticate,    :except   => [:new, :show, :create]   # these pages can be seen without logging-in
   before_filter :authorize_staff, :only     => [:index]                 # only staff can access these pages
-    
+      
   # display the profile of an individual identity
   def show
     bad_request = (name_blacklisted?(params[:id]) && !staff?) || !Identity.valid_identifer?(params[:id])
@@ -21,7 +21,7 @@ class IdentitiesController < ApplicationController
     respond_to do |format|
       format.html {
         @options = {
-          :address_informal              => identity.address_informal(role),
+          :address_informal             => identity.address_informal(role),
           :gravatar_url                 => identity.gravatar_url(:size => 120),
           :show_edit_link               => [ :owner, :staff, :admin ].include?(role),
           :show_delete_link             => [ :owner, :staff, :admin ].include?(role),

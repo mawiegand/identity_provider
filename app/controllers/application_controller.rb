@@ -1,10 +1,19 @@
 require 'exception/http_exceptions'
 
+
+    class SimpleFormatter < ::Logger::Formatter
+      # This method is invoked when a log event occurs
+      def call(severity, timestamp, progname, msg)
+        "#{String === msg ? msg : msg.inspect}\n"
+      end
+    end
+
 class ApplicationController < ActionController::Base
   protect_from_forgery
   include SessionsHelper     # session helpers must be available to all controllers
   
   before_filter :set_locale  # get the locale from the user parameters
+  around_filter :time_action
   
   rescue_from NotFoundError, BadRequestError, ForbiddenError, :with => :render_response_for_exception
   
@@ -17,6 +26,13 @@ class ApplicationController < ActionController::Base
   end
   
   protected
+  
+    def time_action
+      started = Time.now
+      yield
+      elapsed = Time.now - started
+      logger.debug("Executing #{controller_name}::#{action_name} took #{elapsed*1000}ms in real-time.")
+    end
   
     # Set the locale according to the user specified locale or to the default
     # locale, if not specified or specified is not available.
