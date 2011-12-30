@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   
   before_filter :set_locale  # get the locale from the user parameters
   
-  rescue_from NotFoundError, BadRequestError, :with => :render_response_for_exception
+  rescue_from NotFoundError, BadRequestError, ForbiddenError, :with => :render_response_for_exception
   
   # This method adds the locale to all rails-generated path, e.g. root_path.
   # Based on I18n documentation in rails guides:
@@ -45,11 +45,13 @@ class ApplicationController < ActionController::Base
     def render_json_for_exception(exception)
       head :bad_request if exception.class == BadRequestError
       head :not_found if exception.class == NotFoundError
+      head :forbidden if exception.class == ForbiddenError
     end
     
     def render_html_for_exception(exception)
       render :text => exception.message, :status => :bad_request if exception.class == BadRequestError
       render :text => exception.message, :status => :not_found if exception.class == NotFoundError
+      render :text => exception.message, :status => :forbidden if exception.class == ForbiddenError
     end
       
     # renders a 404 error

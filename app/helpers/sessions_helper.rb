@@ -83,9 +83,14 @@ module SessionsHelper
   # requested page when he's not authorized to access it. The method
   # displays the given notice (using the flash) and redirects to the
   # sign-in form.
-  def deny_access(notice = "You are not allowed to access this page.")
-    store_location
-    redirect_to signin_path, :notice => notice
+  def deny_access(notice = "You are not allowed to access this page. Please log in.")
+    if ! signed_in?
+      store_location
+      redirect_to signin_path, :notice => notice
+    else
+      clear_return_to
+      raise ForbiddenError.new "You have tried to access a resource you're not authorized to see. The incidend has been logged."
+    end
   end
   
   # Redirects a user to the stored location, if stored, and to a 

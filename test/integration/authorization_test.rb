@@ -22,10 +22,10 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
     assert_template "show"
     
     get "/identities"
-    assert_response :redirect
+    assert_response :forbidden
     
     get "/log_entries"
-    assert_response :redirect
+    assert_response :forbidden
   end
 
   test "deleted user can not log in" do
@@ -36,7 +36,7 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
       :password => "sonnen"
     }
     assert_response :success
-    assert_template "show"
+    assert_template "new"
     assert_not_nil flash[:error]
   end
 
@@ -125,7 +125,7 @@ class AuthorizationTest < ActionDispatch::IntegrationTest
       :password_confirmation => 'password',
     }
     
-    assert_response :error
+    assert_response :forbidden
   end
  
 end
