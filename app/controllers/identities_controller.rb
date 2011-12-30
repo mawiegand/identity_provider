@@ -97,21 +97,8 @@ class IdentitiesController < ApplicationController
     role = :owner if !admin? && current_identity && current_identity.id == @identity.id
 
     deny_access("You're not allowed to edit identity %s." % params[:id]) unless role == :owner || staff?  
-       
-    # ACHTUNG!  THE FOLLOWING CODE IS NOT SAVE; SINCE IT DOES _NOT_ MASS ASSIGN ATTRIBUTES ->
-    #           THEREFORE IT DOES NOT APPLY ATTTIBUTES_ACCESSIBLE
-    @identity.nickname  = params[:identity][:nickname] unless params[:identity][:nickname].nil?
-    @identity.firstname = params[:identity][:firstname] unless params[:identity][:firstname].nil?
-    @identity.surname   = params[:identity][:surname] unless params[:identity][:surname].nil?
-    @identity.email     = params[:identity][:email] unless params[:identity][:email].blank?
-    @identity.admin     = params[:identity][:admin] unless params[:identity][:admin].nil?
-    @identity.staff     = params[:identity][:staff] unless params[:identity][:staff].nil?
-
-    # validation will not be executed, if confirmation is nil    
-    if !params[:identity][:password].blank? || !params[:identity][:password_confirmation].blank?
-      @identity.password = params[:identity][:password]
-      @identity.password_confirmation = params[:identity][:password_confirmation]
-    end
+              
+    @identity.assign_attributes params[:identity].delete_if { |k,v| v.nil? }, :as => role
         
     if @identity.save
       redirect_to :action => "show"
