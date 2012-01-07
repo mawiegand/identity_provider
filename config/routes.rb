@@ -18,7 +18,8 @@ IdentityProvider::Application.routes.draw do
     resources :log_entries, :only => [:index]
     
     namespace :oauth2 do
-      resources :access_token, :only => [ :index, :create, :delete ]
+      match :access_token, :to => 'access_tokens#create'
+      resources :access_tokens, :only => [ :index, :show, :delete ] # routes for administering issued access tokens
     end
         
     match '/signin',  :to => 'sessions#new'
