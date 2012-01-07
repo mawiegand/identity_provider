@@ -49,8 +49,9 @@ class Identity < ActiveRecord::Base
   attr_readable *readable_attributes(:user), :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt,  :as => :staff
   attr_readable *readable_attributes(:staff),   :as => :admin
   
-  @email_regex    = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  @nickname_regex = /^[^\d\s]+[^\s]*$/i
+  @email_regex      = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  @nickname_regex   = /^[^\d\s]+[^\s]*$/i
+  @identifier_regex = /[a-z]{16}/i
   
   validates :email, :presence   => true,
                     :format     => { :with => @email_regex },
@@ -77,15 +78,16 @@ class Identity < ActiveRecord::Base
   
   default_scope :order => 'identities.nickname ASC'
                        
-  before_save :set_encrypted_password
+  before_save :set_encrypted_password, :set_unique_identifier
   
-  def self.find_by_id_or_nickname(identifer, options = {})
+  def self.find_by_id_identifier_or_nickname(user_identifier, options = {})
     options = { 
       :find_deleted => false,    # by default: don't return deleted users
     }.merge(options).delete_if { |key, value| value.nil? }  # merge 'over' default values
     
-    identity = Identity.find_by_id(identifer) if Identity.valid_id?(identifer)
-    identity = Identity.find(:first, :conditions => ["lower(nickname) = lower(?)", identifer]) if identity.nil? && Identity.valid_nickname?(identifer)
+    identity = Identity.find_by_id(user_identifier) if Identity.valid_id?(user_identifier)
+    identity = Identity.find_by_identifier(user_identifier) if identity.nil? && Identity.valid_identifier?(user_identifier)
+    identity = Identity.find(:first, :conditions => ["lower(nickname) = lower(?)", user_identifier]) if identity.nil? && Identity.valid_nickname?(user_identifier)
     # article about a method to generate a case-insensitive dynamic finder to replace the
     # code above: http://devblog.aoteastudios.com/2009/12/add-case-insensitive-finders-by.html
     
@@ -93,7 +95,6 @@ class Identity < ActiveRecord::Base
     
     return identity
   end
-
   
   # checks a potentialPassword (plain-text) against the "stored"
   # password of the identity. This is done by salting and hashing
@@ -116,7 +117,7 @@ class Identity < ActiveRecord::Base
   # It returns nil otherwise.
   def self.authenticate(login, submittedPassword)
     return nil if login.blank? || submittedPassword.blank?    
-    identity = find_by_email_and_deleted(login, false)
+    identity = find_by_email_and_deleted(login, false) if identity.nil?
     identity = find_by_nickname_and_deleted(login, false) if identity.nil? # user may have specified valid nickname?
     return nil if identity.nil?
     return identity if identity.has_password?(submittedPassword)
@@ -132,8 +133,12 @@ class Identity < ActiveRecord::Base
     return identity if identity.salt == cookie_salt
   end
   
-  def self.valid_identifer?(identifer)
-    self.valid_id?(identifer) || self.valid_nickname?(identifer)
+  def self.valid_user_identifier?(user_identifier)
+    self.valid_id?(user_identifier) || self.valid_identifier?(user_identifier) || self.valid_nickname?(user_identifier)
+  end
+  
+  def self.valid_identifier?(identifier)
+    identifier.index(@identifier_regex) != nil
   end
   
   def self.valid_id?(id)
@@ -230,12 +235,22 @@ class Identity < ActiveRecord::Base
   
   
   private
-  
+
+    # adds a unique identifier to every newly created user that
+    # must not match any existing nickname 
+    def set_unique_identifier
+      if new_record?
+        begin
+          self.identifier = make_random_string(16)
+        end while !Identity.find_by_identifier(self.identifier).nil? || !Identity.find(:first, :conditions => ["lower(nickname) = lower(?)", self.identifier]).nil?
+      end
+    end
+    
     # create salt, if not already set, and set the encrypted
     # password by salting and encrypting the plain-text
     # password sent by the user.
     def set_encrypted_password
-      self.salt = make_salt if new_record? # salt will be created once for a new record
+      self.salt = make_random_string if new_record? # salt will be created once for a new record
       if !password.blank?
         self.encrypted_password = encrypt_password(self.password)
       end
@@ -253,13 +268,10 @@ class Identity < ActiveRecord::Base
       Digest::SHA2.hexdigest(string)
     end  
     
-    # create a random-string with 64-chars to be used as salt
-    def make_salt
+    # create a random-string with len chars
+    def make_random_string(len = 64)
       chars = ('a'..'z').to_a + ('A'..'Z').to_a
-      (0..64).collect { chars[Kernel.rand(chars.length)] }.join
-    end
-    
-    
-    
+      (0..(len-1)).collect { chars[Kernel.rand(chars.length)] }.join
+    end    
 end
 
