@@ -20,8 +20,8 @@ module Oauth2
         :additional_parameter => 'my_example_value'
       }
 
-      render :status => :ok, :text => JSON.pretty_generate(body)
-      headers['Content-Type'] = 'application/x-www-form-urlencoded'
+      render :status => :ok, :json => JSON.pretty_generate(body)
+  #    headers['Content-Type'] = 'application/x-www-form-urlencoded'
       headers['Cache-Control'] = 'no-store'
       headers['Pragma'] = 'no-cache'
       
