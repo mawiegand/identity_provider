@@ -29,9 +29,5 @@ module ApplicationHelper
     
     tag 'img', options, false, false # Patch submitted to rails to allow image_tag here https://rails.lighthouseapp.com/projects/8994/tickets/2878-image_tag-doesnt-allow-escape-false-option-anymore   
   end
-  
 
-
-  
-  
 end

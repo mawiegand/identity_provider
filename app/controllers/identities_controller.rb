@@ -1,3 +1,5 @@
+require 'active_support/secure_random'
+
 # The IdentitiesController allows users to register (sign-up) 
 # new identities, displays profiles of identities and allows
 # staff members to browse a sorted list of all identities in
@@ -37,11 +39,11 @@ class IdentitiesController < ApplicationController
   # If no matching identity could be found ()
   def show
     # first: filter out bad requests (malformed addresses, black-listed ressources)
-    bad_request = (name_blacklisted?(params[:id]) && !staff?) || !Identity.valid_identifer?(params[:id])
+    bad_request = (name_blacklisted?(params[:id]) && !staff?) || !Identity.valid_user_identifier?(params[:id])
     raise BadRequestError.new('Bad Request for Identity %s' % params[:id]) if bad_request
 
     # second: find (non-deleted) identity or fail with a 404 not found error
-    identity = Identity.find_by_id_or_nickname(params[:id], :find_deleted => staff?) # only staff can see deleted users
+    identity = Identity.find_by_id_identifier_or_nickname(params[:id], :find_deleted => staff?) # only staff can see deleted users
     raise NotFoundError.new('Page Not Found') if identity.nil?
     
     # third: determine the role of the current user. 
@@ -100,10 +102,10 @@ class IdentitiesController < ApplicationController
   # edit an existing user
   def edit
     @identity = nil
-    bad_request = (name_blacklisted?(params[:id]) && !staff?) || !Identity.valid_identifer?(params[:id])
+    bad_request = (name_blacklisted?(params[:id]) && !staff?) || !Identity.valid_user_identifier?(params[:id])
     raise BadRequestError.new('Bad Request for Identity %s' % params[:id]) if bad_request
 
-    @identity = Identity.find_by_id_or_nickname(params[:id])
+    @identity = Identity.find_by_id_identifier_or_nickname(params[:id])
     raise NotFoundError.new('Page Not Found') if @identity.nil? || (@identity.deleted && !staff?)  # only staff can see deleted users
     
     role = current_identity ? current_identity.role : :default
@@ -122,10 +124,10 @@ class IdentitiesController < ApplicationController
   
   def update
     @identity = nil
-    bad_request = (name_blacklisted?(params[:id]) && !staff?) || !Identity.valid_identifer?(params[:id])
+    bad_request = (name_blacklisted?(params[:id]) && !staff?) || !Identity.valid_user_identifier?(params[:id])
     raise BadRequestError.new('Bad Request for Identity %s' % params[:id]) if bad_request
 
-    @identity = Identity.find_by_id_or_nickname(params[:id])
+    @identity = Identity.find_by_id_identifier_or_nickname(params[:id])
     raise NotFoundError.new('Page Not Found') if @identity.nil? || (@identity.deleted && !staff?)  # only staff can see deleted users
     
     role = current_identity ? current_identity.role : :default
