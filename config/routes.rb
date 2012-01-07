@@ -16,6 +16,10 @@ IdentityProvider::Application.routes.draw do
     resources :identities,  :only => [:new, :create, :show, :index, :edit, :destroy, :update]
     resources :sessions,    :only => [:new, :create, :destroy]
     resources :log_entries, :only => [:index]
+    
+    namespace :oauth2 do
+      resources :access_token, :only => [ :index, :create, :delete ]
+    end
         
     match '/signin',  :to => 'sessions#new'
     match '/signout', :to => 'sessions#destroy'
