@@ -24,8 +24,8 @@ ActiveRecord::Schema.define(:version => 20120106185617) do
     t.string   "firstname"
     t.string   "surname"
     t.string   "nickname"
-    t.boolean  "deleted",                           :default => false
     t.datetime "activated"
+    t.boolean  "deleted",                           :default => false
     t.string   "identifier"
   end
 
