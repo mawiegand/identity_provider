@@ -11,7 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120106185617) do
+ActiveRecord::Schema.define(:version => 20120111163817) do
+
+  create_table "clients", :force => true do |t|
+    t.string   "identifier"
+    t.string   "name"
+    t.integer  "identity_id"
+    t.string   "password"
+    t.string   "refresh_token_secret"
+    t.text     "description"
+    t.string   "homepage"
+    t.string   "grant_types"
+    t.string   "scopes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "identities", :force => true do |t|
     t.string   "email"

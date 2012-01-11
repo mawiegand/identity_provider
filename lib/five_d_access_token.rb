@@ -110,8 +110,8 @@ require 'json'
     # and false otherwise. 
     #
     #  access_token.in_scope?('5dentity') # true: access token authorizes access to 5dentity 
-    def in_scope?(sc)
-      return @token[:scope].include?(sc)
+    def in_scope?(scope)
+      return @token[:scope].include?(scope)
     end
     
     protected

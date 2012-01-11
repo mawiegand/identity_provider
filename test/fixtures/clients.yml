@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  identifier: MyString
+  name: MyString
+  identity_id: 
+  password: MyString
+  refresh_token_secret: MyString
+  description: MyText
+  homepage: MyString
+  grant_types: MyString
+  scopes: 
+
+two:
+  identifier: MyString
+  name: MyString
+  identity_id: 
+  password: MyString
+  refresh_token_secret: MyString
+  description: MyText
+  homepage: MyString
+  grant_types: MyString
+  scopes: 

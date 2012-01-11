@@ -1,4 +1,5 @@
 IdentityProvider::Application.routes.draw do
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -16,6 +17,7 @@ IdentityProvider::Application.routes.draw do
     resources :identities,  :only => [:new, :create, :show, :index, :edit, :destroy, :update]
     resources :sessions,    :only => [:new, :create, :destroy]
     resources :log_entries, :only => [:index]
+    resources :clients
     
     namespace :oauth2 do
       match :access_token, :to => 'access_tokens#create'
@@ -26,7 +28,6 @@ IdentityProvider::Application.routes.draw do
     match '/signout', :to => 'sessions#destroy'
 
     match '/identities/:id/validation', :to => 'identities#validation'
-    
   end
    
   match '/:locale' => 'sessions#new'         # match e.g. /de/

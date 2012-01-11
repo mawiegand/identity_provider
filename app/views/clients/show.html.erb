@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Identifier:</b>
+  <%= @client.identifier %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @client.name %>
+</p>
+
+<p>
+  <b>Identity:</b>
+  <%= @client.identity_id %>
+</p>
+
+<p>
+  <b>Password:</b>
+  <%= @client.password %>
+</p>
+
+<p>
+  <b>Refresh token secret:</b>
+  <%= @client.refresh_token_secret %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @client.description %>
+</p>
+
+<p>
+  <b>Homepage:</b>
+  <%= @client.homepage %>
+</p>
+
+<p>
+  <b>Grant types:</b>
+  <%= @client.grant_types %>
+</p>
+
+<p>
+  <b>Scopes:</b>
+  <%= @client.scopes %>
+</p>
+
+
+<%= link_to 'Edit', edit_client_path(@client) %> |
+<%= link_to 'Back', clients_path %>
