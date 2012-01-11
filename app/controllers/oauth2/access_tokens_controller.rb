@@ -112,24 +112,23 @@ module Oauth2
         return
       end
       
-      if true      # on success
-        body = {
-          :access_token => access_token.token,
-          :token_type => 'bearer',
-          :expires_in => 3600,
-#         :refresh_token => 'myrefreshtoken',
-          :user_identifer => identity.identifier
-        }
+      body = {
+        :access_token => access_token.token,
+        :token_type => 'bearer',
+        :expires_in => 3600,
+        #   :refresh_token => 'myrefreshtoken',
+        :user_identifer => identity.identifier
+      }
 
-        render :status => :ok, :json => JSON.pretty_generate(body)
-        headers['Cache-Control'] = 'no-store'
-        headers['Pragma'] = 'no-cache'
-        headers['Connection'] = 'close'
+      render :status => :ok, :json => JSON.pretty_generate(body)
+      headers['Cache-Control'] = 'no-store'
+      headers['Pragma'] = 'no-cache'
+      headers['Connection'] = 'close'
 
-        # NOTE: add to tests:
-        # check cache control no-store
-        # check pragma no-cache
-        # check Content-Type is application/json;charset=UTF-8   (compare case-insensitve, remove whitespaces)
+      # NOTE: add to tests:
+      # check cache control no-store
+      # check pragma no-cache
+      # check Content-Type is application/json;charset=UTF-8   (compare case-insensitve, remove whitespaces)
 
      end
        
