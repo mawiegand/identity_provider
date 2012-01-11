@@ -20,6 +20,7 @@ en:
       signout: Sing Out
       confirm: Do you really want to sign out?
       index: Profile List
+      clients: Clients
   
   identities:
     
