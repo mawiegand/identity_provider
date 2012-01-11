@@ -11,6 +11,7 @@ gem 'therubyracer'          # missing javascript runtime
 gem 'gravatar_image_tag'
 gem 'will_paginate'
 gem 'ruby-prof'
+gem 'thin'
 
 
 # Gems used only for assets and not required
