@@ -5,19 +5,29 @@ require 'five_d_access_token'
 # Presently only implements the "Resource Owner Password Credentials" Flow.
 module Oauth2
 
+  # This controller implements an access token endpoint according to the specifications
+  # of OAuth 2.0 as well as a basic administration interface, to list, inspect and
+  # revoke individual grants (basically to revoke refresh tokens). 
   class AccessTokensController < ApplicationController
     skip_before_filter :verify_authenticity_token, :only => [ :create ] # this prevents setting a session key on a post to the access token endpoint
   
     before_filter :authenticate,    :except => [ :create ]
     before_filter :authorize_staff, :except => [ :create ]
+    
+    @@default_scope = ['5dentity']
       
-    # implementes the POST method endpoint for obtaining an access token
+    # Implementes the POST method endpoint for obtaining an access token.
+    # Presently it only implements the 'resource owner password credentials' flow.
+    # See the OAuth 2.0 draft specification for further details. 
+    #
+    # The endpoint can be tested easily using curl, e.g.:
+    #  curl -v --data "client_id=XYZ-v0.1&grant_type=password&scope=5dentity%20wackadoo&username=Egbert&password=sonnen" localhost:3000/oauth2/access_token
+    # to get an access point for identity Egbert on protected resources in scopes
+    # 5dentity and wackadoo. The +client_id+ must be a client identifier of a 
+    # known client (has been registered with the identity provider) and may
+    # have a version-string for debugging purposes attached, using '-' to 
+    # separate it.
     def create
-      client_id     = 'XYZ'
-      client_secret = 'passwd'
-      client_allowed_grant_types = [ 'password' ]
-      client_scope  = [ '5dentity', 'wackadoo' ]
-      default_scope = ['5dentity']
                       
       logger.debug('Request for access-token with params: ' + params.inspect)
             
@@ -50,10 +60,15 @@ module Oauth2
       if !params[:client_id] || params[:client_id].blank?
         render_endpoint_error params[:client_id], :invalid_request, "Your request is missing the client_id.";
         return
-      elsif params[:client_id].split('-')[0] != client_id
+      end
+      
+      client_identifier = params[:client_id].split('-')[0]   
+      client = Client.find_by_identifier(client_identifier) # get client from database
+      
+      if !client
         render_endpoint_error params[:client_id], :invalid_client, "This client is unknown.";
         return
-      elsif !client_allowed_grant_types.include? params[:grant_type].downcase       
+      elsif !client.grant_type_allowed? params[:grant_type]       
         render_endpoint_error params[:client_id], :unauthorized_client, "This client is not authorized to use the " +
           "requested authorization grant type.";
         return
@@ -61,14 +76,14 @@ module Oauth2
 
       # check scope or set to default
       if !params[:scope] 
-        @scope = default_scope
+        @scope = @@default_scope
       else
         requested_scopes = params[:scope].split(' ')
 
         if requested_scopes.empty?
-          @scope = default_scope
+          @scope = @@default_scope
         else 
-          if requested_scopes.any? { |rscope| !client_scope.include? rscope } # unauthorized scope
+          if requested_scopes.any? { |rscope| !client.scope_authorized?(rscope) } # unauthorized scope
             render_endpoint_error params[:client_id], :invalid_scope, "The requested scope is invalid, unknown, malformed, or "+
               "exceeds the scope granted by the resource owner."
             return
