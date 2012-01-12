@@ -1,3 +1,5 @@
+require "bundler/capistrano"
+
 `ssh-add`
 
 default_run_options[:pty] = true                  # problem with ubuntu
