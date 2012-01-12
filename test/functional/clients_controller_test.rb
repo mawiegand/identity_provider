@@ -1,11 +1,23 @@
 require 'test_helper'
 
 class ClientsControllerTest < ActionController::TestCase
+  fixtures :all
+  
   setup do
     @client = clients(:one)
   end
 
   test "should get index" do
+    identity = identities(:admin)
+    
+    post :create, :controller =>'sessions', :session => { 
+      :login => identity.email, 
+      :password => "sonnen"
+    }
+    assert_response :redirect
+    assert_redirected_to identity
+
+    
     get :index
     assert_response :success
     assert_not_nil assigns(:clients)

@@ -111,7 +111,7 @@ require 'json'
     #
     #  access_token.in_scope?('5dentity') # true: access token authorizes access to 5dentity 
     def in_scope?(scope)
-      return @token[:scope].include?(scope)
+      return @token[:scope].include?(scope.downcase)
     end
     
     protected
