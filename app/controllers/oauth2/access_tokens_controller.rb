@@ -129,9 +129,6 @@ module Oauth2
       # check cache control no-store
       # check pragma no-cache
       # check Content-Type is application/json;charset=UTF-8   (compare case-insensitve, remove whitespaces)
-
-     end
-       
       
     end
     
