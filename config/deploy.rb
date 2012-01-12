@@ -11,6 +11,8 @@ set :repository,  "git@github.com:wackadoo/identity_provider.git"
 set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
+set :user, "deploy-ip"
+
 set :deploy_to, "/var/www/identity_provider"
 set :deploy_via, :remote_cache
 
