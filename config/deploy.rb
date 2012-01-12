@@ -30,3 +30,21 @@ role :db,  "wackadoo.de", :primary => true        # This is where Rails migratio
 #     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
 #   end
 # end
+
+namespace :deploy do
+  desc "Restart Thin"
+  task :restart, :roles => :app, :except => { :no_release => true } do
+    start
+    stop
+  end 
+
+  desc "Start Thin"
+  task :start do
+    run "cd #{current_path}; thin -C config/thin.yml start"
+  end 
+  
+  desc "Stop Thin"
+  task :stop do
+    run "cd #{current_path}; thin stop"
+  end 
+end
