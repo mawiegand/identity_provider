@@ -11,8 +11,11 @@ set :repository,  "git@github.com:wackadoo/identity_provider.git"
 set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
+set :user, "deploy-ip"
+set :use_sudo, true
+
 set :deploy_to, "/var/www/identity_provider"
-set :deplay_via, :remote_cache
+set :deploy_via, :remote_cache
 
 role :web, "wackadoo.de"                          # Your HTTP server, Apache/etc
 role :app, "wackadoo.de"                          # This may be the same as your `Web` server
@@ -30,3 +33,21 @@ role :db,  "wackadoo.de", :primary => true        # This is where Rails migratio
 #     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
 #   end
 # end
+
+namespace :deploy do
+  desc "Restart Thin"
+  task :restart, :roles => :app, :except => { :no_release => true } do
+    start
+    stop
+  end 
+
+  desc "Start Thin"
+  task :start do
+    run "cd #{current_path}; thin -C config/thin.yml start"
+  end 
+  
+  desc "Stop Thin"
+  task :stop do
+    run "cd #{current_path}; thin stop"
+  end 
+end
