@@ -11,10 +11,12 @@ set :repository,  "git@github.com:wackadoo/identity_provider.git"
 set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
-set :user, "deploy-ip"
-set :use_sudo, true
+#set :user, "deploy-ip"
+#set :use_sudo, true
 
 set :deploy_to, "/var/www/identity_provider"
+set :gemhome, "/usr/lib/ruby/gems/1.9.1"
+set :gempath, "/usr/lib/ruby/gems/1.9.1"
 set :deploy_via, :remote_cache
 
 role :web, "wackadoo.de"                          # Your HTTP server, Apache/etc

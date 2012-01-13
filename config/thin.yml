@@ -2,11 +2,11 @@
 pid: /var/run/identity_provider.pid
 timeout: 30
 wait: 30
-log: log/thin.log
+log: /var/log/thin/identity_provider.log
 max_conns: 1024
 require: []
 
-environment: development
+environment: production
 max_persistent_conns: 512
 servers: 2
 daemonize: true
