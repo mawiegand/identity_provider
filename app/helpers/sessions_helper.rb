@@ -99,7 +99,7 @@ module SessionsHelper
       return nil
     end
     request_authorization[:grant_type] = :bearer
-    request_authorization[:privileged] = :false
+    request_authorization[:privileged] = false
     
     return @request_access_token
   end
@@ -113,7 +113,7 @@ module SessionsHelper
   def identity_from_remember_token
     identity = Identity.authenticate_with_salt(*remember_token)
     request_authorization[:grant_type] = :session
-    request_authorization[:privileged] = :true
+    request_authorization[:privileged] = true
     return identity
   end
 
