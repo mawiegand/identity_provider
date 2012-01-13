@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
     end
       
     def render_response_for_exception(exception)  
-      logger.info("%s: '%s', for request '%s' from %s" % [exception.class, exception.message, request.url, request.remote_ip] )
+      logger.warn("%s: '%s', for request '%s' from %s" % [exception.class, exception.message, request.url, request.remote_ip] )
       respond_to do |format|
         format.html {
           render_html_for_exception exception
@@ -51,9 +51,13 @@ class ApplicationController < ActionController::Base
     end
     
     def render_json_for_exception(exception)
-      head :bad_request if exception.class == BadRequestError
-      head :not_found if exception.class == NotFoundError
-      head :forbidden if exception.class == ForbiddenError
+      head :bad_request if exception.class  == BadRequestError
+      head :not_found if exception.class    == NotFoundError
+      head :forbidden if exception.class    == ForbiddenError
+      head :unauthorized if exception.class == BearerAuthError
+      head :bad_request if exception.class  == BearerAuthInvalidRequest
+      head :unauthorized if exception.class == BearerAuthInvalidToken
+      head :forbidden if exception.class    == BearerAuthInsufficientScope
     end
     
     def render_html_for_exception(exception)

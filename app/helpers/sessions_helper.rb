@@ -64,7 +64,31 @@ module SessionsHelper
   #
   # Thus, this method realizes the session tracking.
   def current_identity 
-    @current_identity ||= identity_from_remember_token # returns either the known identity or the one corresponding to the token
+    return nil unless valid_authorization_header?      # don't sign in a user if the headers are not valid!
+    @current_identity ||= identity_from_access_token || identity_from_remember_token # returns either the known identity or the one corresponding to the token
+  end
+  
+  def identity_from_access_token
+    return nil unless valid_authorization_header? && request.headers['HTTP_AUTHORIZATION']
+    chunks = request.headers['HTTP_AUTHORIZATION'].split(' ')
+    return nil unless chunks.length == 2 && chunks[0].downcase == 'bearer'
+    access_token = FiveDAccessToken.new chunks[1]
+    return nil unless access_token.valid? && !access_token.expired?
+    return nil unless access_token.in_scope?('5dentity')
+    identity = Identity.find_by_id_identifier_or_nickname(access_token.identifier, :deleted => false)
+  end
+  
+  def request_access_token
+    return @request_access_token unless @request_access_token.nil?
+    chunks = request.headers['HTTP_AUTHORIZATION'].split(' ')
+    return nil unless chunks.length == 2 && chunks[0].downcase == 'bearer'
+    access_token = FiveDAccessToken.new chunks[1]
+    return nil unless access_token.valid? && !access_token.expired?
+    return nil unless access_token.in_scope?('5dentity')
+  end
+  
+  def request_authorization
+    return @request_authorization ||= {}
   end
   
   # Returns the identity matching the remember token or nil, if it hasn't been
@@ -72,7 +96,7 @@ module SessionsHelper
   def identity_from_remember_token
     Identity.authenticate_with_salt(*remember_token)
   end
-  
+
   # Returns either the remember_token that has been set in the cookie
   # or a nil - array.
   def remember_token
@@ -89,7 +113,7 @@ module SessionsHelper
       redirect_to signin_path, :notice => notice
     else
       clear_return_to
-      raise ForbiddenError.new "You have tried to access a resource you're not authorized to see. The incidend has been logged."
+      raise ForbiddenError.new "You have tried to access a resource you're not authorized to see. The incident has been logged."
     end
   end
   
@@ -99,6 +123,19 @@ module SessionsHelper
   def redirect_back_or(default)
     redirect_to(stored_location || default)
     clear_return_to
+  end
+  
+  def valid_authorization_header?
+    return @valid_authorization_header unless @valid_authorization_header.nil?
+ 
+    num_access_tokens = 0
+    num_access_tokens+=1 if request.query_parameters[:access_token]
+    num_access_tokens+=1 if request.request_parameters[:access_token]
+    num_access_tokens+=1 if request.path_parameters[:access_token]
+    num_access_tokens+=1 if request.headers['HTTP_AUTHORIZATION']
+    logger.debug("params: #{ params[:access_token] } header: #{ request.headers['HTTP_AUTHORIZATION'] } query string: #{ request.query_string} num tokens: #{num_access_tokens}")
+    
+    @valid_authorization_header = num_access_tokens <= 1 # received either one or no access token
   end
   
   private

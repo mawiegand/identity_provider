@@ -59,7 +59,7 @@ class SessionsController < ApplicationController
       if !identity.nil?
         entry.affected_id = identity.id
       end
-      entry.description = "Sign-in with email #{email}  (#{ identity.nil? || identity.nickname.nil? ? 'unknown user' : 'user ' + identity.nickname  }) did fail#{ as_identity.nil? ? '' : ' for current_user ' + (as_identity.nickname.nil? ? as_identity.email : as_identity.email) }."
+      entry.description = "Sign-in with email #{email} (#{ identity.nil? || identity.nickname.nil? ? 'unknown user' : 'user ' + identity.nickname  }) did fail#{ as_identity.nil? ? '' : ' for current_user ' + (as_identity.nickname.nil? ? as_identity.email : as_identity.email) }."
       entry.save
     end
   
