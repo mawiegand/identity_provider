@@ -14,10 +14,14 @@ IdentityProvider::Application.routes.draw do
   # all resources and paths are scoped in an optional path_prefix determining the
   # locale to use. Presently only available: en, de
   scope "(:locale)", :locale => /en|de/ do   
+    match '/identities/self', :to => 'identities#self'
+
+    
     resources :identities,  :only => [:new, :create, :show, :index, :edit, :destroy, :update]
     resources :sessions,    :only => [:new, :create, :destroy]
     resources :log_entries, :only => [:index]
     resources :clients
+    
     
     namespace :oauth2 do
       match :access_token, :to => 'access_tokens#create'

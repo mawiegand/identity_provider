@@ -20,12 +20,12 @@ IdentityProvider::Application.configure do
   
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address        => "smtp.googlemail.com",
+    :address        => "smtp.5dlab.com",
     :port           => 587,
-    :domain         => "googlemail.com",
+    :domain         => "5dlab.com",
     :authentication => :plain,
-    :user_name      => "sascha77",
-    :password       => "PASSWORD_HERE",
+    :user_name      => "no-reply@5dlab.com",
+    :password       => "+N4$3.bQ",
     :enable_starttls_auto => true
   }
   
