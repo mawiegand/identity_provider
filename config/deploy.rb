@@ -14,8 +14,9 @@ set :scm, :git
 #set :user, "deploy-ip"
 #set :use_sudo, true
 
-set :deploy_to, "/var/www/#{application}"
+set :deploy_to, "/var/www/identity_provider"
 set :gemhome, "/usr/lib/ruby/gems/1.9.1"
+set :gempath, "/usr/lib/ruby/gems/1.9.1"
 set :deploy_via, :remote_cache
 
 role :web, "wackadoo.de"                          # Your HTTP server, Apache/etc
