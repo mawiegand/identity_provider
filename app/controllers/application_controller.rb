@@ -1,4 +1,5 @@
 require 'exception/http_exceptions'
+require 'five_d_access_token'
 
 
 class ApplicationController < ActionController::Base
@@ -9,6 +10,7 @@ class ApplicationController < ActionController::Base
   around_filter :time_action
   
   rescue_from NotFoundError, BadRequestError, ForbiddenError, :with => :render_response_for_exception
+  rescue_from BearerAuthError, :with => :render_response_for_bearer_auth_exception
   
   # This method adds the locale to all rails-generated path, e.g. root_path.
   # Based on I18n documentation in rails guides:
@@ -62,8 +64,36 @@ class ApplicationController < ActionController::Base
     
     def render_html_for_exception(exception)
       render :text => exception.message, :status => :bad_request if exception.class == BadRequestError
-      render :text => exception.message, :status => :not_found if exception.class == NotFoundError
-      render :text => exception.message, :status => :forbidden if exception.class == ForbiddenError
+      render :text => exception.message, :status => :not_found   if exception.class == NotFoundError
+      render :text => exception.message, :status => :forbidden   if exception.class == ForbiddenError
+    end
+      
+    def render_response_for_bearer_auth_exception(exception)
+      info = { :code => :bad_request }
+      if exception.kind_of? BearerAuthInvalidRequest
+        info = { :code => :bad_request,  :headers => { 'WWW-Authenticate' => 'Bearer realm="5dentity", error="invalid_request", error_description ="'+exception.message+'"' } }
+      elsif exception.kind_of?(BearerAuthInvalidToken) 
+        info = { :code => :unauthorized, :headers => { 'WWW-Authenticate' => 'Bearer realm="5dentity", error="invalid_token", error_description ="'+exception.message+'"' } }
+      elsif exception.kind_of? BearerAuthInsufficientScope
+        info = { :code => :forbidden,    :headers => { 'WWW-Authenticate' => 'Bearer realm="5dentity", error="insufficient_scope", error_description ="'+exception.message+'"' } }
+      elsif exception.instance_of?(BearerAuthError)
+        info = { :code => :unauthorized, :headers => { 'WWW-Authenticate' => 'Bearer realm="5dentity"' } }  # no error_code! (due to specs)
+      end
+      
+      if info[:headers]
+        info[:headers].each do |key, value|
+          headers[key] = value
+        end
+      end
+
+      respond_to do |format|
+        format.html {
+          render :text => exception.message, :status => info[:code]
+        }
+        format.json {
+          head info[:code]
+        }
+      end
     end
       
     # renders a 404 error

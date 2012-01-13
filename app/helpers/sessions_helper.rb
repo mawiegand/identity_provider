@@ -35,13 +35,13 @@ module SessionsHelper
   
   # True, in case the present user is an admin user.
   def admin?
-    !current_identity.nil? && current_identity.admin
+    !current_identity.nil? && current_identity.admin && request_authorization[:privileged]
   end
   
   # True, in case the present user is a staff memeber. Admins always have
   # staff status, even when their staff flag hasn't been set properly.
   def staff?
-    admin? || (!current_identity.nil? && current_identity.staff)  # admin is always staff
+    admin? || (!current_identity.nil? && current_identity.staff && request_authorization[:privileged]) # admin is always staff
   end
   
   # Signs the present user out by destroying the cookie and unsetting
@@ -64,27 +64,44 @@ module SessionsHelper
   #
   # Thus, this method realizes the session tracking.
   def current_identity 
-    return nil unless valid_authorization_header?      # don't sign in a user if the headers are not valid!
+    raise BearerAuthInvalidRequest.new('Multiple access tokens sent within one request.') if !valid_authorization_header?
     @current_identity ||= identity_from_access_token || identity_from_remember_token # returns either the known identity or the one corresponding to the token
   end
   
   def identity_from_access_token
-    return nil unless valid_authorization_header? && request.headers['HTTP_AUTHORIZATION']
-    chunks = request.headers['HTTP_AUTHORIZATION'].split(' ')
-    return nil unless chunks.length == 2 && chunks[0].downcase == 'bearer'
-    access_token = FiveDAccessToken.new chunks[1]
-    return nil unless access_token.valid? && !access_token.expired?
-    return nil unless access_token.in_scope?('5dentity')
-    identity = Identity.find_by_id_identifier_or_nickname(access_token.identifier, :deleted => false)
+    raise BearerAuthInvalidRequest.new('Multiple access tokens sent within one request.') if !valid_authorization_header?
+    return nil if request_access_token.nil?
+    
+    raise BearerAuthInvalidToken.new('Invalid or malformed access token.') unless request_access_token.valid? 
+    raise BearerAuthInvalidToken.new('Access token expired.') if request_access_token.expired?
+    raise BearerAuthInsufficientScope.new('Requested resource is not in authorized scope.') unless request_access_token.in_scope?('5dentity')
+  
+    identity = Identity.find_by_id_identifier_or_nickname(request_access_token.identifier, :deleted => false)
   end
   
   def request_access_token
     return @request_access_token unless @request_access_token.nil?
-    chunks = request.headers['HTTP_AUTHORIZATION'].split(' ')
-    return nil unless chunks.length == 2 && chunks[0].downcase == 'bearer'
-    access_token = FiveDAccessToken.new chunks[1]
-    return nil unless access_token.valid? && !access_token.expired?
-    return nil unless access_token.in_scope?('5dentity')
+    if request.headers['HTTP_AUTHORIZATION']
+      chunks = request.headers['HTTP_AUTHORIZATION'].split(' ')
+      raise BearerAuthInvalidRequest.new('Send bearer token in authorization header.') unless chunks.length == 2 && chunks[0].downcase == 'bearer'
+      request_authorization[:method] = :header
+      @request_access_token = FiveDAccessToken.new chunks[1]
+    elsif params[:access_token]
+      @request_access_token = FiveDAccessToken.new params[:access_token]
+      if request.query_parameters[:access_token]
+        request_authorization[:method] = :query   
+      elsif request.request_parameters[:access_token]
+        request_authorization[:method] = :request 
+      else # e.g. extracted access_token from path
+        raise BearerAuthInvalidRequest.new('Send access token in authorization header, query string or body (POST).')
+      end
+    else # no access token
+      return nil
+    end
+    request_authorization[:grant_type] = :bearer
+    request_authorization[:privileged] = :false
+    
+    return @request_access_token
   end
   
   def request_authorization
@@ -94,7 +111,10 @@ module SessionsHelper
   # Returns the identity matching the remember token or nil, if it hasn't been
   # set or is not valid.
   def identity_from_remember_token
-    Identity.authenticate_with_salt(*remember_token)
+    identity = Identity.authenticate_with_salt(*remember_token)
+    request_authorization[:grant_type] = :session
+    request_authorization[:privileged] = :true
+    return identity
   end
 
   # Returns either the remember_token that has been set in the cookie
@@ -108,12 +128,24 @@ module SessionsHelper
   # displays the given notice (using the flash) and redirects to the
   # sign-in form.
   def deny_access(notice = "You are not allowed to access this page. Please log in.")
-    if ! signed_in?
-      store_location
-      redirect_to signin_path, :notice => notice
-    else
-      clear_return_to
-      raise ForbiddenError.new "You have tried to access a resource you're not authorized to see. The incident has been logged."
+    
+    respond_to do |format|
+      format.html {
+        if ! signed_in?
+          store_location
+          redirect_to signin_path, :notice => notice
+        else
+          clear_return_to
+          raise ForbiddenError.new "You have tried to access a resource you're not authorized to see. The incident has been logged."
+        end
+      }
+      format.json {
+        if ! signed_in?
+          raise BearerAuthError.new "Authorization needed."
+        else
+          raise ForbiddenError.new "You have tried to access a resource you're not authorized to see. The incident has been logged."
+        end        
+      }
     end
   end
   
