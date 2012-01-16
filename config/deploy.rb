@@ -15,8 +15,6 @@ set :scm, :git
 #set :use_sudo, true
 
 set :deploy_to, "/var/www/identity_provider"
-set :gemhome, "/usr/lib/ruby/gems/1.9.1"
-set :gempath, "/usr/lib/ruby/gems/1.9.1"
 set :deploy_via, :remote_cache
 
 role :web, "wackadoo.de"                          # Your HTTP server, Apache/etc
@@ -45,11 +43,11 @@ namespace :deploy do
 
   desc "Start Thin"
   task :start do
-    run "cd #{current_path}; thin -C config/thin.yml start"
+    run "cd #{current_path}; bundle exec thin -C config/thin.yml start"
   end 
   
   desc "Stop Thin"
   task :stop do
-    run "cd #{current_path}; thin stop"
+    run "cd #{current_path}; bundle exec thin stop"
   end 
 end
