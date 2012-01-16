@@ -2,7 +2,7 @@
 pid: /var/run/identity_provider.pid
 timeout: 30
 wait: 30
-log: /var/log/thin/identity_provider.log
+log: log/thin/identity_provider.log
 max_conns: 1024
 require: []
 
