@@ -48,6 +48,6 @@ namespace :deploy do
   
   desc "Stop Thin"
   task :stop do
-    run "cd #{current_path}; bundle exec thin stop"
+    run "cd #{current_path}; bundle exec thin -C config/thin.yml stop"
   end 
 end
