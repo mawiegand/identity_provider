@@ -75,6 +75,10 @@ class IdentitiesController < ApplicationController
     end
   end
   
+  def self
+    redirect_to current_identity
+  end
+  
   # send the sign-up form
   def new
     @identity = Identity.new

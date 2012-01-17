@@ -56,10 +56,6 @@ class ApplicationController < ActionController::Base
       head :bad_request if exception.class  == BadRequestError
       head :not_found if exception.class    == NotFoundError
       head :forbidden if exception.class    == ForbiddenError
-      head :unauthorized if exception.class == BearerAuthError
-      head :bad_request if exception.class  == BearerAuthInvalidRequest
-      head :unauthorized if exception.class == BearerAuthInvalidToken
-      head :forbidden if exception.class    == BearerAuthInsufficientScope
     end
     
     def render_html_for_exception(exception)
@@ -67,9 +63,11 @@ class ApplicationController < ActionController::Base
       render :text => exception.message, :status => :not_found   if exception.class == NotFoundError
       render :text => exception.message, :status => :forbidden   if exception.class == ForbiddenError
     end
-      
+    
+    # hanlde exceptions raised by a failed attempt to authorize with a bearer 
+    # token of the resource and produce correct repsonses and headers. 
     def render_response_for_bearer_auth_exception(exception)
-      info = { :code => :bad_request }
+      info =   { :code => :bad_request }   # no description for unknwon (new or mislead) exception
       if exception.kind_of? BearerAuthInvalidRequest
         info = { :code => :bad_request,  :headers => { 'WWW-Authenticate' => 'Bearer realm="5dentity", error="invalid_request", error_description ="'+exception.message+'"' } }
       elsif exception.kind_of?(BearerAuthInvalidToken) 

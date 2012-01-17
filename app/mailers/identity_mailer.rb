@@ -1,5 +1,5 @@
 class IdentityMailer < ActionMailer::Base
-  default from: "sascha77@googlemail.com"
+  default from: "no-reply@5dlab.com"
   
   def validation_email(identity)
     @identity = identity
