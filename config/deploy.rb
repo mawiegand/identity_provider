@@ -12,7 +12,7 @@ set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
 #set :user, "deploy-ip"
-#set :use_sudo, true
+set :use_sudo, true
 
 set :deploy_to, "/var/www/identity_provider"
 set :deploy_via, :remote_cache
