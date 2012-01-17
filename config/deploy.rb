@@ -37,8 +37,8 @@ role :db,  "wackadoo.de", :primary => true        # This is where Rails migratio
 namespace :deploy do
   desc "Restart Thin"
   task :restart, :roles => :app, :except => { :no_release => true } do
-    start
     stop
+    start
   end 
 
   desc "Start Thin"
