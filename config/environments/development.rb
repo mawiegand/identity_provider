@@ -26,7 +26,8 @@ IdentityProvider::Application.configure do
     :authentication => :plain,
     :user_name      => "no-reply@5dlab.com",
     :password       => "+N4$3.bQ",
-    :enable_starttls_auto => true
+    :enable_starttls_auto => true,
+    :openssl_verify_mode => OpenSSL::SSL::VERIFY_NONE
   }
   
   # set log level of logger
