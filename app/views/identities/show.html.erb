@@ -6,7 +6,8 @@
     <h1><%="#{@options[:address_informal]}" %></h1>
         <%="#{@attributes[:firstname]} #{@attributes[:surname]}" unless @attributes[:firstname].blank?  && @attributes[:surname].blank?   %><br />
         <%="#{@attributes[:email]}" unless @attributes[:email].blank? %><br />
-        <%="joined #{ time_ago_in_words @attributes[:created_at]} ago" if @attributes[:created_at] %><br />
+        <%="joined #{ time_ago_in_words @attributes[:created_at]} ago." if @attributes[:created_at] %>        
+        <%="activated #{ time_ago_in_words @attributes[:activated]} ago." if @attributes[:activated] %><br />
   </div>
 
   <div class="profile-button-bar">

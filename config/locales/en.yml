@@ -66,6 +66,8 @@ en:
         submit_button: Submit
         admin: administrator
         staff: staff member
+        activated: activated
+
         
     delete:
       flash:

@@ -208,7 +208,7 @@ class IdentitiesController < ApplicationController
   # sent with the request. It validates the identity only
   # once and sends an error message when called for an
   # already validated user or given an invalid token.
-  def activation
+  def validation
     @identity = Identity.find(params[:id])    || render_404
     if @identity.nil?
       redirect_to new_identity_path, :notice => I18n.t('identities.validation.flash.user_not_found')

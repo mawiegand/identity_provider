@@ -50,6 +50,13 @@
   </div>
   <% end %>
   
+  <% if @accessible_attributes.include?(:activated)%>
+  <div class="field">
+    <%= f.label I18n.t 'identities.edit.form.activated' %><br/>
+    <%= f.text_field :activated %>
+  </div>
+  <% end %>
+  
   <% if @accessible_attributes.include?(:password)%>
   <div class="field">
     <%= f.label I18n.t 'identities.edit.form.password' %><br/>
