@@ -26,8 +26,7 @@ group :development do
   gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git'
 end
 
-  gem 'faker'
-
+gem 'faker'
 gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
