@@ -2,8 +2,8 @@
 <html>
 <head>
   <title>5dentity | <%= @title %></title>
-  <%= stylesheet_link_tag    :all %>
-  <%= javascript_include_tag :all %>
+  <%= stylesheet_link_tag    "application", "clients", "identities", "log_entries", "scaffolds", "sessions" %>
+  <%= javascript_include_tag "application", "sessions" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
