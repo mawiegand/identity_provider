@@ -59,5 +59,5 @@ IdentityProvider::Application.configure do
   config.active_support.deprecation = :notify
   
   # run in subdirectory
-  config.action_controller.relative_url_root = "/identity_provider"
+  ENV["RAILS_RELATIVE_URL_ROOT"] = "/identity_provider"
 end
