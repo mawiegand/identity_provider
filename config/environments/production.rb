@@ -57,4 +57,7 @@ IdentityProvider::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+  
+  # run in subdirectory
+  config.action_controller.relative_url_root = "/identity_provider"
 end
