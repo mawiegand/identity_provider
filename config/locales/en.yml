@@ -67,7 +67,6 @@ en:
         admin: administrator
         staff: staff member
         activated: activated
-
         
     delete:
       flash:

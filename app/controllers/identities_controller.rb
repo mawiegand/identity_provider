@@ -52,6 +52,11 @@ class IdentitiesController < ApplicationController
         
     # fourth: collect and sanitize values then render output (either html or JSON)
     respond_to do |format|
+      format.json { 
+        @attributes = identity.sanitized_hash(role)           # only those, that may be read by present user
+        @attributes[:gravatar_hash] = identity.gravatar_hash
+        render :json => @attributes.delete_if { |k,v| v.blank? } # to compact the return string to non-blank attrs
+      }      
       format.html {
         @options = {
           :address_informal             => identity.address_informal(role),
@@ -67,16 +72,17 @@ class IdentitiesController < ApplicationController
                                                               # the attributes visible to the given role. 
         @title = @options[:address_informal]                  # never forget to set this for the side-wide layout
       }
-      format.json { 
-        @attributes = identity.sanitized_hash(role)           # only those, that may be read by present user
-        @attributes[:gravatar_hash] = identity.gravatar_hash
-        render :json => @attributes.delete_if { |k,v| v.blank? } # to compact the return string to non-blank attrs
-      }
+
     end
   end
   
   def self
-    redirect_to current_identity
+    # this is to handle a bug in Safari (and other browsers), that lose a custom Authorization header when following a redirect
+    if !params[:access_token].blank? && request_authorization && request_authorization[:method] == :query 
+      redirect_to polymorphic_path(current_identity, :access_token => params[:access_token])
+    else
+      redirect_to current_identity
+    end
   end
   
   # send the sign-up form

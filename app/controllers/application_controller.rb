@@ -3,7 +3,7 @@ require 'five_d_access_token'
 
 
 class ApplicationController < ActionController::Base
-  protect_from_forgery
+  #protect_from_forgery
   include SessionsHelper     # session helpers must be available to all controllers
   
   before_filter :set_locale  # get the locale from the user parameters
@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   end
   
   protected
-  
+    
     def time_action
       started = Time.now
       yield
