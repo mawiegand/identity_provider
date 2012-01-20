@@ -4,9 +4,15 @@ namespace :db do
   desc "Fill database with sample data"
   task :populate => :environment do
     
-    puts 
-    
     Rake::Task['db:reset'].invoke
+    
+    client = Client.create({
+                                :identifier   => "XYZ",
+                                :scopes       => "5dentity wackadoo",
+                                :grant_types  => "password"
+    }, :as => :creator)
+    client.save
+    
     identity = Identity.create({:nickname  => "Egbert",
                                 :surname   => "Lange",
                                 :firstname => "Sascha",
