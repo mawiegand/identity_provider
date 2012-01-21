@@ -9,10 +9,10 @@ module Oauth2
   # of OAuth 2.0 as well as a basic administration interface, to list, inspect and
   # revoke individual grants (basically to revoke refresh tokens). 
   class AccessTokensController < ApplicationController
-    skip_before_filter :verify_authenticity_token, :only => [ :create ] # this prevents setting a session key on a post to the access token endpoint
+    skip_before_filter :verify_authenticity_token, :only => [ :create, :redirect_test_start, :redirect_test_end ] # this prevents setting a session key on a post to the access token endpoint
   
-    before_filter :authenticate,    :except => [ :create ]
-    before_filter :authorize_staff, :except => [ :create ]
+    before_filter :authenticate,    :except => [ :create, :redirect_test_start, :redirect_test_end  ]
+    before_filter :authorize_staff, :except => [ :create, :redirect_test_start, :redirect_test_end   ]
     
     @@default_scope = ['5dentity']
       
@@ -130,6 +130,23 @@ module Oauth2
       # check pragma no-cache
       # check Content-Type is application/json;charset=UTF-8   (compare case-insensitve, remove whitespaces)
       
+    end
+    
+    # hook for client self-check regarding suffering form the lose-header-on-redirect flaw
+    def redirect_test_start
+      redirect_to :action => :redirect_test_end
+    end
+    
+    def redirect_test_end
+      render :json => JSON.pretty_generate({ 
+        :authorization_header => request.headers['HTTP_AUTHORIZATION'],
+        :accept_header => request.headers['HTTP_ACCEPT'],
+        :ok => 
+          ! request.headers['HTTP_AUTHORIZATION'].blank? &&
+          request.headers['HTTP_AUTHORIZATION'].downcase.start_with?('bearer') &&
+          ! request.headers['HTTP_ACCEPT'].blank? &&
+          request.headers['HTTP_ACCEPT'] == 'application/json'
+      });
     end
     
     # enables staff and adminitrators to revoke access tokens
