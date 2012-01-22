@@ -8,6 +8,9 @@ class ApplicationController < ActionController::Base
   
   before_filter :set_locale  # get the locale from the user parameters
   around_filter :time_action
+  after_filter { |controller|    
+    logger.debug("Response headers: #{controller.response.headers}")
+  }
   
   rescue_from NotFoundError, BadRequestError, ForbiddenError, :with => :render_response_for_exception
   rescue_from BearerAuthError, :with => :render_response_for_bearer_auth_exception

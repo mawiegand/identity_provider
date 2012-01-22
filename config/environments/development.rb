@@ -1,7 +1,12 @@
 require 'five_d_logger'  
+require 'cookie_filter'
 
 IdentityProvider::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
+
+  # Add the cookie filter to the rack middelware. presently the filtering mechanism
+  # hasn't been implemented and the cookie filter - middleware class does nothing. 
+  # config.middleware.use "CookieFilter"
 
   # In the development environment your application's code is reloaded on
   # every request.  This slows down response time but is perfect for development
