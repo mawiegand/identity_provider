@@ -49,5 +49,10 @@ namespace :deploy do
   desc "Stop Thin"
   task :stop do
     run "cd #{current_path}; bundle exec thin -C config/thin.yml stop"
-  end 
+  end
+  
+  desc "Reset Database"
+  task :populate do
+    run "cd #{current_path}; bundle exec rake db:populate"
+  end
 end
