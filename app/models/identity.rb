@@ -74,6 +74,8 @@ class Identity < ActiveRecord::Base
   
   validates :surname,   :length       => { :maximum => 30 }
   
+  validates :identifier, :uniqueness => { :case_sensitive => true }
+  
   has_many  :log_entries;
   
   default_scope :order => 'identities.nickname ASC'
