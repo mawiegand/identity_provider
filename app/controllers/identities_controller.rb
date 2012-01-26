@@ -93,21 +93,50 @@ class IdentitiesController < ApplicationController
   
   # create a new identity from the posted form data
   def create
-    @identity = Identity.new(params[:identity], :as => :creator)
-    
-    if @identity.save                                      # created successfully
-      logRegisterSuccess(@identity)                        # log creation
-      IdentityMailer.validation_email(@identity).deliver   # send email validation email
-      sign_in @identity                                    # sign in with newly created identity
-      flash[:success] =    
-        I18n.t('identities.signup.flash.welcome', :name => @identity.address_informal(:owner))
-      redirect_to @identity                                # redirect to new identity
-    else 
-      logRegisterFailure(params[:identity][:email], params[:identity][:nickname])
-      @title = I18n.t('identities.signup.title')
-      render :new
+    respond_to do |format|
+      format.json {
+        i = 0
+        begin        
+          begin
+            i = i+1
+            disambiguated_name = params[:nickname_base] + i.to_s
+            puts disambiguated_name
+          end while !(Identity.find_by_nickname(disambiguated_name)).nil?
+          
+          @identity = Identity.new
+          @identity.nickname = disambiguated_name
+          @identity.email = disambiguated_name + '@heldenduell.de'
+          @identity.password = params[:password]
+          @identity.password_confirmation = params[:password]
+          saved = @identity.save
+          puts disambiguated_name + ' saveversuch'
+        end while !@identity.errors.messages[:nickname].nil?    # did save fail due to duplicate nickname? 
+        
+        if saved
+          render json: @identity, status: :created, location: @identity
+        else
+          render json: {error: :error}, status: :error          
+        end
+      }
+      format.html {
+        @identity = Identity.new(params[:identity], :as => :creator)
+      
+        if @identity.save                                      # created successfully
+          logRegisterSuccess(@identity)                        # log creation
+          IdentityMailer.validation_email(@identity).deliver   # send email validation email
+          sign_in @identity                                    # sign in with newly created identity
+          flash[:success] =    
+            I18n.t('identities.signup.flash.welcome', :name => @identity.address_informal(:owner))
+          redirect_to @identity                                # redirect to new identity
+        else 
+          logRegisterFailure(params[:identity][:email], params[:identity][:nickname])
+          @title = I18n.t('identities.signup.title')
+          render :new
+        end
+      }
     end
   end
+
   
   # edit an existing user
   def edit
@@ -232,6 +261,7 @@ class IdentitiesController < ApplicationController
       end
     end
   end
+  
   
   private
   
