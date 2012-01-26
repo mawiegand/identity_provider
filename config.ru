@@ -2,6 +2,3 @@
 
 require ::File.expand_path('../config/environment',  __FILE__)
 run IdentityProvider::Application
-
-require 'content_length_fix' 
-use Nginx::ContentLengthFix
