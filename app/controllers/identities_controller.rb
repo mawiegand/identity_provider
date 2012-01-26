@@ -113,7 +113,7 @@ class IdentitiesController < ApplicationController
         end while !identity.errors.messages[:nickname].nil?    # did save fail due to duplicate nickname? 
         
         if saved
-          render :status => :created, :json => identity.sanitized_hash(:creator)          
+          render :json => identity.sanitized_hash(:creator)          
         else
           render json: {error: :error}, status: :error          
         end
