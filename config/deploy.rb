@@ -53,6 +53,6 @@ namespace :deploy do
   
   desc "Add Admins to DB"
   task :populate do
-    run "cd #{current_path}; bundle exec rake db:populate_admin RAILS_ENV='production'"
+    run "cd #{current_path}; bundle exec rake db:populate_admin RAILS_ENV=production"
   end
 end
