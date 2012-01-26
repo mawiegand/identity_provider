@@ -2,29 +2,8 @@ require 'faker'
 
 namespace :db do
   desc "Fill database with sample data"
-  task :populate => 'production' do
     
-    Rake::Task['db:reset'].invoke
-    
-    client = Client.create({
-                                :identifier   => "XYZ",
-                                :scopes       => "5dentity wackadoo",
-                                :grant_types  => "password"
-    }, :as => :creator)
-    client.save
-    
-    identity = Identity.create({:nickname  => "admin",
-                                :surname   => "Admin",
-                                :firstname => "5D",
-                                :email     => "admin@5dlab.com",
-                                :password  => "pH%e3.dG",
-                                :password_confirmation => "pH%e3.dG"}, :as => :creator)
-    identity.admin = true
-    identity.staff = true
-    identity.save
-  end
-    
-  task :populate => 'development' do
+  task :populate => :environment do
     
     Rake::Task['db:reset'].invoke
     
