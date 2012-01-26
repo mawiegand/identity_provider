@@ -104,16 +104,19 @@ class IdentitiesController < ApplicationController
             disambiguated_name = params[:nickname_base] + i.to_s
           end
           
-          @identity = Identity.new
-          @identity.nickname = disambiguated_name
-          @identity.email = disambiguated_name + '@heldenduell.de'
-          @identity.password = params[:password]
-          @identity.password_confirmation = params[:password]
-          saved = @identity.save
-        end while !@identity.errors.messages[:nickname].nil?    # did save fail due to duplicate nickname? 
+          identity = Identity.new
+          identity.nickname = disambiguated_name
+          identity.email = disambiguated_name + '@heldenduell.de'
+          identity.password = params[:password]
+          identity.password_confirmation = params[:password]
+          saved = identity.save
+        end while !identity.errors.messages[:nickname].nil?    # did save fail due to duplicate nickname? 
         
         if saved
-          render json: @identity, status: :created, location: @identity
+        @attributes = identity.sanitized_hash(:creator)           # only those, that may be read by present user
+        @attributes[:gravatar_hash] = identity.gravatar_hash
+        render :json => @attributes.delete_if { |k,v| v.blank? } # to compact the return string to non-blank attrs
+#          render status: :created, json: identity
         else
           render json: {error: :error}, status: :error          
         end
