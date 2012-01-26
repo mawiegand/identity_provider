@@ -50,4 +50,57 @@ namespace :db do
       identity.save
     end
   end
+  
+  desc "Fill database with sample data"
+  task :populate_admin_only => :environment do
+    
+    Rake::Task['db:reset'].invoke
+    
+    client = Client.create({
+                                :identifier   => "XYZ",
+                                :scopes       => "5dentity wackadoo",
+                                :grant_types  => "password"
+    }, :as => :creator)
+    client.save
+    
+    client = Client.create({
+                                :identifier   => "HeldenDuell",
+                                :scopes       => "5dentity heldenduell",
+                                :grant_types  => "password"
+    }, :as => :creator)
+    client.save
+    
+    identity = Identity.create({:nickname  => "Egbert",
+                                :surname   => "Lange",
+                                :firstname => "Sascha",
+                                :email     => "sascha77@googlemail.com",
+                                :password  => "sonnen",
+                                :password_confirmation => "sonnen"}, :as => :creator)
+    identity.admin = true
+    identity.staff = true
+    identity.save
+                    
+    identity = Identity.create({:nickname  => "paffi",
+                                :surname   => "Fox",
+                                :firstname => "Patrick",
+                                :email     => "p@trick-fox.de",
+                                :password  => "ploppp",
+                                :password_confirmation => "ploppp"}, :as => :creator)
+    identity.admin = true
+    identity.staff = true
+    identity.save
+    
+    
+    identity = Identity.create({:nickname  => "Julian",
+                                :surname   => "Schmid",
+                                :firstname => "Julian",
+                                :email     => "schmidj@informatik.uni-freiburg.de",
+                                :password  => "asdfasdf",
+                                :password_confirmation => "asdfasdf"}, :as => :creator)
+    identity.admin = true
+    identity.staff = true
+    identity.save
+    
+  end
+  
 end

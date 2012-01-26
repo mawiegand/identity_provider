@@ -20,7 +20,7 @@ require 'json'
   class FiveDAccessToken 
     
     @@shared_secret = 'ARandomStringWithGoodEntropy'
-    @@expiration    = 3600                 # expiration in seconds
+    @@expiration    = 36                 # expiration in seconds
     
     # generates a new access token for the given identifier and scope
     #
