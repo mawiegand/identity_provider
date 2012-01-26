@@ -96,12 +96,13 @@ class IdentitiesController < ApplicationController
     respond_to do |format|
       format.json {
         i = 0
-        begin        
-          begin
+        begin
+          disambiguated_name = params[:nickname_base]
+          
+          while !(Identity.find_by_nickname(disambiguated_name)).nil?
             i = i+1
             disambiguated_name = params[:nickname_base] + i.to_s
-            puts disambiguated_name
-          end while !(Identity.find_by_nickname(disambiguated_name)).nil?
+          end
           
           @identity = Identity.new
           @identity.nickname = disambiguated_name
@@ -109,7 +110,6 @@ class IdentitiesController < ApplicationController
           @identity.password = params[:password]
           @identity.password_confirmation = params[:password]
           saved = @identity.save
-          puts disambiguated_name + ' saveversuch'
         end while !@identity.errors.messages[:nickname].nil?    # did save fail due to duplicate nickname? 
         
         if saved
