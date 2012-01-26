@@ -113,10 +113,7 @@ class IdentitiesController < ApplicationController
         end while !identity.errors.messages[:nickname].nil?    # did save fail due to duplicate nickname? 
         
         if saved
-        # @attributes = identity.sanitized_hash(:creator)           # only those, that may be read by present user
-        # @attributes[:gravatar_hash] = identity.gravatar_hash
-        # render :json => @attributes.delete_if { |k,v| v.blank? } # to compact the return string to non-blank attrs
-          render :status => :created, :json => identity
+          render :status => :created, :json => identity.sanitized_hash(:creator)          
         else
           render json: {error: :error}, status: :error          
         end
