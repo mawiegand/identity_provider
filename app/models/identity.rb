@@ -120,6 +120,7 @@ class Identity < ActiveRecord::Base
   def self.authenticate(login, submittedPassword)
     return nil if login.blank? || submittedPassword.blank?    
     identity = find_by_email_and_deleted(login, false) if identity.nil?
+    identity = find_by_identifier_and_deleted(login, false) if identity.nil?
     identity = find_by_nickname_and_deleted(login, false) if identity.nil? # user may have specified valid nickname?
     return nil if identity.nil?
     return identity if identity.has_password?(submittedPassword)
