@@ -22,3 +22,5 @@
 *~
 .DS_Store
 .project
+
+/config/thin_local.yml
