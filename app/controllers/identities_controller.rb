@@ -101,18 +101,21 @@ class IdentitiesController < ApplicationController
         raise BadRequestError.new("Client's secret not valid") if params[:client_password] != client.password
         i = 0
         begin
-          disambiguated_name = params[:nickname_base]
+          base_name = params[:nickname_base ].blank? ? "User" : params[:nickname_base]
+          disambiguated_name = base_name
           
+          # TODO: the following is the most simple algorithm and must be raplaced
+          # before there's noteworthy traffic on the server!!!!
           while !(Identity.find_by_nickname(disambiguated_name)).nil?
             i = i+1
-            disambiguated_name = params[:nickname_base] + i.to_s
+            disambiguated_name = base_name + i.to_s
           end
           
           identity = Identity.new
           identity.nickname = disambiguated_name
-          identity.email = disambiguated_name + '@heldenduell.de'
+          identity.email = params[:email]
           identity.password = params[:password]
-          identity.password_confirmation = params[:password]
+          identity.password_confirmation = params[:password_confirmation]
           saved = identity.save
         end while !identity.errors.messages[:nickname].nil?    # did save fail due to duplicate nickname? 
         
