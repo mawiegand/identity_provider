@@ -81,7 +81,7 @@ module SessionsHelper
   
   def request_access_token
     return @request_access_token unless @request_access_token.nil?
-    if request.headers['HTTP_AUTHORIZATION']
+    if !request.headers['HTTP_AUTHORIZATION'].blank?
       chunks = request.headers['HTTP_AUTHORIZATION'].split(' ')
       raise BearerAuthInvalidRequest.new('Send bearer token in authorization header.') unless chunks.length == 2 && chunks[0].downcase == 'bearer'
       request_authorization[:method] = :header
