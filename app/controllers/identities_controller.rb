@@ -120,6 +120,7 @@ class IdentitiesController < ApplicationController
         end while !identity.errors.messages[:nickname].nil?    # did save fail due to duplicate nickname? 
         
         if saved
+          IdentityMailer.validation_email(identity).deliver   # send email validation email
           render :status => :created, :json => identity.sanitized_hash(:owner).delete_if { |k,v| v.blank? }, :location => identity          
         else
           render json: {error: :error}, status: :error          

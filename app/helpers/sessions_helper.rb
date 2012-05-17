@@ -83,6 +83,8 @@ module SessionsHelper
     return @request_access_token unless @request_access_token.nil?
     if !request.headers['HTTP_AUTHORIZATION'].blank?
       chunks = request.headers['HTTP_AUTHORIZATION'].split(' ')
+      logger.error 'HEADERS: ' + chunks.inspect
+      logger.error request.headers['HTTP_AUTHORIZATION'].inspect
       raise BearerAuthInvalidRequest.new('Send bearer token in authorization header.') unless chunks.length == 2 && chunks[0].downcase == 'bearer'
       request_authorization[:method] = :header
       @request_access_token = FiveDAccessToken.new chunks[1]
