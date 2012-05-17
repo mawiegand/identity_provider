@@ -6,7 +6,7 @@ require 'active_support/secure_random'
 # the system.
 class IdentitiesController < ApplicationController
 
-  before_filter :authenticate,    :except   => [:new, :show, :create]   # these pages can be seen without logging-in
+  before_filter :authenticate,    :except   => [:new, :show, :create, :validation]   # these pages can be seen without logging-in
   before_filter :authorize_staff, :only     => [:index]                 # only staff can access these pages
         
   # Returns a representation of a single identity-resource by either rendering 

@@ -1,5 +1,27 @@
 module SessionsHelper
   
+  
+  def requested_json?
+    return request.format == "application/json"
+  end  
+
+  def requested_html?
+    return request.format == "text/html"
+  end  
+
+  def api_request?
+    return requested_json?
+  end
+
+  def website_request?
+    return requested_html?
+  end
+  
+  def deny_api
+    deny_access if api_request?
+  end
+
+  
   # Checks whether the present visitor has authenticated himself properly
   # (that is, has successfully logged in using a valid identity) and
   # denies access otherwise.
@@ -65,7 +87,8 @@ module SessionsHelper
   # Thus, this method realizes the session tracking.
   def current_identity 
     raise BearerAuthInvalidRequest.new('Multiple access tokens sent within one request.') if !valid_authorization_header?
-    @current_identity ||= identity_from_access_token || identity_from_remember_token # returns either the known identity or the one corresponding to the token
+    @current_identifier ||= identity_from_access_token if api_request?
+    @current_identifier ||= identity_from_remember_token if website_request?
   end
   
   def identity_from_access_token
