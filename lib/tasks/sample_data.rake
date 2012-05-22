@@ -14,6 +14,22 @@ namespace :db do
     }, :as => :creator)
     client.save
     
+    
+      client = Client.create({
+                                :identifier   => "Payment",
+                                :scopes       => "payment",
+                                :grant_types  => "password"
+    }, :as => :creator)
+    client.save
+    
+    client = Client.create({
+                                :identifier   => "WACKADOOHTML5",
+                                :scopes       => "5dentity wackadoo payment",
+                                :password     => "wacky",
+                                :grant_types  => "password"
+    }, :as => :creator)
+    client.save
+    
     identity = Identity.create({:nickname  => "Egbert",
                                 :surname   => "Lange",
                                 :firstname => "Sascha",
@@ -60,6 +76,21 @@ namespace :db do
     client = Client.create({
                                 :identifier   => "XYZ",
                                 :scopes       => "5dentity wackadoo",
+                                :grant_types  => "password"
+    }, :as => :creator)
+    client.save
+    
+    client = Client.create({
+                                :identifier   => "Payment",
+                                :scopes       => "payment",
+                                :grant_types  => "password"
+    }, :as => :creator)
+    client.save
+    
+    client = Client.create({
+                                :identifier   => "WACKADOOHTML5",
+                                :scopes       => "5dentity wackadoo payment",
+                                :password     => "wacky",
                                 :grant_types  => "password"
     }, :as => :creator)
     client.save
