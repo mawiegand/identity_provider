@@ -1,0 +1,12 @@
+defaults: &defaults
+  allow_jsonp: true
+  
+        
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

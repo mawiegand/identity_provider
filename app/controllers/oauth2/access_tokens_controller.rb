@@ -30,16 +30,23 @@ module Oauth2
     def create
                       
       logger.debug('Request for access-token with params: ' + params.inspect)
+      logger.debug(IDENTITY_PROVIDER_CONFIG.inspect)      
             
       # check method; only post allowed
-      if (!request.post?)
+      if !request.post? && !IDENTITY_PROVIDER_CONFIG['allow_jsonp']
         render_endpoint_error params[:client_id], :invalid_request, "This endpoint only supports POST. " +
           "Your request used HTTP #{ request.method }.";
         return 
       end
       
-      # check encoding
-      if (request.content_type() != "application/x-www-form-urlencoded")
+      if (!request.post? && params[:callback].blank?)
+        render_endpoint_error params[:client_id], :invalid_request, "This endpoint only supports JSONP via GET. " +
+          "Your request used HTTP #{ request.method } but did not send a callback.";
+        return 
+      end
+      
+      # check encoding for post requests (don't care for JSONP via GET)
+      if (request.post? && request.content_type() != "application/x-www-form-urlencoded")
         render_endpoint_error params[:client_id], :invalid_request, "The Content-Type of the message must be " +
           "application/x-www-form-urlencoded but was " +
           "#{ ActionController::Base.helpers.sanitize(request.content_type().inspect) }."
@@ -120,7 +127,12 @@ module Oauth2
         :user_identifer => identity.identifier
       }
 
-      render :status => :ok, :json => JSON.pretty_generate(body)
+      if (!request.post?) # JSONP
+        render :status => :ok, :json => JSON.pretty_generate(body), :callback => params[:callback]
+      else
+        render :status => :ok, :json => JSON.pretty_generate(body)
+      end
+
       headers['Cache-Control'] = 'no-store'
       headers['Pragma'] = 'no-cache'
       headers['Connection'] = 'close'
@@ -170,7 +182,11 @@ module Oauth2
           :error_uri         => error_uri
         }
 
-        render :status => :bad_request, :json => JSON.pretty_generate(body.delete_if { |k,v| v.blank? })
+        if (!request.post? && !params[:callback].blank?) # JSONP
+          render :status => :bad_request, :json => JSON.pretty_generate(body.delete_if { |k,v| v.blank? }), :callback => params[:callback]
+        else
+          render :status => :bad_request, :json => JSON.pretty_generate(body.delete_if { |k,v| v.blank? })
+        end
         headers['Cache-Control'] = 'no-store'
         headers['Pragma'] = 'no-cache'
         headers['Connection'] = 'close'

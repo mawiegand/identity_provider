@@ -1,0 +1,1 @@
+IDENTITY_PROVIDER_CONFIG = YAML.load_file("#{Rails.root}/config/identity_provider.yml")[Rails.env]
