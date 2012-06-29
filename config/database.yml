@@ -21,6 +21,6 @@ test:
 production:
   adapter: postgresql
   encoding: UTF8
-  database: game_server
+  database: identity_provider
   port: 5686
   username: run-ip
