@@ -7,30 +7,28 @@ namespace :db do
     
     Rake::Task['db:reset'].invoke
     
-    client = Client.create({
+    Client.create({
                                 :identifier   => "XYZ",
                                 :scopes       => "5dentity wackadoo",
-                                :grant_types  => "password"
+                                :grant_types  => "password",
     }, :as => :creator)
-    client.save
     
     
-      client = Client.create({
+    Client.create({
                                 :identifier   => "Payment",
-                                :scopes       => "payment",
-                                :grant_types  => "password"
+                                :scopes       => "5dentity payment",
+                                :password     => "wacky",
+                                :grant_types  => "password",
     }, :as => :creator)
-    client.save
     
-    client = Client.create({
+    Client.create({
                                 :identifier   => "WACKADOOHTML5",
                                 :scopes       => "5dentity wackadoo payment",
                                 :password     => "wacky",
-                                :grant_types  => "password"
+                                :grant_types  => "password",
     }, :as => :creator)
-    client.save
     
-    identity = Identity.create({:nickname  => "Egbert",
+    identity = Identity.new({:nickname  => "Egbert",
                                 :surname   => "Lange",
                                 :firstname => "Sascha",
                                 :email     => "sascha77@googlemail.com",
@@ -40,7 +38,7 @@ namespace :db do
     identity.staff = true
     identity.save
                     
-    identity = Identity.create({:nickname  => "paffi",
+    identity = Identity.new({:nickname  => "paffi",
                                 :surname   => "Fox",
                                 :firstname => "Patrick",
                                 :email     => "p@trick-fox.de",
@@ -49,6 +47,7 @@ namespace :db do
     identity.admin = true
     identity.staff = true
     identity.save
+
                     
     999.times do |n|
       firstname = Faker::Name.first_name
@@ -78,14 +77,13 @@ namespace :db do
                                 :scopes       => "5dentity wackadoo",
                                 :grant_types  => "password"
     }, :as => :creator)
-    client.save
     
     client = Client.create({
                                 :identifier   => "Payment",
-                                :scopes       => "payment",
+                                :scopes       => "5dentity payment",
+                                :password     => "wacky",
                                 :grant_types  => "password"
     }, :as => :creator)
-    client.save
     
     client = Client.create({
                                 :identifier   => "WACKADOOHTML5",
@@ -93,42 +91,40 @@ namespace :db do
                                 :password     => "wacky",
                                 :grant_types  => "password"
     }, :as => :creator)
-    client.save
     
     client = Client.create({
-                                :identifier   => "HeldenDuell",
-                                :scopes       => "5dentity heldenduell",
-                                :grant_types  => "password"
+                              :identifier   => "HeldenDuell",
+                              :scopes       => "5dentity heldenduell",
+                              :grant_types  => "password"
     }, :as => :creator)
-    client.save
     
-    identity = Identity.create({:nickname  => "Egbert",
-                                :surname   => "Lange",
-                                :firstname => "Sascha",
-                                :email     => "sascha77@googlemail.com",
-                                :password  => "sonnen",
-                                :password_confirmation => "sonnen"}, :as => :creator)
+    identity = Identity.new({ :nickname  => "Egbert",
+                              :surname   => "Lange",
+                              :firstname => "Sascha",
+                              :email     => "sascha77@googlemail.com",
+                              :password  => "sonnen",
+                              :password_confirmation => "sonnen"}, :as => :creator)
     identity.admin = true
     identity.staff = true
     identity.save
                     
-    identity = Identity.create({:nickname  => "paffi",
-                                :surname   => "Fox",
-                                :firstname => "Patrick",
-                                :email     => "p@trick-fox.de",
-                                :password  => "ploppp",
-                                :password_confirmation => "ploppp"}, :as => :creator)
+    identity = Identity.new({ :nickname  => "paffi",
+                              :surname   => "Fox",
+                              :firstname => "Patrick",
+                              :email     => "p@trick-fox.de",
+                              :password  => "ploppp",
+                              :password_confirmation => "ploppp"}, :as => :creator)
     identity.admin = true
     identity.staff = true
     identity.save
     
     
-    identity = Identity.create({:nickname  => "Julian",
-                                :surname   => "Schmid",
-                                :firstname => "Julian",
-                                :email     => "schmidj@informatik.uni-freiburg.de",
-                                :password  => "asdfasdf",
-                                :password_confirmation => "asdfasdf"}, :as => :creator)
+    identity = Identity.new({ :nickname  => "Julian",
+                              :surname   => "Schmid",
+                              :firstname => "Julian",
+                              :email     => "schmidj@informatik.uni-freiburg.de",
+                              :password  => "asdfasdf",
+                              :password_confirmation => "asdfasdf"}, :as => :creator)
     identity.admin = true
     identity.staff = true
     identity.save
