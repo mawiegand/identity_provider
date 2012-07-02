@@ -38,7 +38,7 @@ identity = Identity.new({ :nickname  => "Sascha",
                           :firstname => "Sascha",
                           :email     => "sascha@5dlab.com",
                           :password  => "1.A-V.vW",
-                          :password_confirmation => "sonnen"}, :as => :creator)
+                          :password_confirmation => "1.A-V.vW"}, :as => :creator)
 identity.admin = true
 identity.staff = true
 identity.save
@@ -48,7 +48,7 @@ identity = Identity.new({ :nickname  => "Patrick",
                           :firstname => "Patrick",
                           :email     => "patrick@5dlab.com",
                           :password  => "1.A-V.vW",
-                          :password_confirmation => "ploppp"}, :as => :creator)
+                          :password_confirmation => "1.A-V.vW"}, :as => :creator)
 identity.admin = true
 identity.staff = true
 identity.save
@@ -59,7 +59,7 @@ identity = Identity.new({ :nickname  => "Hajo",
                           :firstname => "Hajo",
                           :email     => "hajo@5dlab.com",
                           :password  => "1.A-V.vW",
-                          :password_confirmation => "ploppp"}, :as => :creator)
+                          :password_confirmation => "1.A-V.vW"}, :as => :creator)
 identity.admin = true
 identity.staff = true
 identity.save
@@ -70,7 +70,7 @@ identity = Identity.new({ :nickname  => "Max",
                           :firstname => "Max",
                           :email     => "max@5dlab.com",
                           :password  => "1.A-V.vW",
-                          :password_confirmation => "ploppp"}, :as => :creator)
+                          :password_confirmation => "1.A-V.vW"}, :as => :creator)
 identity.admin = true
 identity.staff = true
 identity.save
@@ -81,7 +81,7 @@ identity = Identity.new({ :nickname  => "Julian",
                           :firstname => "Julian",
                           :email     => "julian@5dlab.com",
                           :password  => "1.A-V.vW",
-                          :password_confirmation => "asdfasdf"}, :as => :creator)
+                          :password_confirmation => "1.A-V.vW"}, :as => :creator)
 identity.admin = true
 identity.staff = false
 identity.save
