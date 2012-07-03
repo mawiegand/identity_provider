@@ -21,6 +21,23 @@ require 'base64'
 # * the hashing function must be cryptographic
 # * plain-text passwords must not be stored in log files!
 #
+# What options exist for finding and authenticating a specific
+# Identity
+# * the identifier: case-sensitive exact match is needed
+# * the nickname: case-insensitive match is needed
+# * the email: case-insensitive match is needed
+# Furthermore, the same rules hold for the uniqueness-condition
+# on identifiers, emails and nicknames in the system; no
+# two persons can register with the same email or nickname
+# differing only in case (e.g. Sascha & sascha identify the
+# same identity).
+#
+# Please note: emails are stored in downcase (and checked 
+# using the downcase version), nicknames are not modified.
+#
+# It's only possible ot authenticate against non-deleted
+# Identities (value of attribute "deleted" is not "true").
+#
 # == Schema Information
 #
 # Table name: identities
@@ -119,9 +136,9 @@ class Identity < ActiveRecord::Base
   # It returns nil otherwise.
   def self.authenticate(login, submittedPassword)
     return nil if login.blank? || submittedPassword.blank?    
-    identity = find_by_email_and_deleted(login, false) if identity.nil?
+    identity = find_by_email_and_deleted(login.downcase, false) if identity.nil?
     identity = find_by_identifier_and_deleted(login, false) if identity.nil?
-    identity = find_by_nickname_and_deleted(login, false) if identity.nil? # user may have specified valid nickname?
+    identity = Identity.find(:first, :conditions => ["lower(nickname) = lower(?) AND (deleted IS NULL OR NOT deleted)", login]) if identity.nil? && Identity.valid_nickname?(login)
     return nil if identity.nil?
     return identity if identity.has_password?(submittedPassword)
   end

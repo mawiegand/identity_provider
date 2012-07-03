@@ -96,9 +96,11 @@ class IdentitiesController < ApplicationController
     respond_to do |format|
       format.json {
         client = Client.find_by_identifier(params[:client_id])
+        email = params[:email].blank? ? nil : params[:email].downcase
         raise BadRequestError.new("No valid client") if client.nil?
         raise BadRequestError.new("Client's scope not valid") if not client.scopes.include?('5dentity')
         raise BadRequestError.new("Client's secret not valid") if params[:client_password] != client.password
+        raise ConflictError.new("Email is alredy registered.") if email && Identity.find_by_email(email)
         i = 0
         begin
           base_name = params[:nickname_base ].blank? ? "User" : params[:nickname_base]
