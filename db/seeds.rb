@@ -5,3 +5,83 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+
+client = Client.create({
+                          :identifier   => "XYZ",
+                          :scopes       => "5dentity wackadoo",
+                          :grant_types  => "password"
+}, :as => :creator)
+
+client = Client.create({
+                          :identifier   => "Payment",
+                          :scopes       => "5dentity payment",
+                          :password     => "wacky",
+                          :grant_types  => "password"
+}, :as => :creator)
+
+client = Client.create({
+                          :identifier   => "WACKADOOHTML5",
+                          :scopes       => "5dentity wackadoo payment",
+                          :password     => "wacky",
+                          :grant_types  => "password"
+}, :as => :creator)
+
+client = Client.create({
+                          :identifier   => "HeldenDuell",
+                          :scopes       => "5dentity heldenduell",
+                          :grant_types  => "password"
+}, :as => :creator)
+
+identity = Identity.new({ :nickname  => "Sascha",
+                          :surname   => "Lange",
+                          :firstname => "Sascha",
+                          :email     => "sascha@5dlab.com",
+                          :password  => "1.A-V.vW",
+                          :password_confirmation => "1.A-V.vW"}, :as => :creator)
+identity.admin = true
+identity.staff = true
+identity.save
+                
+identity = Identity.new({ :nickname  => "Patrick",
+                          :surname   => "Fox",
+                          :firstname => "Patrick",
+                          :email     => "patrick@5dlab.com",
+                          :password  => "1.A-V.vW",
+                          :password_confirmation => "1.A-V.vW"}, :as => :creator)
+identity.admin = true
+identity.staff = true
+identity.save
+
+
+identity = Identity.new({ :nickname  => "Hajo",
+                          :surname   => "Runne",
+                          :firstname => "Hajo",
+                          :email     => "hajo@5dlab.com",
+                          :password  => "1.A-V.vW",
+                          :password_confirmation => "1.A-V.vW"}, :as => :creator)
+identity.admin = true
+identity.staff = true
+identity.save
+
+
+identity = Identity.new({ :nickname  => "Max",
+                          :surname   => "Buck",
+                          :firstname => "Max",
+                          :email     => "max@5dlab.com",
+                          :password  => "1.A-V.vW",
+                          :password_confirmation => "1.A-V.vW"}, :as => :creator)
+identity.admin = true
+identity.staff = true
+identity.save
+
+
+identity = Identity.new({ :nickname  => "Julian",
+                          :surname   => "Schmid",
+                          :firstname => "Julian",
+                          :email     => "julian@5dlab.com",
+                          :password  => "1.A-V.vW",
+                          :password_confirmation => "1.A-V.vW"}, :as => :creator)
+identity.admin = true
+identity.staff = false
+identity.save

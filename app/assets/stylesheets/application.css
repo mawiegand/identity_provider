@@ -13,7 +13,7 @@ html {
 body {
   min-width: 480px;
   
-  background-image: url("/assets/background.jpg");
+  background-image: url("/identity_provider/assets/background.jpg");
   padding: 0px;
   margin: 0px;
   min-height: 100%;

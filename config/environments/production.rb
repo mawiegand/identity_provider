@@ -22,7 +22,7 @@ IdentityProvider::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
 
-  config.action_controller.asset_host = "https://wackadoo.de/identity_provider"
+  config.action_controller.asset_host = "https://wack-a-doo.de/identity_provider"
 
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH
