@@ -108,7 +108,7 @@ module Oauth2
       
       identity = Identity.authenticate(params[:username], params[:password])
       if !identity
-        render_endpoint_error params[:client_id], :invalid_grant, "Invalid resource owner credentials."
+        render_endpoint_error params[:client_id], :invalid_grant, I18n.translate('error.oauth.wrongCredentials') 
         return 
       end
         

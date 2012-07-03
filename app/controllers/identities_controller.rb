@@ -100,7 +100,8 @@ class IdentitiesController < ApplicationController
         raise BadRequestError.new("No valid client") if client.nil?
         raise BadRequestError.new("Client's scope not valid") if not client.scopes.include?('5dentity')
         raise BadRequestError.new("Client's secret not valid") if params[:client_password] != client.password
-        raise ConflictError.new("Email is alredy registered.") if email && Identity.find_by_email(email)
+        raise ConflictError.new(I18n.translate "error.emailTaken") if email && Identity.find_by_email(email)
+        raise BadRequestError.new(I18n.translate "error.passwordToShort") if !params[:password].blank? && params[:password].length < 6
         i = 0
         begin
           base_name = params[:nickname_base ].blank? ? "User" : params[:nickname_base]
@@ -118,6 +119,9 @@ class IdentitiesController < ApplicationController
           identity.email = params[:email]
           identity.password = params[:password]
           identity.password_confirmation = params[:password_confirmation]
+          
+          raise BadRequestError.new(I18n.translate "error.identityInvalid") unless identity.valid?
+                    
           saved = identity.save
         end while !identity.errors.messages[:nickname].nil?    # did save fail due to duplicate nickname? 
         

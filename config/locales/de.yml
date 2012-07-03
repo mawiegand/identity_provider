@@ -8,17 +8,26 @@ de:
       mr: Herr
       mrs: Frau
       mrmrs: Frau oder Herr
-      user: Benutzer
+      user:  Benutzer
       staff: Kollege
       admin: Administrator
+      
+  error:
+    emailTaken:       "Diese Email wurde bereits registriert. Bitte einfach einloggen."
+    passwordToShort:  "Das gewählte Passwort ist zu kurz!"
+    identityInvalid:  "Emailadresse oder Passwort ungültig."
+      
+    oauth:
+      wrongCredentials: "Login und / oder Passwort passen nicht."
+        
   
   application:
     layout:
       profile: Profil
-      signin: Anmelden
+      signin:  Anmelden
       signout: Abmelden
       confirm: Wirklich abmelden?
-      index: Profilliste
+      index:   Profilliste
       clients: Clients
   
   identities:

@@ -1,3 +1,7 @@
+class ConflictError               < ArgumentError
+end
+
+
 class BadRequestError             < ArgumentError
 end
 

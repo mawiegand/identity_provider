@@ -13,6 +13,15 @@ en:
       admin: administrator
 
 
+  error:
+    emailTaken:       This email has already been registered during sign up. Please sign in!
+    passwordToShort:  The chosen password is to short!
+    identityInvalid:  "Please enter valid email and password."
+      
+      
+    oauth:
+      wrongCredentials: "Invalid credentials: wrong login or password."
+
   application:
     layout:
       profile: Profile

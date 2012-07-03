@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
     logger.debug("Response headers: #{controller.response.headers}")
   }
   
-  rescue_from NotFoundError, BadRequestError, ForbiddenError, :with => :render_response_for_exception
+  rescue_from NotFoundError, BadRequestError, ForbiddenError, ConflictError, :with => :render_response_for_exception
   rescue_from BearerAuthError, :with => :render_response_for_bearer_auth_exception
   
   # This method adds the locale to all rails-generated path, e.g. root_path.
@@ -56,15 +56,17 @@ class ApplicationController < ActionController::Base
     end
     
     def render_json_for_exception(exception)
-      head :bad_request if exception.class  == BadRequestError
-      head :not_found if exception.class    == NotFoundError
-      head :forbidden if exception.class    == ForbiddenError
+      render :json => { error_description: exception.message }, :status => :bad_request                 if exception.class  == BadRequestError
+      render :json => { error_description: exception.message }, :status => :not_found                   if exception.class  == NotFoundError
+      render :json => { error_description: exception.message }, :status => :forbidden                   if exception.class  == ForbiddenError
+      render :json => { error_description: exception.message }, :status => :conflict                    if exception.class  == ConflictError
     end
     
     def render_html_for_exception(exception)
       render :text => exception.message, :status => :bad_request if exception.class == BadRequestError
       render :text => exception.message, :status => :not_found   if exception.class == NotFoundError
       render :text => exception.message, :status => :forbidden   if exception.class == ForbiddenError
+      render :text => exception.message, :status => :conflict    if exception.class == ConflictError
     end
     
     # hanlde exceptions raised by a failed attempt to authorize with a bearer 
