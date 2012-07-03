@@ -4,14 +4,22 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-    <h1>Welcome to Wackadoo, <%= @identity.address_informal %></h1>
+    <h1>Welcome to Wack-a-doo, <%= @identity.address_informal %></h1>
     <p>
-      You have successfully signed up to wackadoo.de,
+      You have successfully signed up to wack-a-doo.de,
       with the following email address: <%= @identity.email %>.<br/>
     </p>
     <p>
-      Please validate your email address clicking the following link:
+      You can already play using your email address to sign in.
+      So, you don't need to take any further action right now. But
+      please validate your email address and identity within 72 
+      hours by clicking the following link:
       <a href="<%= @validation_url %>"><%= @validation_url %></a>
+    </p>
+    <p>
+      Presently, Wack-a-doo is still in a very early development
+      (alpha) state and changes daily. We hope for your understanding
+      if anything does not work properly or as expected. 
     </p>
     <p>Thanks for joining and have a great day!</p>
   </body>

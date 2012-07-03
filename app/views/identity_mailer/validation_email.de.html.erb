@@ -4,15 +4,29 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-    <h1>Willkommen bei Wackadoo, <%= @identity.address_informal %></h1>
+    <h1>Willkommen bei Wack-a-doo, <%= @identity.address_informal %></h1>
     <p>
-      You have successfully signed up to wackadoo.de,
-      with the following email address: <%= @identity.email %>.<br/>
+      Du hast Dich erfolgreich mit folgender Emailadresse bei 
+      wack-a-doo.de angemeldet:  <%= @identity.email %>.<br/>
     </p>
     <p>
-      Please validate your email address clicking the following link:
-      <a href="<%= @validation_url %>"><%= @validation_url %></a>
+Du kannst Dich bereits jetzt mit dieser Emailadresse im 
+Portal einloggen und spielen, brauchst also im Moment
+nichts weiter zu machen. Aber bitte sei so nett und 
+bestätige Deine Emailadresse und Identität innerhalb
+der nächsten 72 Stunden durch einen Klick auf folgenden
+Link: <a href="<%= @validation_url %>"><%= @validation_url %></a>
     </p>
-    <p>Thanks for joining and have a great day!</p>
+    <p> Im Moment befindet sich Wack-A-Doo noch in einem sehr
+        frühen Entwicklungsstadium (Alpha-Stadium) und wir nehmen
+        täglich Änderungen vor. Dementsprechend ist derzeit
+        auch noch mit allen möglichen Fehlern zu rechnen. Wir
+        möchten Dir und anderen dennoch bereits zu diesem 
+        frühen Zeitpunkt die Möglichkeit geben, Probezuspielen
+        und so an der Gestaltung und Verbesserung des Spiels 
+        mitzuwirken. Wir freuen uns über jede Rückmeldung im
+        Forum oder per Email und bitten um Dein Verständnis,
+        wenn derzeit noch nicht alles klappt. </p>
+    <p>Vielen Dank für Deine Registrierung, hab' viel Spaß!</p>
   </body>
 </html>
