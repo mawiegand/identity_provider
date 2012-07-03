@@ -259,10 +259,10 @@ class IdentitiesController < ApplicationController
       if @identity.activated.nil?   # not activated, yet?
         if @identity.has_validation_code?(params[:code])
           @identity.touch(:activated)
-          redirect_to @identity, :notice => I18n.t('identities.validation.flash.validated')
+          redirect_to IDENTITY_PROVIDER_CONFIG[:redirect_after_activation] # @identity, :notice => I18n.t('identities.validation.flash.validated')
         else
           logger.debug("Email validation for identity #{params[:id]} did fail because token do not match (sent / exepcted):\n#{params[:code]}\n#{@identity.validation_code}")
-          redirect_to @identity, :notice => I18n.t('identities.validation.flash.wrong_token')  
+          redirect_to IDENTITY_PROVIDER_CONFIG[:redirect_after_activation] #@identity, :notice => I18n.t('identities.validation.flash.wrong_token')  
         end        
       else
         redirect_to IDENTITY_PROVIDER_CONFIG[:redirect_after_activation] #  @identity, :notice => I18n.t('identities.validation.flash.already_validated')
