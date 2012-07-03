@@ -265,7 +265,7 @@ class IdentitiesController < ApplicationController
           redirect_to @identity, :notice => I18n.t('identities.validation.flash.wrong_token')  
         end        
       else
-        redirect_to @identity, :notice => I18n.t('identities.validation.flash.already_validated')
+        redirect_to IDENTITY_PROVIDER_CONFIG[:redirect_after_activation] #  @identity, :notice => I18n.t('identities.validation.flash.already_validated')
       end
     end
   end
