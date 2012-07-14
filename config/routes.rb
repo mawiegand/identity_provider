@@ -27,14 +27,15 @@ IdentityProvider::Application.routes.draw do
       namespace :oauth2 do
         match :access_token, :to => 'access_tokens#create'
         match :redirect_test_start, :to => 'access_tokens#redirect_test_start'
-        match :redirect_test_end, :to => 'access_tokens#redirect_test_end'
-        resources :access_tokens, :only => [ :index, :show, :delete ] # routes for administering issued access tokens
+        match :redirect_test_end,   :to => 'access_tokens#redirect_test_end'
+        resources :access_tokens,   :only => [ :index, :show, :delete ] # routes for administering issued access tokens
       end
           
       match '/signin',  :to => 'sessions#new'
       match '/signout', :to => 'sessions#destroy'
   
       match '/identities/:id/validation', :to => 'identities#validation'
+      match '/identities/:id/signin',     :to => 'identities#signin'
     end
    
     match '/:locale' => 'sessions#new'         # match e.g. /de/

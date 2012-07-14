@@ -7,7 +7,7 @@ require 'active_support/secure_random'
 class IdentitiesController < ApplicationController
 
   before_filter :authenticate,    :except   => [:new, :show, :create, :validation]   # these pages can be seen without logging-in
-  before_filter :authorize_staff, :only     => [:index]                 # only staff can access these pages
+  before_filter :authorize_staff, :only     => [:index, :singin]                     # only staff can access these pages
         
   # Returns a representation of a single identity-resource by either rendering 
   # a html page or sending a JSON-representation. 
@@ -149,6 +149,26 @@ class IdentitiesController < ApplicationController
         end
       }
     end
+  end
+  
+  def signin
+    raise BadRequestError.new('Client Identifier Missing') if params[:client].blank?
+
+    @identity = Identity.find_by_id_identifier_or_nickname(params[:id])
+    raise NotFoundError.new('Page Not Found') if @identity.nil? || (@identity.deleted && !staff?)  # only staff can see deleted users
+
+    @client = Client.find_by_identifier(params[:client])
+    raise BadRequestError.new('Unknown Client') if @client.nil?
+
+    access_token = FiveDAccessToken.generate_access_token(@identity.identifier, @client.scopes)
+    if !access_token || !access_token.valid? || access_token.expired?
+      raise BadRequestError.new('Staff-to-client sign in: failed to create a valid access token.')
+    end
+
+    @parameters = {
+      access_token: access_token,
+      client_url: params[:client] == "WACKADOOHTML5" ? "URL" : "", # TODO: make dynamic 
+    }
   end
 
   
