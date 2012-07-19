@@ -1,5 +1,7 @@
 class Client < ActiveRecord::Base
   
+  has_many  :grants,  :class_name => "GrantedScope", :foreign_key => :client_id, :inverse_of => :client
+  
   SIGNUP_MODES = []
   SIGNUP_MODE_NORMAL = 1
   SIGNUP_MODES[SIGNUP_MODE_NORMAL] = :normal

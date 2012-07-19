@@ -17,7 +17,6 @@ IdentityProvider::Application.routes.draw do
   scope "/identity_provider" do
     scope "(:locale)", :locale => /en|de/ do   
       match '/identities/self', :to => 'identities#self'
-  
       
       resources :identities,  :only => [:new, :create, :show, :index, :edit, :destroy, :update]
       resources :sessions,    :only => [:new, :create, :destroy]
