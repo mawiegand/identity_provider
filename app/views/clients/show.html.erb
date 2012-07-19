@@ -45,6 +45,16 @@
   <%= @client.scopes %>
 </p>
 
+<p>
+  <b>Signin Mode:</b>
+  <%= Client::SIGNIN_MODES[@client.signin_mode] %>
+</p>
+
+<p>
+  <b>Signup Mode:</b>
+  <%= Client::SIGNUP_MODES[@client.signup_mode] %>
+</p>
+
 
 <%= link_to 'Edit', edit_client_path(@client) %> |
 <%= link_to 'Back', clients_path %>
