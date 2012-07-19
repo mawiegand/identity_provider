@@ -16,6 +16,11 @@
 </p>
 
 <p>
+  <b>Number Used:</b>
+  <%= @key.num_used %>
+</p>
+
+<p>
   <b>Link:</b>
   <a href="<%= request.protocol + request.host_with_port + '/invitations/' + @key.key %>"><%= request.protocol + request.host_with_port + '/invitations/' + @key.key %></a>
 </p>
