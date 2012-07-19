@@ -30,6 +30,8 @@ en:
       confirm: Do you really want to sign out?
       index: Profile List
       clients: Clients
+      grants: Grants
+      keys: Keys
   
   identities:
     

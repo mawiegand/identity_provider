@@ -25,7 +25,7 @@ class KeysController < ApplicationController
   # GET /keys/new.json
   def new
     @key = Key.new
-
+    
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @key }
@@ -41,6 +41,7 @@ class KeysController < ApplicationController
   # POST /keys.json
   def create
     @key = Key.new(params[:key])
+    @key.set_unique_random_key
 
     respond_to do |format|
       if @key.save
