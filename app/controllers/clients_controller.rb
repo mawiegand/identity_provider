@@ -26,9 +26,16 @@ class ClientsController < ApplicationController
     else
       role = current_identity ? current_identity.role : :default   # admin or staff
     end
+        
+    raise ForbiddenError.new   "Access forbidden."   if role == :default  # only staff or the owner (same client) may access its data
     
-    raise ForbiddenError.new   "Access forbidden."   if role == :default
-    
+    respond_to do |format|
+      format.json { 
+        @attributes = @client.sanitized_hash(role)           # only those, that may be read by present user
+        render :json => @attributes.delete_if { |k,v| v.blank? } # to compact the return string to non-blank attrs
+      }      
+      format.html {}
+    end    
   end
 
   # GET /clients/new
