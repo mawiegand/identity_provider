@@ -1,4 +1,8 @@
 class KeysController < ApplicationController
+  
+  before_filter :authenticate    
+  before_filter :authorize_staff
+  
   # GET /keys
   # GET /keys.json
   def index
