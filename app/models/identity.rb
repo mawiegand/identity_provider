@@ -53,6 +53,10 @@ require 'base64'
 #  staff              :boolean(255)
 #
 class Identity < ActiveRecord::Base
+  
+  has_many  :log_entries;
+  has_many  :grants,  :class_name => "GrantedScope", :foreign_key => :identity_id, :inverse_of => :identity
+  
   attr_accessor :password
   
   attr_accessible :nickname, :firstname, :surname, :password, :password_confirmation, :as => :owner
@@ -93,7 +97,6 @@ class Identity < ActiveRecord::Base
   
   validates :identifier, :uniqueness => { :case_sensitive => true }
   
-  has_many  :log_entries;
   
   default_scope :order => 'identities.nickname ASC'
                        

@@ -1,5 +1,6 @@
 class Client < ActiveRecord::Base
   
+  has_many  :grants,  :class_name => "GrantedScope", :foreign_key => :client_id, :inverse_of => :client
   
   def scope_authorized?(scope)
     return scopes.split(' ').include?(scope.downcase())
