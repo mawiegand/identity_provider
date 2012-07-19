@@ -1,6 +1,8 @@
 IdentityProvider::Application.routes.draw do
 
 
+  resources :keys
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
