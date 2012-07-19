@@ -18,12 +18,23 @@ class Client < ActiveRecord::Base
   SIGNIN_MODE_ON = 1
   SIGNIN_MODES[SIGNIN_MODE_ON] = :on
   
+  def self.find_by_id_or_identifier(client_identifier)
+    client = Client.find_by_id(client_identifier) if Client.valid_id?(client_identifier)
+    client = Client.find_by_identifier(client_identifier) if client.nil?
+    
+    return client
+  end
+  
   def scope_authorized?(scope)
     return scopes.split(' ').include?(scope.downcase())
   end
   
   def grant_type_allowed?(grant_type)
     return grant_types.split(' ').include?(grant_type.downcase())
+  end
+  
+  def self.valid_id?(id)
+    id.index(/^[1-9]\d*$/) != nil
   end
   
 end

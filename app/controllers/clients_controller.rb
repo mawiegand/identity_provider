@@ -1,7 +1,7 @@
 class ClientsController < ApplicationController
  
-  before_filter :authenticate, :except => :show
-  before_filter :authorize_staff, :except => :show
+  before_filter :authenticate,    :except => [:show]
+  before_filter :authorize_staff, :except => [:show]
  
   # GET /clients
   def index
@@ -14,14 +14,21 @@ class ClientsController < ApplicationController
 
   # GET /clients/1
   def show
-    @client = Client.find(params[:id])
-
-    respond_to do |format|
-      format.json { 
-        @attributes = @client.sanitized_hash(:default)          
-        render :json => @attributes.delete_if { |k,v| v.blank? } # to compact the return string to non-blank attrs
-      }      
+    @client = Client.find_by_id_or_identifier(params[:id])
+    raise NotFoundError.new "Client not found." if @client.nil?
+    
+    role = :default  
+    if params[:client_id]
+      accessing_client = Client.find_by_id_or_identifier(params[:client_id])
+      raise ForbiddenError.new "Access forbidden. Client id not found." if accessing_client.nil?
+      raise ForbiddenError.new "Access forbidden. Wrong credentials."   if params[:client_password].nil? || params[:client_password] != accessing_client.password
+      role = :owner if @client.id == accessing_client.id
+    else
+      role = current_identity ? current_identity.role : :default   # admin or staff
     end
+    
+    raise ForbiddenError.new   "Access forbidden."   if role == :default
+    
   end
 
   # GET /clients/new
