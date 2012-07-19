@@ -20,7 +20,7 @@ client = Client.create({
                           :grant_types  => "password"
 }, :as => :creator)
 
-client = Client.create({
+clientwack = Client.create({
                           :identifier   => "WACKADOOHTML5",
                           :scopes       => "5dentity wackadoo payment",
                           :password     => "wacky",
@@ -42,6 +42,10 @@ identity = Identity.new({ :nickname  => "Sascha",
 identity.admin = true
 identity.staff = true
 identity.save
+identity.grants.create({
+  client_id: clientwack.id,
+  scopes: clientwack.scopes,
+});
                 
 identity = Identity.new({ :nickname  => "Patrick",
                           :surname   => "Fox",
@@ -52,6 +56,10 @@ identity = Identity.new({ :nickname  => "Patrick",
 identity.admin = true
 identity.staff = true
 identity.save
+identity.grants.create({
+  client_id: clientwack.id,
+  scopes: clientwack.scopes,
+});
 
 
 identity = Identity.new({ :nickname  => "Hajo",
@@ -63,7 +71,10 @@ identity = Identity.new({ :nickname  => "Hajo",
 identity.admin = true
 identity.staff = true
 identity.save
-
+identity.grants.create({
+  client_id: clientwack.id,
+  scopes: clientwack.scopes,
+});
 
 identity = Identity.new({ :nickname  => "Max",
                           :surname   => "Buck",
@@ -74,6 +85,10 @@ identity = Identity.new({ :nickname  => "Max",
 identity.admin = true
 identity.staff = true
 identity.save
+identity.grants.create({
+  client_id: clientwack.id,
+  scopes: clientwack.scopes,
+});
 
 
 identity = Identity.new({ :nickname  => "Julian",
@@ -85,3 +100,7 @@ identity = Identity.new({ :nickname  => "Julian",
 identity.admin = true
 identity.staff = false
 identity.save
+identity.grants.create({
+  client_id: clientwack.id,
+  scopes: clientwack.scopes,
+});

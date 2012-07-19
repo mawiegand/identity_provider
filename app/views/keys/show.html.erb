@@ -15,6 +15,16 @@
   <%= @key.number %>
 </p>
 
+<p>
+  <b>Number Used:</b>
+  <%= @key.num_used %>
+</p>
+
+<p>
+  <b>Link:</b>
+  <a href="<%= request.protocol + request.host_with_port + '/invitations/' + @key.key %>"><%= request.protocol + request.host_with_port + '/invitations/' + @key.key %></a>
+</p>
+
 
 <%= link_to 'Edit', edit_key_path(@key) %> |
 <%= link_to 'Back', keys_path %>

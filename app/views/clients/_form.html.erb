@@ -49,11 +49,11 @@
   </div>
   <div class="field">
     <%= f.label :signin_mode %><br />
-    <%= f.text_field :signin_mode %>
+    <%= select(:client, :signin_mode, Client::SIGNIN_MODES.enum_for(:each_with_index).collect {|mode, index| [ mode, index ] } ) %>
   </div>
   <div class="field">
     <%= f.label :signup_mode %><br />
-    <%= f.text_field :signup_mode %>
+    <%= select(:client, :signup_mode, Client::SIGNUP_MODES.enum_for(:each_with_index).collect {|mode, index| [ mode, index ] } ) %>
   </div>
   <div class="actions">
     <%= f.submit %>

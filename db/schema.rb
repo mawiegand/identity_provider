@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120719152730) do
+ActiveRecord::Schema.define(:version => 20120719155523) do
 
   create_table "clients", :force => true do |t|
     t.string   "identifier"
@@ -44,14 +44,14 @@ ActiveRecord::Schema.define(:version => 20120719152730) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "encrypted_password"
-    t.boolean  "admin",                  :limit => 255
-    t.boolean  "staff",                  :limit => 255
+    t.boolean  "admin"
+    t.boolean  "staff"
     t.string   "firstname"
     t.string   "surname"
     t.string   "nickname"
-    t.boolean  "deleted",                               :default => false
+    t.boolean  "deleted",                :default => false
     t.datetime "activated"
-    t.string   "identifier",                            :default => "a",   :null => false
+    t.string   "identifier",             :default => "a",   :null => false
     t.integer  "sign_up_with_client_id"
   end
 
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(:version => 20120719152730) do
     t.integer  "number",     :default => 1, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "num_used",   :default => 0, :null => false
   end
 
   create_table "log_entries", :force => true do |t|

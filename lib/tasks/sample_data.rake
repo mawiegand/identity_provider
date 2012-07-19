@@ -21,7 +21,7 @@ namespace :db do
                                 :grant_types  => "password",
     }, :as => :creator)
     
-    Client.create({
+    clientwack = Client.create({
                                 :identifier   => "WACKADOOHTML5",
                                 :scopes       => "5dentity wackadoo payment",
                                 :password     => "wacky",
@@ -37,6 +37,10 @@ namespace :db do
     identity.admin = true
     identity.staff = true
     identity.save
+identity.grants.create({
+  client_id: clientwack.id,
+  scopes: clientwack.scopes,
+});
                     
     identity = Identity.new({:nickname  => "paffi",
                                 :surname   => "Fox",
@@ -47,7 +51,10 @@ namespace :db do
     identity.admin = true
     identity.staff = true
     identity.save
-
+identity.grants.create({
+  client_id: clientwack.id,
+  scopes: clientwack.scopes,
+});
                     
     999.times do |n|
       firstname = Faker::Name.first_name
@@ -85,7 +92,7 @@ namespace :db do
                                 :grant_types  => "password"
     }, :as => :creator)
     
-    client = Client.create({
+    clientwack = Client.create({
                                 :identifier   => "WACKADOOHTML5",
                                 :scopes       => "5dentity wackadoo payment",
                                 :password     => "wacky",
@@ -107,6 +114,10 @@ namespace :db do
     identity.admin = true
     identity.staff = true
     identity.save
+identity.grants.create({
+  client_id: clientwack.id,
+  scopes: clientwack.scopes,
+});
                     
     identity = Identity.new({ :nickname  => "paffi",
                               :surname   => "Fox",
@@ -117,6 +128,10 @@ namespace :db do
     identity.admin = true
     identity.staff = true
     identity.save
+identity.grants.create({
+  client_id: clientwack.id,
+  scopes: clientwack.scopes,
+});
     
     
     identity = Identity.new({ :nickname  => "Julian",
@@ -128,6 +143,10 @@ namespace :db do
     identity.admin = true
     identity.staff = true
     identity.save
+identity.grants.create({
+  client_id: clientwack.id,
+  scopes: clientwack.scopes,
+});
     
   end
   

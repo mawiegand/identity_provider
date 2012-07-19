@@ -5,6 +5,7 @@
     <th>Client</th>
     <th>Key</th>
     <th>Number</th>
+    <th>Used</th>
     <th></th>
     <th></th>
     <th></th>
@@ -15,6 +16,7 @@
     <td><%= key.client_id %></td>
     <td><%= key.key %></td>
     <td><%= key.number %></td>
+    <td><%= key.num_used %></td>
     <td><%= link_to 'Show', key %></td>
     <td><%= link_to 'Edit', edit_key_path(key) %></td>
     <td><%= link_to 'Destroy', key, confirm: 'Are you sure?', method: :delete %></td>
