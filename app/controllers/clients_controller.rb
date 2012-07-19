@@ -1,7 +1,7 @@
 class ClientsController < ApplicationController
  
-  before_filter :authenticate
-  before_filter :authorize_staff
+  before_filter :authenticate, :except => :show
+  before_filter :authorize_staff, :except => :show
  
   # GET /clients
   def index
@@ -17,7 +17,10 @@ class ClientsController < ApplicationController
     @client = Client.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.json { 
+        @attributes = @client.sanitized_hash(:default)          
+        render :json => @attributes.delete_if { |k,v| v.blank? } # to compact the return string to non-blank attrs
+      }      
     end
   end
 
