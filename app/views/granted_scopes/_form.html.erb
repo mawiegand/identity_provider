@@ -1,0 +1,33 @@
+<%= form_for(@granted_scope) do |f| %>
+  <% if @granted_scope.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@granted_scope.errors.count, "error") %> prohibited this granted_scope from being saved:</h2>
+
+      <ul>
+      <% @granted_scope.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :identity_id %><br />
+    <%= f.number_field :identity_id %>
+  </div>
+  <div class="field">
+    <%= f.label :client_id %><br />
+    <%= f.number_field :client_id %>
+  </div>
+  <div class="field">
+    <%= f.label :scopes %><br />
+    <%= f.text_field :scopes %>
+  </div>
+  <div class="field">
+    <%= f.label :key_id %><br />
+    <%= f.number_field :key_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

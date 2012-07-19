@@ -1,5 +1,6 @@
 IdentityProvider::Application.routes.draw do
 
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -22,6 +23,7 @@ IdentityProvider::Application.routes.draw do
       resources :sessions,    :only => [:new, :create, :destroy]
       resources :log_entries, :only => [:index]
       resources :clients
+      resources :granted_scopes
       
       
       namespace :oauth2 do

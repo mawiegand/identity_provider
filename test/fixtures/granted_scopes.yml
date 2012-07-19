@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  identity_id: 1
+  client_id: 1
+  scopes: MyString
+  key_id: 1
+
+two:
+  identity_id: 1
+  client_id: 1
+  scopes: MyString
+  key_id: 1

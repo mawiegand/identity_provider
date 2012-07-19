@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120702153209) do
+ActiveRecord::Schema.define(:version => 20120719142730) do
 
   create_table "clients", :force => true do |t|
     t.string   "identifier"
@@ -27,20 +27,29 @@ ActiveRecord::Schema.define(:version => 20120702153209) do
     t.datetime "updated_at"
   end
 
+  create_table "granted_scopes", :force => true do |t|
+    t.integer  "identity_id"
+    t.integer  "client_id"
+    t.string   "scopes"
+    t.integer  "key_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "identities", :force => true do |t|
     t.string   "email"
     t.string   "salt"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "encrypted_password"
-    t.boolean  "admin"
-    t.boolean  "staff"
+    t.boolean  "admin",              :limit => 255
+    t.boolean  "staff",              :limit => 255
     t.string   "firstname"
     t.string   "surname"
     t.string   "nickname"
-    t.boolean  "deleted",            :default => false
+    t.boolean  "deleted",                           :default => false
     t.datetime "activated"
-    t.string   "identifier",         :default => "a",   :null => false
+    t.string   "identifier",                        :default => "a",   :null => false
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true

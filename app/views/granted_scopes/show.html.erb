@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Identity:</b>
+  <%= @granted_scope.identity_id %>
+</p>
+
+<p>
+  <b>Client:</b>
+  <%= @granted_scope.client_id %>
+</p>
+
+<p>
+  <b>Scopes:</b>
+  <%= @granted_scope.scopes %>
+</p>
+
+<p>
+  <b>Key:</b>
+  <%= @granted_scope.key_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_granted_scope_path(@granted_scope) %> |
+<%= link_to 'Back', granted_scopes_path %>

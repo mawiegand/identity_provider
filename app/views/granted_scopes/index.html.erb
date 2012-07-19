@@ -1,0 +1,29 @@
+<h1>Listing granted_scopes</h1>
+
+<table>
+  <tr>
+    <th>Identity</th>
+    <th>Client</th>
+    <th>Scopes</th>
+    <th>Key</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @granted_scopes.each do |granted_scope| %>
+  <tr>
+    <td><%= granted_scope.identity_id %></td>
+    <td><%= granted_scope.client_id %></td>
+    <td><%= granted_scope.scopes %></td>
+    <td><%= granted_scope.key_id %></td>
+    <td><%= link_to 'Show', granted_scope %></td>
+    <td><%= link_to 'Edit', edit_granted_scope_path(granted_scope) %></td>
+    <td><%= link_to 'Destroy', granted_scope, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Granted scope', new_granted_scope_path %>
