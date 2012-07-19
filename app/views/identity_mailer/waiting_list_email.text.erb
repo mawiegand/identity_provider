@@ -1,0 +1,20 @@
+Willkommen auf der Warteliste zu Wack-a-doo, <%= @identity.address_informal %>
+    
+<%if @invitation%>
+Du hast versucht, Dich mit dem Einladungscode 
+<%=@invitation%> anzumelden. Leider ist das Kontingent 
+für diesen Code bereits verbraucht. 
+<% else %>
+Du hast Dich erfolgreich bei wack-a-doo.de angemeldet. 
+Im Moment sind allerdings alle Plätze im Spiel belegt.
+<% end %>
+Aus diesem Grund haben wir Dich mit Deiner Email-Adresse
+<%= @identity.email %> 
+auf die Warteliste gesetzt und werden Dich freischalten, 
+sobald weitere Plätze verfügbar werden. Wir werden Dich 
+darüber in einer weiteren Email informieren.
+
+Bitte sei so nett und bestätige Deine Emailadresse und 
+Identität innerhalb der nächsten 72 Stunden durch einen
+Klick auf folgenden Link: 
+<%= @validation_url %>

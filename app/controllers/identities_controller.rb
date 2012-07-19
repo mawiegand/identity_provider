@@ -7,7 +7,7 @@ require 'active_support/secure_random'
 class IdentitiesController < ApplicationController
 
   before_filter :authenticate,    :except   => [:new, :show, :create, :validation]   # these pages can be seen without logging-in
-  before_filter :authorize_staff, :only     => [:index, :singin]                     # only staff can access these pages
+  before_filter :authorize_staff, :only     => [:index]                              # only staff can access these pages
         
   # Returns a representation of a single identity-resource by either rendering 
   # a html page or sending a JSON-representation. 
@@ -98,16 +98,16 @@ class IdentitiesController < ApplicationController
         client = Client.find_by_identifier(params[:client_id])
         email = params[:email].blank? ? nil : params[:email].downcase
         raise BadRequestError.new("No valid client") if client.nil?
-        raise BadRequestError.new("Client's scope not valid") if not client.scopes.include?('5dentity')
-        raise BadRequestError.new("Client's secret not valid") if params[:client_password] != client.password
-        raise ConflictError.new(I18n.translate "error.emailTaken") if email && Identity.find_by_email(email)
+        raise BadRequestError.new("Client's scope not valid")             if not client.scopes.include?('5dentity')
+        raise BadRequestError.new("Client's secret not valid")            if params[:client_password] != client.password
+        raise ConflictError.new(I18n.translate "error.emailTaken")        if email && Identity.find_by_email(email)
         raise BadRequestError.new(I18n.translate "error.passwordToShort") if !params[:password].blank? && params[:password].length < 6
         i = 0
         begin
           base_name = params[:nickname_base ].blank? ? "User" : params[:nickname_base]
           disambiguated_name = base_name
           
-          # TODO: the following is the most simple algorithm and must be raplaced
+          # TODO: the following is the most simple algorithm and must be replaced
           # before there's noteworthy traffic on the server!!!!
           while !(Identity.find_by_nickname(disambiguated_name)).nil?
             i = i+1
@@ -119,15 +119,45 @@ class IdentitiesController < ApplicationController
           identity.email = params[:email]
           identity.password = params[:password]
           identity.password_confirmation = params[:password_confirmation]
+          identity.sign_up_with_client_id = client.id
           
           raise BadRequestError.new(I18n.translate "error.identityInvalid") unless identity.valid?
                     
-          saved = identity.save
+          saved = identity.save          
         end while !identity.errors.messages[:nickname].nil?    # did save fail due to duplicate nickname? 
         
         if saved
-          IdentityMailer.validation_email(identity).deliver    # send email validation email
-          render :status => :created, :json => identity.sanitized_hash(:owner).delete_if { |k,v| v.blank? }, :location => identity          
+          # now grant scopes according to present sign_up_mode 
+          if client.signup_mode == Client::SIGNUP_MODE_NORMAL      # normal mode -> always grant all scopes.
+            identity.grants.create({
+              client_id: client.id,
+              scopes:    client.scopes
+            });
+            IdentityMailer.validation_email(identity).deliver      # send email validation email
+            render :status => :created, :json => identity.sanitized_hash(:owner).delete_if { |k,v| v.blank? }, :location => identity     
+          elsif client.signup_mode == Client::SIGNUP_MODE_INVITATION    # invitation mode -> grant scopes, if identity has a valid invitation
+            if !params[:invitation].nil?
+              invitation = client.keys.where(key: params[:invitation]).first
+              if !invitation.nil? && invitation.num_used < invitation.number
+                identity.grants.create({
+                  client_id: client.id,
+                  scopes:    client.scopes,
+                  key_id:    invitation.id,
+                })
+                invitation.increment(:num_used)
+                invitation.save
+                IdentityMailer.validation_email(identity).deliver  # send email validation email
+              else 
+                IdentityMailer.waiting_list_email(identity, params[:invitation]).deliver# send waiting-list email
+              end
+            else
+              IdentityMailer.waiting_list_email(identity).deliver  # send waiting-list email
+            end
+            render :status => :created, :json => identity.sanitized_hash(:owner).delete_if { |k,v| v.blank? }, :location => identity     
+          else # sign up mode off
+            IdentityMailer.waiting_list_email(identity).deliver    # send waiting-list email
+            render :status => :created, :json => identity.sanitized_hash(:owner).delete_if { |k,v| v.blank? }, :location => identity                 
+          end
         else
           render json: {error: :error}, status: :error          
         end

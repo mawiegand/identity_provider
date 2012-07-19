@@ -81,7 +81,7 @@ module Oauth2
         return
       end
 
-      # check scope or set to default
+      # check whether the requested scopes have been granted to the client requesting authentication
       if !params[:scope] 
         @scope = @@default_scope
       else
@@ -92,7 +92,7 @@ module Oauth2
         else 
           if requested_scopes.any? { |rscope| !client.scope_authorized?(rscope) } # unauthorized scope
             render_endpoint_error params[:client_id], :invalid_scope, "The requested scope is invalid, unknown, malformed, or "+
-              "exceeds the scope granted by the resource owner."
+              "exceeds the scope granted by the resource owner. In short: the client you're using tried to access the resource in a way it is not allowed to do. Please report this to the support staff."
             return
           else
             @scope = requested_scopes
@@ -110,6 +110,16 @@ module Oauth2
       if !identity
         render_endpoint_error params[:client_id], :invalid_grant, I18n.translate('error.oauth.wrongCredentials') 
         return 
+      end
+      
+      # check whether requested scopes were granted to the identity
+      grants_for_client = identity.grants.where(:client_id => client.id).first
+      logger.debug "Grants the idenetity has for this client: #{grants_for_client.inspect}"
+      logger.debug "Grants the idenetity requested:           #{requested_scopes.inspect}"
+      if requested_scopes.any? { |rscope| grants_for_client.nil? || !grants_for_client.scope_authorized?(rscope) }
+        render_endpoint_error params[:client_id], :invalid_scope, "The requested scope is invalid, unknown, malformed, or "+
+              "exceeds the scope granted to the identity. In short: you're not allowed to access the resource. In case of an error, please contact the support staff."
+        return
       end
         
       access_token = FiveDAccessToken.generate_access_token(identity.identifier, @scope)
