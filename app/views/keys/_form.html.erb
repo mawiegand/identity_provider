@@ -13,11 +13,7 @@
 
   <div class="field">
     <%= f.label :client_id %><br />
-    <%= f.number_field :client_id %>
-  </div>
-  <div class="field">
-    <%= f.label :key %><br />
-    <%= f.text_field :key %>
+    <%= select("key", "client_id", Client.all.collect {|client| [ client.identifier, client.id ] }) %>
   </div>
   <div class="field">
     <%= f.label :number %><br />

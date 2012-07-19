@@ -2,6 +2,7 @@
 
 <table>
   <tr>
+    <th>ID</th>
     <th>Identifier</th>
     <th>Name</th>
     <th>Identity</th>
@@ -20,6 +21,7 @@
 
 <% @clients.each do |client| %>
   <tr>
+    <td><%= client.id %></td>
     <td><%= client.identifier %></td>
     <td><%= client.name %></td>
     <td><%= client.identity_id %></td>
