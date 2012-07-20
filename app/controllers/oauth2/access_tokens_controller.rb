@@ -100,6 +100,12 @@ module Oauth2
         end
       end     
       
+      #check whether or not the client presently allows sign ins
+      if client.signin_mode == Client::SIGNIN_MODE_OFF  
+        render_endpoint_error params[:client_id], :invalid_request, "Sign in is disabled at the moment. Please try again later."
+        return 
+      end
+      
       # check username and password
       if params[:username].blank? || params[:password].blank?
         render_endpoint_error params[:client_id], :invalid_request, "The request is missing the username and / or password."
