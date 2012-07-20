@@ -1,6 +1,7 @@
 class Client < ActiveRecord::Base
   
   has_many  :grants,  :class_name => "GrantedScope", :foreign_key => :client_id, :inverse_of => :client
+  has_many  :keys,    :class_name => "Key",          :foreign_key => :client_id, :inverse_of => :client
 
   attr_readable :as => :default 
   attr_readable :signup_mode, :signin_mode,      :as => :owner 
