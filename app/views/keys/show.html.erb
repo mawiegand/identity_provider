@@ -21,6 +21,11 @@
 </p>
 
 <p>
+  <b>Comment:</b>
+  <%= @key.comment %>
+</p>
+
+<p>
   <b>Link:</b>
   <a href="<%= request.protocol + request.host_with_port + '/invitations/' + @key.key %>"><%= request.protocol + request.host_with_port + '/invitations/' + @key.key %></a>
 </p>
