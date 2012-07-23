@@ -56,11 +56,4 @@ namespace :deploy do
   task :stop do
     run "cd #{current_path}; bundle exec thin -C config/thin_server.yml stop"
   end
-  
-  desc "Add Admins to DB"
-  task :populate do
-    run "cd #{current_path}; bundle exec rake db:populate_admin_only RAILS_ENV=production"
-    stop
-    start
-  end
 end
