@@ -46,8 +46,8 @@ module SessionsHelper
   
   def service_identifier_from_auth_token
     return nil if request_auth_token.nil?
-                                                                            # vvv aus Tabelle
-    raise BearerAuthInvalidToken.new('Invalid client identifier.') unless IDENTITY_PROVIDER_CONFIG['valid_api_clients'].include? request_auth_token.identifier 
+    
+    raise BearerAuthInvalidToken.new('Invalid client identifier.') if Resource::Game.find_by_identifier(request_auth_token.identifier).nil? 
     raise BearerAuthInvalidToken.new('Invalid or malformed auth token.') unless request_auth_token.valid? 
     raise BearerAuthInvalidToken.new('Access token expired.') if request_auth_token.expired?
     raise BearerAuthInsufficientScope.new('Requested resource is not in authorized scope.') unless request_auth_token.in_scope?(IDENTITY_PROVIDER_CONFIG[:default_scope])
