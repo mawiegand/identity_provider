@@ -4,6 +4,7 @@ require "bundler/capistrano"
 
 default_run_options[:pty] = true                  # problem with ubuntu
 set :ssh_options, :forward_agent => true          # ssh forwarding
+set :gateway, 'wackadoo.de:5775'
 
 set :application, "identity provider"
 set :repository,  "git@github.com:wackadoo/identity_provider.git"
@@ -55,12 +56,5 @@ namespace :deploy do
   desc "Stop Thin"
   task :stop do
     run "cd #{current_path}; bundle exec thin -C config/thin_server.yml stop"
-  end
-  
-  desc "Add Admins to DB"
-  task :populate do
-    run "cd #{current_path}; bundle exec rake db:populate_admin_only RAILS_ENV=production"
-    stop
-    start
   end
 end
