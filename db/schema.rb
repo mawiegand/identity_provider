@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120724122008) do
+ActiveRecord::Schema.define(:version => 20120724122600) do
 
   create_table "clients", :force => true do |t|
     t.string   "identifier"
@@ -86,6 +86,15 @@ ActiveRecord::Schema.define(:version => 20120724122008) do
     t.string   "scopes"
     t.string   "link"
     t.string   "shared_secret"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "resource_histories", :force => true do |t|
+    t.integer  "game_id"
+    t.integer  "identity_id"
+    t.text     "data"
+    t.text     "localized_description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
