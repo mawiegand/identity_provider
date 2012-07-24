@@ -29,27 +29,26 @@ module SessionsHelper
     deny_access unless signed_in?
   end
   
-  def authenticate_service
-    #logger.debug "Authenticate API with current identifier: #{current_identifier}"
-    deny_access unless api_request? && service_signed_in?
+  def authenticate_game
+    deny_access unless api_request? && game_signed_in?
   end
   
-  def authenticate_service_or_backend
-    authenticate_service if api_request?    
+  def authenticate_game_or_backend
+    authenticate_game if api_request?    
     authenticate         # only html requests are authenticated using this method. 
   end
     
   
-  def service_signed_in?
-    !current_service.nil?
+  def game_signed_in?
+    !current_game.nil?
   end
   
   # returns true if    
-  def current_service
-    @current_service ||= service_identifier_from_auth_token
+  def current_game
+    @current_game ||= game_identifier_from_auth_token
   end
   
-  def service_identifier_from_auth_token
+  def game_identifier_from_auth_token
     return nil if request_auth_token.nil?
     
     raise BearerAuthInvalidToken.new('Invalid client identifier.') if Resource::Game.find_by_identifier(request_auth_token.identifier).nil? 
