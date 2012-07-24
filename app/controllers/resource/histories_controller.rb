@@ -1,13 +1,43 @@
 class Resource::HistoriesController < ApplicationController
+  
+  before_filter :authenticate_game_or_backend,    :only   => [ :index, :create ]
+  before_filter :authenticate,                    :except => [ :index, :create ]
+
+  before_filter :authorize_staff,                 :except => [ :index, :create ]                         
+  before_filter :deny_api,                        :except => [ :index, :create ]  
+  
   # GET /resource/histories
   # GET /resource/histories.json
   def index
-    @resource_histories = Resource::History.all
+    if params.has_key?(:identity_id)
+      # first: filter out bad requests (malformed addresses, black-listed ressources)
+      #bad_request = (name_blacklisted?(params[:identity_id]) && !staff?) || !Identity.valid_user_identifier?(params[:identity_id])
+      #raise BadRequestError.new('Bad Request for Identity %s' % params[:identity_id]) if bad_request
+
+      # second: find (non-deleted) identity or fail with a 404 not found error
+      identity = Identity.find_by_id_identifier_or_nickname(params[:identity_id], :find_deleted => staff?) # only staff can see deleted users
+      raise NotFoundError.new('Page Not Found') if identity.nil?    
+      if current_game.nil?
+        @resource_histories = identity.events
+      else
+        @resource_histories = identity.events.where(:game_id => current_game.id)
+      end
+    else 
+      @asked_for_index = true
+    end
 
     respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @resource_histories }
-    end
+      format.html do
+        if @resource_histories.nil?
+          @resource_histories =  Resource::History.paginate(:order => "identity_id ASC", :page => params[:page], :per_page => 50)    
+          @paginate = true   
+        end 
+      end
+      format.json do
+        raise ForbiddenError.new('Access Forbidden')        if @asked_for_index
+        render json: @resource_histories 
+      end
+    end       
   end
 
   # GET /resource/histories/1
@@ -40,7 +70,17 @@ class Resource::HistoriesController < ApplicationController
   # POST /resource/histories
   # POST /resource/histories.json
   def create
+    raise BadRequestError.new "Malformed or missing data."   unless params.has_key?(:resource_history)
+    
     @resource_history = Resource::History.new(params[:resource_history])
+    
+    if !current_game.nil?
+      raise ForbiddenError.new "Access to character in different game forbidden."  if params[:resource_history].has_key?(:game_id) && params[:resource_history][:game_id] != current_game.id
+      @resource_history.game_id = current_game.id
+    end
+    
+    raise BadRequestError.new "Game id missing"              if @resource_history.game_id.nil?
+    raise BadRequestError.new "Identity id missing"          if @resource_history.identity_id.nil?
 
     respond_to do |format|
       if @resource_history.save

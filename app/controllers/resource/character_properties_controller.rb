@@ -6,6 +6,8 @@ class Resource::CharacterPropertiesController < ApplicationController
   before_filter :authenticate,                    :except => [ :index, :update, :create ]
 
   before_filter :authorize_staff,                 :except => [ :index, :update, :create ]                         
+  before_filter :deny_api,                        :except => [ :index, :update, :create ]
+
   
   def index
     if params.has_key?(:identity_id)

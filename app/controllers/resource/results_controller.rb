@@ -1,16 +1,45 @@
 class Resource::ResultsController < ApplicationController
   
+  before_filter :authenticate_game_or_backend,    :only   => [ :index, :create ]
+  before_filter :authenticate,                    :except => [ :index, :create ]
+
+  before_filter :authorize_staff,                 :except => [ :index, :create ]                         
+  before_filter :deny_api,                        :except => [ :index, :create ]
 
   
   # GET /resource/results
   # GET /resource/results.json
   def index
-    @resource_results = Resource::Result.all
+    
+    if params.has_key?(:identity_id)
+      # first: filter out bad requests (malformed addresses, black-listed ressources)
+      #bad_request = (name_blacklisted?(params[:identity_id]) && !staff?) || !Identity.valid_user_identifier?(params[:identity_id])
+      #raise BadRequestError.new('Bad Request for Identity %s' % params[:identity_id]) if bad_request
+
+      # second: find (non-deleted) identity or fail with a 404 not found error
+      identity = Identity.find_by_id_identifier_or_nickname(params[:identity_id], :find_deleted => staff?) # only staff can see deleted users
+      raise NotFoundError.new('Page Not Found') if identity.nil?    
+      if current_game.nil?
+        @resource_results = identity.results
+      else
+        @resource_results = identity.results.where(:game_id => current_game.id)
+      end
+    else 
+      @asked_for_index = true
+    end
 
     respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @resource_results }
-    end
+      format.html do
+        if @resource_results.nil?
+          @resource_results =  Resource::Result.paginate(:order => "identity_id ASC", :page => params[:page], :per_page => 50)    
+          @paginate = true   
+        end 
+      end
+      format.json do
+        raise ForbiddenError.new('Access Forbidden')        if @asked_for_index
+        render json: @resource_results 
+      end
+    end    
   end
 
   # GET /resource/results/1
@@ -43,7 +72,17 @@ class Resource::ResultsController < ApplicationController
   # POST /resource/results
   # POST /resource/results.json
   def create
+    raise BadRequestError.new "Malformed or missing data."   unless params.has_key?(:resource_result)
+    
     @resource_result = Resource::Result.new(params[:resource_result])
+    
+    if !current_game.nil?
+      raise ForbiddenError.new "Access to character in different game forbidden."  if params[:resource_result].has_key?(:game_id) && params[:resource_result][:game_id] != current_game.id
+      @resource_result.game_id = current_game.id
+    end
+    
+    raise BadRequestError.new "Game id missing"              if @resource_result.game_id.nil?
+    raise BadRequestError.new "Identity id missing"          if @resource_result.identity_id.nil?
 
     respond_to do |format|
       if @resource_result.save
@@ -53,7 +92,7 @@ class Resource::ResultsController < ApplicationController
         format.html { render action: "new" }
         format.json { render json: @resource_result.errors, status: :unprocessable_entity }
       end
-    end
+    end    
   end
 
   # PUT /resource/results/1
