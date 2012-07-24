@@ -2,11 +2,10 @@ class Resource::CharacterPropertiesController < ApplicationController
   # GET /resource/character_properties
   # GET /resource/character_properties.json
   
-  before_filter :authenticate_game_or_backend, :only   => :index
-  before_filter :authenticate,                    :except => :index
+  before_filter :authenticate_game_or_backend,    :only   => [ :index, :update, :create ]
+  before_filter :authenticate,                    :except => [ :index, :update, :create ]
 
-  before_filter :authorize_staff,                 :except => :index                         
-  
+  before_filter :authorize_staff,                 :except => [ :index, :update, :create ]                         
   
   def index
     if params.has_key?(:identity_id)
