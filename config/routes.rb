@@ -1,12 +1,6 @@
 IdentityProvider::Application.routes.draw do
 
-  namespace :resource do resources :character_properties end
 
-  namespace :resource do resources :results end
-
-  namespace :resource do resources :histories end
-
-  namespace :resource do resources :games end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -31,7 +25,13 @@ IdentityProvider::Application.routes.draw do
       resources :clients
       resources :granted_scopes
       resources :keys
-      
+  
+      namespace :resource do 
+        resources :character_properties
+        resources :results
+        resources :histories
+        resources :games 
+      end
       
       namespace :oauth2 do
         match :access_token, :to => 'access_tokens#create'
