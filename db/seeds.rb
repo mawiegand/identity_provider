@@ -23,7 +23,7 @@ wackadoo_game = Resource::Game.create({
   :name         => "Wack-a-Doo",
   :link         => "https://wack-a-doo.de",
   :scopes       => "5dentity",
-}, :as => :creator)
+}, :as => :staff)
 
 
 # heldenduell = Client.create({
