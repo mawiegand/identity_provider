@@ -6,7 +6,7 @@ require 'active_support/secure_random'
 # the system.
 class IdentitiesController < ApplicationController
 
-  before_filter :authenticate,    :except   => [:new, :show, :create, :validation]   # these pages can be seen without logging-in
+  before_filter :authenticate,    :except   => [:new, :show, :create, :validation, :send_password_token, :send_password]   # these pages can be seen without logging-in
   before_filter :authorize_staff, :only     => [:index]                              # only staff can access these pages
         
   # Returns a representation of a single identity-resource by either rendering 
@@ -326,6 +326,32 @@ class IdentitiesController < ApplicationController
     end
   end
   
+  def send_password_token
+    accessing_client = Client.find_by_id_or_identifier(params[:client_id])
+    raise ForbiddenError.new "Access forbidden. Client id not found." if accessing_client.nil?
+    raise ForbiddenError.new "Access forbidden. Wrong credentials."   if params[:client_password].nil? || params[:client_password] != accessing_client.password
+    
+    respond_to do |format|
+      format.json { 
+        render :status => :ok, :json => {}
+      }      
+      format.html {}
+    end    
+
+
+
+    # token erzeugen
+    # in db eintragen
+    # mail raushauen
+  end
+  
+  def send_password
+    # if token
+    # passwort erzeugen
+    # in db eintragen
+    # token löschen
+    # mail raushauen
+  end
   
   private
   
