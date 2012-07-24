@@ -60,6 +60,8 @@ class Resource::GamesController < ApplicationController
       end
     end
   end
+  
+
 
   # PUT /resource/games/1
   # PUT /resource/games/1.json

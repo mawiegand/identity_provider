@@ -101,6 +101,14 @@ class Resource::CharacterPropertiesController < ApplicationController
   def update
     @resource_character_property = Resource::CharacterProperty.find(params[:id])
 
+    if !current_game.nil?
+      raise BadRequestError.new "Malformed or missing data."                        unless params.has_key?(:resource_character_property)
+
+      raise ForbiddenError.new  "Access to character in different game forbidden."  if @resource_character_property.game_id != current_game.id
+      raise BadRequestError.new "Forbidden to change game id"                       if params[:resource_character_property].has_key?(:game_id)     && params[:resource_character_property][:game_id]     != current_game.id
+      raise BadRequestError.new "Forbidden to change identity id"                   if params[:resource_character_property].has_key?(:identity_id) && params[:resource_character_property][:identity_id] != resource_character_property.identity_id
+    end
+    
     respond_to do |format|
       if @resource_character_property.update_attributes(params[:resource_character_property])
         format.html { redirect_to @resource_character_property, notice: 'Character property was successfully updated.' }
