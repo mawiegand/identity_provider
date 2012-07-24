@@ -1,5 +1,7 @@
 IdentityProvider::Application.routes.draw do
 
+  namespace :resource do resources :results end
+
   namespace :resource do resources :histories end
 
   namespace :resource do resources :games end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120724122600) do
+ActiveRecord::Schema.define(:version => 20120724122840) do
 
   create_table "clients", :force => true do |t|
     t.string   "identifier"
@@ -95,6 +95,21 @@ ActiveRecord::Schema.define(:version => 20120724122600) do
     t.integer  "identity_id"
     t.text     "data"
     t.text     "localized_description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "resource_results", :force => true do |t|
+    t.integer  "game_id"
+    t.integer  "identity_id"
+    t.string   "round_name"
+    t.integer  "round_number"
+    t.integer  "individual_rank"
+    t.integer  "alliance_rank"
+    t.string   "alliance_tag"
+    t.string   "alliance_name"
+    t.string   "character_name"
+    t.boolean  "won"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
