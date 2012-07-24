@@ -20,7 +20,8 @@ class Resource::CharacterPropertiesController < ApplicationController
         @resource_character_properties = identity.character_properties
       else
         property = identity.character_properties.where(:game_id => current_game.id).first
-        @resource_character_properties = property.nil? ? [] : [property]
+        raise NotFoundError.new "No properties found on server for that identity."
+        @resource_character_properties = [property]
       end
     else 
       @asked_for_index = true
