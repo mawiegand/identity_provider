@@ -1,4 +1,7 @@
 class Resource::ResultsController < ApplicationController
+  
+
+  
   # GET /resource/results
   # GET /resource/results.json
   def index

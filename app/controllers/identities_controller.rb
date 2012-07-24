@@ -8,7 +8,7 @@ class IdentitiesController < ApplicationController
 
   before_filter :authenticate,    :except   => [:new, :show, :create, :validation, :send_password_token, :send_password]   # these pages can be seen without logging-in
   before_filter :authorize_staff, :only     => [:index]                              # only staff can access these pages
-        
+  
   # Returns a representation of a single identity-resource by either rendering 
   # a html page or sending a JSON-representation. 
   #

@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
     logger.debug("Response headers: #{controller.response.headers}")
   }
   
-  rescue_from NotFoundError, BadRequestError, ForbiddenError, ConflictError, NameError, :with => :render_response_for_exception
+  rescue_from NotFoundError, BadRequestError, ForbiddenError, ConflictError, :with => :render_response_for_exception # NameError, 
   rescue_from BearerAuthError, :with => :render_response_for_bearer_auth_exception
   
   # This method adds the locale to all rails-generated path, e.g. root_path.

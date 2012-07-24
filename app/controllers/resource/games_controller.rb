@@ -1,4 +1,9 @@
 class Resource::GamesController < ApplicationController
+  
+  before_filter :authenticate
+  before_filter :authorize_staff
+  before_filter :deny_api  
+  
   # GET /resource/games
   # GET /resource/games.json
   def index

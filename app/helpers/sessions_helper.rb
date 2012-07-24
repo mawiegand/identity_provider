@@ -29,11 +29,16 @@ module SessionsHelper
     deny_access unless signed_in?
   end
   
-  
   def authenticate_service
-    logger.debug "Authenticate API with current identifier: #{current_identifier}"
+    #logger.debug "Authenticate API with current identifier: #{current_identifier}"
     deny_access unless api_request? && service_signed_in?
   end
+  
+  def authenticate_service_or_backend
+    authenticate_service if api_request?    
+    authenticate         # only html requests are authenticated using this method. 
+  end
+    
   
   def service_signed_in?
     !current_service.nil?
@@ -57,7 +62,11 @@ module SessionsHelper
   
   # creates and returns auth token from query param for authenticating game-server
   def request_auth_token
-    return @request_auth_token ||= FiveD::AccessToken.new(params[:auth_token])
+    if params[:auth_token].blank?
+      return nil 
+    else
+      return @request_auth_token ||= FiveDAccessToken.new(params[:auth_token])
+    end
   end
     
   # Checks whether the present user has admin-status and redirects to 
