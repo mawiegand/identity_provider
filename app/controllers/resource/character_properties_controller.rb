@@ -9,11 +9,30 @@ class Resource::CharacterPropertiesController < ApplicationController
   
   
   def index
-    @resource_character_properties = Resource::CharacterProperty.all
+    if params.has_key?(:identity_id)
+      # first: filter out bad requests (malformed addresses, black-listed ressources)
+      #bad_request = (name_blacklisted?(params[:identity_id]) && !staff?) || !Identity.valid_user_identifier?(params[:identity_id])
+      #raise BadRequestError.new('Bad Request for Identity %s' % params[:identity_id]) if bad_request
+
+      # second: find (non-deleted) identity or fail with a 404 not found error
+      identity = Identity.find_by_id_identifier_or_nickname(params[:identity_id], :find_deleted => staff?) # only staff can see deleted users
+      raise NotFoundError.new('Page Not Found') if identity.nil?    
+      @resource_character_properties = identity.character_properties
+    else 
+      @asked_for_index = true
+    end
 
     respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @resource_character_properties }
+      format.html do
+        if @resource_character_properties.nil?
+          @resource_character_properties =  Resource::CharacterProperty.paginate(:order => "identity_id ASC", :page => params[:page], :per_page => 50)    
+          @paginate = true   
+        end 
+      end
+      format.json do
+        raise ForbiddenError.new('Access Forbidden')        if @asked_for_index
+        render json: @resource_character_properties 
+      end
     end
   end
 

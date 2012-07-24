@@ -59,7 +59,7 @@ class Identity < ActiveRecord::Base
   
   has_many  :results,               :class_name => "Resource::Result",            :foreign_key => :game_id, :inverse_of => :identity
   has_many  :events,                :class_name => "Resource::History",           :foreign_key => :game_id, :inverse_of => :identity
-  has_one   :character_property,    :class_name => "Resource::CharacterProperty", :foreign_key => :game_id, :inverse_of => :identity
+  has_one   :character_properties,  :class_name => "Resource::CharacterProperty", :foreign_key => :game_id, :inverse_of => :identity
   
   
   attr_accessor :password
@@ -106,6 +106,8 @@ class Identity < ActiveRecord::Base
   default_scope :order => 'identities.nickname ASC'
                        
   before_save :set_encrypted_password, :set_unique_identifier
+  
+  
   
   def self.find_by_id_identifier_or_nickname(user_identifier, options = {})
     options = { 
