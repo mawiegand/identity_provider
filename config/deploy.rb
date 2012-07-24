@@ -4,6 +4,7 @@ require "bundler/capistrano"
 
 default_run_options[:pty] = true                  # problem with ubuntu
 set :ssh_options, :forward_agent => true          # ssh forwarding
+set :gateway, 'wackadoo.de:5775'
 
 set :application, "identity provider"
 set :repository,  "git@github.com:wackadoo/identity_provider.git"
