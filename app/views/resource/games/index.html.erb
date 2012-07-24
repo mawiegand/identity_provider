@@ -3,6 +3,7 @@
 <table>
   <tr>
     <th>Name</th>
+    <th>Identifier</th>
     <th>Scopes</th>
     <th>Link</th>
     <th>Shared secret</th>
@@ -14,6 +15,7 @@
 <% @resource_games.each do |resource_game| %>
   <tr>
     <td><%= resource_game.name %></td>
+    <td><%= resource_game.identifier %></td>
     <td><%= resource_game.scopes %></td>
     <td><%= resource_game.link %></td>
     <td><%= resource_game.shared_secret %></td>
