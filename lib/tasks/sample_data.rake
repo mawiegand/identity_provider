@@ -1,8 +1,70 @@
 require 'faker'
 
 namespace :db do
+  desc "Fill database with development users"
+  task :populate => :environment do
+    
+    wackadoo_client = Client.find_by_identifier("WACKADOOHTML5")
+                        
+    egbert = Identity.new({
+      :nickname              => "Egbert",
+      :surname               => "Lange",
+      :firstname             => "Sascha",
+      :email                 => "sascha77@googlemail.com",
+      :password              => "sonnen",
+      :password_confirmation => "sonnen"
+    }, :as => :creator)
+    
+    egbert.admin = true
+    egbert.staff = true
+    egbert.save
+
+    egbert.grants.create({
+      client_id: wackadoo_client.id,
+      scopes:    wackadoo_client.scopes,
+    })
+    
+                    
+    paffi = Identity.new({
+      :nickname              => "paffi",
+      :surname               => "Fox",
+      :firstname             => "Patrick",
+      :email                 => "p@trick-fox.de",
+      :password              => "ploppp",
+      :password_confirmation => "ploppp"
+    }, :as => :creator)
+                              
+    paffi.admin = true
+    paffi.staff = true
+    paffi.save
+    
+    paffi.grants.create({
+      client_id: wackadoo_client.id,
+      scopes:    wackadoo_client.scopes,
+    })
+    
+    
+    julian = Identity.new({
+      :nickname              => "Julian",
+      :surname               => "Schmid",
+      :firstname             => "Julian",
+      :email                 => "schmidj@informatik.uni-freiburg.de",
+      :password              => "asdfasdf",
+      :password_confirmation => "asdfasdf"
+    }, :as => :creator)
+    
+    julian.admin = true
+    julian.staff = true
+    julian.save
+
+    julian.grants.create({
+      client_id: wackadoo_client.id,
+      scopes:    wackadoo_client.scopes,
+    })
+  end
+
   desc "Fill database with additonal sample users"
-  task :add_fake_accounts => :environment do
+  task :populate_fake => :environment do
     
     wackadoo_client = Client.find_by_identifier("WACKADOOHTML5")
                         
@@ -27,7 +89,7 @@ namespace :db do
       identity.grants.create({
         client_id: wackadoo_client.id,
         scopes:    wackadoo_client.scopes,
-      });
+      })
     end
   end  
 end
