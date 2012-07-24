@@ -70,6 +70,8 @@ class Resource::CharacterPropertiesController < ApplicationController
   # POST /resource/character_properties
   # POST /resource/character_properties.json
   def create
+    raise BadRequestError.new "Malformed or missing data."   unless params.has_key?(:resource_character_property)
+    
     @resource_character_property = Resource::CharacterProperty.new(params[:resource_character_property])
     
     if !current_game.nil?
@@ -77,8 +79,8 @@ class Resource::CharacterPropertiesController < ApplicationController
       @resource_character_property.game_id = current_game.id
     end
     
-    raise BadRequestError.new "Game id missing"        if @resource_character_property.game_id.nil?
-    raise BadRequestError.new "Identity id missing"    if @resource_character_property.identity_id.nil?
+    raise BadRequestError.new "Game id missing"              if @resource_character_property.game_id.nil?
+    raise BadRequestError.new "Identity id missing"          if @resource_character_property.identity_id.nil?
 
     old_entry = Resource::CharacterProperty.find_by_identity_id_and_game_id(@resource_character_property.identity_id, @resource_character_property.game_id)
     raise ConflictError.new "Already have properties for this player and game."  unless old_entry.nil?

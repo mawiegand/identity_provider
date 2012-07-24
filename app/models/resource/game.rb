@@ -6,7 +6,7 @@ class Resource::Game < ActiveRecord::Base
   
   attr_accessible :identifier, :name, :link, :shared_secret,                     :as => :owner
   attr_accessible *accessible_attributes(:owner),                                :as => :creator # fields accesible during creation
-  attr_accessible :scopes,                                                       :as => :staff
+  attr_accessible *accessible_attributes(:creator), :scopes,                     :as => :staff
   attr_accessible *accessible_attributes(:staff),                                :as => :admin
     
   attr_readable :name, :link, :id,                                               :as => :default 

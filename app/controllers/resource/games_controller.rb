@@ -45,7 +45,10 @@ class Resource::GamesController < ApplicationController
   # POST /resource/games
   # POST /resource/games.json
   def create
-    @resource_game = Resource::Game.new(params[:resource_game])
+    role = :creator
+    role = :staff   if staff?
+    role = :admin   if admin?
+    @resource_game = Resource::Game.new(params[:resource_game], :as => role)
 
     respond_to do |format|
       if @resource_game.save
@@ -61,10 +64,13 @@ class Resource::GamesController < ApplicationController
   # PUT /resource/games/1
   # PUT /resource/games/1.json
   def update
+    role = :default
+    role = :staff   if staff?
+    role = :admin   if admin?
     @resource_game = Resource::Game.find(params[:id])
 
     respond_to do |format|
-      if @resource_game.update_attributes(params[:resource_game])
+      if @resource_game.update_attributes(params[:resource_game], :as => role)
         format.html { redirect_to @resource_game, notice: 'Game was successfully updated.' }
         format.json { head :ok }
       else
