@@ -35,7 +35,7 @@ module SessionsHelper
   
   def authenticate_game_or_backend
     authenticate_game if api_request?    
-    authenticate         # only html requests are authenticated using this method. 
+    authenticate if website_request?        # only html requests are authenticated using this method. 
   end
     
   
@@ -45,16 +45,17 @@ module SessionsHelper
   
   # returns true if    
   def current_game
-    @current_game ||= game_identifier_from_auth_token
+    @current_game ||= Resource::Game.find_by_identifier(game_identifier_from_auth_token)
   end
   
   def game_identifier_from_auth_token
     return nil if request_auth_token.nil?
     
-    raise BearerAuthInvalidToken.new('Invalid client identifier.') if Resource::Game.find_by_identifier(request_auth_token.identifier).nil? 
+    game = Resource::Game.find_by_identifier(request_auth_token.identifier)
+    raise BearerAuthInvalidToken.new('Invalid client identifier.') if game.nil? 
     raise BearerAuthInvalidToken.new('Invalid or malformed auth token.') unless request_auth_token.valid? 
     raise BearerAuthInvalidToken.new('Access token expired.') if request_auth_token.expired?
-    raise BearerAuthInsufficientScope.new('Requested resource is not in authorized scope.') unless request_auth_token.in_scope?(IDENTITY_PROVIDER_CONFIG[:default_scope])
+    raise BearerAuthInsufficientScope.new('Requested resource is not in authorized scope.') unless game.scopes.include?(IDENTITY_PROVIDER_CONFIG['default_scope'])
     
     return request_auth_token.identifier
   end
