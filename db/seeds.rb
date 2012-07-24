@@ -18,10 +18,10 @@ wackadoo_client = Client.create({
   :grant_types  => "password"
 }, :as => :creator)
 
-wackadoo_game = Game.create({
+wackadoo_game = Resource::Game.create({
   :identifier   => "WACKADOO",
   :name         => "Wack-a-Doo",
-  :link         => "https://wack-a-doo.de"
+  :link         => "https://wack-a-doo.de",
   :scopes       => "5dentity",
 }, :as => :creator)
 
