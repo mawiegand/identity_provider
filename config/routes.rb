@@ -25,6 +25,10 @@ IdentityProvider::Application.routes.draw do
       resources :clients
       resources :granted_scopes
       resources :keys
+      
+      resources :character_properties,  :path => "identities/:identity_id/character_properties",  :module => 'resource'            
+      resources :results,               :path => "identities/:identity_id/results",               :module => 'resource'            
+      resources :histories,             :path => "identities/:identity_id/histories",             :module => 'resource'            
   
       namespace :resource do 
         resources :character_properties
