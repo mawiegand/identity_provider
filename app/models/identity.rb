@@ -263,6 +263,7 @@ class Identity < ActiveRecord::Base
     return validation_code().eql? code
   end
   
+
   
   private
 
