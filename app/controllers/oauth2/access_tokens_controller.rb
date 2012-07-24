@@ -14,7 +14,7 @@ module Oauth2
     before_filter :authenticate,    :except => [ :create, :redirect_test_start, :redirect_test_end  ]
     before_filter :authorize_staff, :except => [ :create, :redirect_test_start, :redirect_test_end   ]
     
-    @@default_scope = ['5dentity']
+    @@default_scope = IDENTITY_PROVIDER_CONFIG[:default_scope] || ['5dentity']
       
     # Implementes the POST method endpoint for obtaining an access token.
     # Presently it only implements the 'resource owner password credentials' flow.

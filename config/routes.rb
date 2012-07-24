@@ -37,6 +37,9 @@ IdentityProvider::Application.routes.draw do
   
       match '/identities/:id/validation', :to => 'identities#validation'
       match '/identities/:id/signin',     :to => 'identities#signin'
+
+      # match '/identities/:email/send_password_token', :to => 'identities#send_password_token'
+      # match '/identities/:email/send_password',       :to => 'identities#send_password'
     end
    
     match '/:locale' => 'sessions#new'         # match e.g. /de/

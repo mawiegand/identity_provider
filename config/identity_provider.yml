@@ -2,7 +2,8 @@ defaults: &defaults
   allow_jsonp: true
   redirect_after_activation: '/activation.html'
   
-        
+  default_scope: '5dentity'
+  
 development:
   <<: *defaults
 

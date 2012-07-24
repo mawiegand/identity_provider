@@ -29,6 +29,37 @@ module SessionsHelper
     deny_access unless signed_in?
   end
   
+  
+  def authenticate_service
+    logger.debug "Authenticate API with current identifier: #{current_identifier}"
+    deny_access unless api_request? && service_signed_in?
+  end
+  
+  def service_signed_in?
+    !current_service.nil?
+  end
+  
+  # returns true if    
+  def current_service
+    @current_service ||= service_identifier_from_auth_token
+  end
+  
+  def service_identifier_from_auth_token
+    return nil if request_auth_token.nil?
+                                                                            # vvv aus Tabelle
+    raise BearerAuthInvalidToken.new('Invalid client identifier.') unless IDENTITY_PROVIDER_CONFIG['valid_api_clients'].include? request_auth_token.identifier 
+    raise BearerAuthInvalidToken.new('Invalid or malformed auth token.') unless request_auth_token.valid? 
+    raise BearerAuthInvalidToken.new('Access token expired.') if request_auth_token.expired?
+    raise BearerAuthInsufficientScope.new('Requested resource is not in authorized scope.') unless request_auth_token.in_scope?(IDENTITY_PROVIDER_CONFIG[:default_scope])
+    
+    return request_auth_token.identifier
+  end
+  
+  # creates and returns auth token from query param for authenticating game-server
+  def request_auth_token
+    return @request_auth_token ||= FiveD::AccessToken.new(params[:auth_token])
+  end
+    
   # Checks whether the present user has admin-status and redirects to 
   # sign-in otherwise.
   def authorize_admin
