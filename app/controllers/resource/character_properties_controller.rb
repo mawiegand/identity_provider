@@ -71,6 +71,17 @@ class Resource::CharacterPropertiesController < ApplicationController
   # POST /resource/character_properties.json
   def create
     @resource_character_property = Resource::CharacterProperty.new(params[:resource_character_property])
+    
+    if !current_game.nil?
+      raise ForbiddenError.new "Access to character in different game forbidden."  if params[:resource_character_property].has_key?(:game_id) && params[:resource_character_property][:game_id] != current_game.id
+      @resource_character_property.game_id = current_game.id
+    end
+    
+    raise BadRequestError.new "Game id missing"        if @resource_character_property.game_id.nil?
+    raise BadRequestError.new "Identity id missing"    if @resource_character_property.identity_id.nil?
+
+    old_entry = Resource::CharacterProperty.find_by_identity_id_and_game_id(@resource_character_property.identity_id, @resource_character_property.game_id)
+    raise ConflictError.new "Already have properties for this player and game."  unless old_entry.nil?
 
     respond_to do |format|
       if @resource_character_property.save
