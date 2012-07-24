@@ -1,0 +1,29 @@
+<%= form_for(@resource_character_property) do |f| %>
+  <% if @resource_character_property.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@resource_character_property.errors.count, "error") %> prohibited this resource_character_property from being saved:</h2>
+
+      <ul>
+      <% @resource_character_property.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :game_id %><br />
+    <%= f.number_field :game_id %>
+  </div>
+  <div class="field">
+    <%= f.label :identity_id %><br />
+    <%= f.number_field :identity_id %>
+  </div>
+  <div class="field">
+    <%= f.label :data %><br />
+    <%= f.text_area :data %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

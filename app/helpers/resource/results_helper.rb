@@ -1,0 +1,2 @@
+module Resource::ResultsHelper
+end

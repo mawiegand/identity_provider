@@ -1,0 +1,57 @@
+<%= form_for(@resource_result) do |f| %>
+  <% if @resource_result.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@resource_result.errors.count, "error") %> prohibited this resource_result from being saved:</h2>
+
+      <ul>
+      <% @resource_result.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :game_id %><br />
+    <%= f.number_field :game_id %>
+  </div>
+  <div class="field">
+    <%= f.label :identity_id %><br />
+    <%= f.number_field :identity_id %>
+  </div>
+  <div class="field">
+    <%= f.label :round_name %><br />
+    <%= f.text_field :round_name %>
+  </div>
+  <div class="field">
+    <%= f.label :round_number %><br />
+    <%= f.number_field :round_number %>
+  </div>
+  <div class="field">
+    <%= f.label :individual_rank %><br />
+    <%= f.number_field :individual_rank %>
+  </div>
+  <div class="field">
+    <%= f.label :alliance_rank %><br />
+    <%= f.number_field :alliance_rank %>
+  </div>
+  <div class="field">
+    <%= f.label :alliance_tag %><br />
+    <%= f.text_field :alliance_tag %>
+  </div>
+  <div class="field">
+    <%= f.label :alliance_name %><br />
+    <%= f.text_field :alliance_name %>
+  </div>
+  <div class="field">
+    <%= f.label :character_name %><br />
+    <%= f.text_field :character_name %>
+  </div>
+  <div class="field">
+    <%= f.label :won %><br />
+    <%= f.check_box :won %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

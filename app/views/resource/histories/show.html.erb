@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Game:</b>
+  <%= @resource_history.game_id %>
+</p>
+
+<p>
+  <b>Identity:</b>
+  <%= @resource_history.identity_id %>
+</p>
+
+<p>
+  <b>Data:</b>
+  <%= @resource_history.data %>
+</p>
+
+<p>
+  <b>Localized description:</b>
+  <%= @resource_history.localized_description %>
+</p>
+
+
+<%= link_to 'Edit', edit_resource_history_path(@resource_history) %> |
+<%= link_to 'Back', resource_histories_path %>

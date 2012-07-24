@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Game:</b>
+  <%= @resource_character_property.game_id %>
+</p>
+
+<p>
+  <b>Identity:</b>
+  <%= @resource_character_property.identity_id %>
+</p>
+
+<p>
+  <b>Data:</b>
+  <%= @resource_character_property.data %>
+</p>
+
+
+<%= link_to 'Edit', edit_resource_character_property_path(@resource_character_property) %> |
+<%= link_to 'Back', resource_character_properties_path %>

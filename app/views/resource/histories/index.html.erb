@@ -1,0 +1,29 @@
+<h1>Listing resource_histories</h1>
+
+<table>
+  <tr>
+    <th>Game</th>
+    <th>Identity</th>
+    <th>Data</th>
+    <th>Localized description</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @resource_histories.each do |resource_history| %>
+  <tr>
+    <td><%= resource_history.game_id %></td>
+    <td><%= resource_history.identity_id %></td>
+    <td><%= resource_history.data %></td>
+    <td><%= resource_history.localized_description %></td>
+    <td><%= link_to 'Show', resource_history %></td>
+    <td><%= link_to 'Edit', edit_resource_history_path(resource_history) %></td>
+    <td><%= link_to 'Destroy', resource_history, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New History', new_resource_history_path %>

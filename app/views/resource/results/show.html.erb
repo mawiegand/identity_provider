@@ -1,0 +1,55 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Game:</b>
+  <%= @resource_result.game_id %>
+</p>
+
+<p>
+  <b>Identity:</b>
+  <%= @resource_result.identity_id %>
+</p>
+
+<p>
+  <b>Round name:</b>
+  <%= @resource_result.round_name %>
+</p>
+
+<p>
+  <b>Round number:</b>
+  <%= @resource_result.round_number %>
+</p>
+
+<p>
+  <b>Individual rank:</b>
+  <%= @resource_result.individual_rank %>
+</p>
+
+<p>
+  <b>Alliance rank:</b>
+  <%= @resource_result.alliance_rank %>
+</p>
+
+<p>
+  <b>Alliance tag:</b>
+  <%= @resource_result.alliance_tag %>
+</p>
+
+<p>
+  <b>Alliance name:</b>
+  <%= @resource_result.alliance_name %>
+</p>
+
+<p>
+  <b>Character name:</b>
+  <%= @resource_result.character_name %>
+</p>
+
+<p>
+  <b>Won:</b>
+  <%= @resource_result.won %>
+</p>
+
+
+<%= link_to 'Edit', edit_resource_result_path(@resource_result) %> |
+<%= link_to 'Back', resource_results_path %>

@@ -1,5 +1,13 @@
 IdentityProvider::Application.routes.draw do
 
+  namespace :resource do resources :character_properties end
+
+  namespace :resource do resources :results end
+
+  namespace :resource do resources :histories end
+
+  namespace :resource do resources :games end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

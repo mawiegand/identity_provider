@@ -1,0 +1,27 @@
+<h1>Listing resource_character_properties</h1>
+
+<table>
+  <tr>
+    <th>Game</th>
+    <th>Identity</th>
+    <th>Data</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @resource_character_properties.each do |resource_character_property| %>
+  <tr>
+    <td><%= resource_character_property.game_id %></td>
+    <td><%= resource_character_property.identity_id %></td>
+    <td><%= resource_character_property.data %></td>
+    <td><%= link_to 'Show', resource_character_property %></td>
+    <td><%= link_to 'Edit', edit_resource_character_property_path(resource_character_property) %></td>
+    <td><%= link_to 'Destroy', resource_character_property, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Character property', new_resource_character_property_path %>
