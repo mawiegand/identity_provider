@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @resource_game.name %>
+</p>
+
+<p>
+  <b>Scopes:</b>
+  <%= @resource_game.scopes %>
+</p>
+
+<p>
+  <b>Link:</b>
+  <%= @resource_game.link %>
+</p>
+
+<p>
+  <b>Shared secret:</b>
+  <%= @resource_game.shared_secret %>
+</p>
+
+
+<%= link_to 'Edit', edit_resource_game_path(@resource_game) %> |
+<%= link_to 'Back', resource_games_path %>

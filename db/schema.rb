@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120720101534) do
+ActiveRecord::Schema.define(:version => 20120724122008) do
 
   create_table "clients", :force => true do |t|
     t.string   "identifier"
@@ -80,5 +80,14 @@ ActiveRecord::Schema.define(:version => 20120720101534) do
 
   add_index "log_entries", ["event_type"], :name => "index_log_entries_on_type"
   add_index "log_entries", ["identity_id"], :name => "index_log_entries_on_identity_id"
+
+  create_table "resource_games", :force => true do |t|
+    t.string   "name"
+    t.string   "scopes"
+    t.string   "link"
+    t.string   "shared_secret"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end

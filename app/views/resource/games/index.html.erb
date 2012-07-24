@@ -1,0 +1,29 @@
+<h1>Listing resource_games</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Scopes</th>
+    <th>Link</th>
+    <th>Shared secret</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @resource_games.each do |resource_game| %>
+  <tr>
+    <td><%= resource_game.name %></td>
+    <td><%= resource_game.scopes %></td>
+    <td><%= resource_game.link %></td>
+    <td><%= resource_game.shared_secret %></td>
+    <td><%= link_to 'Show', resource_game %></td>
+    <td><%= link_to 'Edit', edit_resource_game_path(resource_game) %></td>
+    <td><%= link_to 'Destroy', resource_game, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Game', new_resource_game_path %>

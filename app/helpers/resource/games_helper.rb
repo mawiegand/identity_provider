@@ -1,0 +1,2 @@
+module Resource::GamesHelper
+end
