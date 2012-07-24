@@ -1,0 +1,33 @@
+<%= form_for(@resource_history) do |f| %>
+  <% if @resource_history.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@resource_history.errors.count, "error") %> prohibited this resource_history from being saved:</h2>
+
+      <ul>
+      <% @resource_history.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :game_id %><br />
+    <%= f.number_field :game_id %>
+  </div>
+  <div class="field">
+    <%= f.label :identity_id %><br />
+    <%= f.number_field :identity_id %>
+  </div>
+  <div class="field">
+    <%= f.label :data %><br />
+    <%= f.text_area :data %>
+  </div>
+  <div class="field">
+    <%= f.label :localized_description %><br />
+    <%= f.text_area :localized_description %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

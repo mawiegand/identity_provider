@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  game_id: 1
+  identity_id: 1
+  round_name: MyString
+  round_number: 1
+  individual_rank: 1
+  alliance_rank: 1
+  alliance_tag: MyString
+  alliance_name: MyString
+  character_name: MyString
+  won: false
+
+two:
+  game_id: 1
+  identity_id: 1
+  round_name: MyString
+  round_number: 1
+  individual_rank: 1
+  alliance_rank: 1
+  alliance_tag: MyString
+  alliance_name: MyString
+  character_name: MyString
+  won: false

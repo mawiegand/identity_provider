@@ -1,0 +1,41 @@
+<h1>Listing resource_results</h1>
+
+<table>
+  <tr>
+    <th>Game</th>
+    <th>Identity</th>
+    <th>Round name</th>
+    <th>Round number</th>
+    <th>Individual rank</th>
+    <th>Alliance rank</th>
+    <th>Alliance tag</th>
+    <th>Alliance name</th>
+    <th>Character name</th>
+    <th>Won</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @resource_results.each do |resource_result| %>
+  <tr>
+    <td><%= resource_result.game_id %></td>
+    <td><%= resource_result.identity_id %></td>
+    <td><%= resource_result.round_name %></td>
+    <td><%= resource_result.round_number %></td>
+    <td><%= resource_result.individual_rank %></td>
+    <td><%= resource_result.alliance_rank %></td>
+    <td><%= resource_result.alliance_tag %></td>
+    <td><%= resource_result.alliance_name %></td>
+    <td><%= resource_result.character_name %></td>
+    <td><%= resource_result.won %></td>
+    <td><%= link_to 'Show', resource_result %></td>
+    <td><%= link_to 'Edit', edit_resource_result_path(resource_result) %></td>
+    <td><%= link_to 'Destroy', resource_result, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Result', new_resource_result_path %>
