@@ -74,7 +74,15 @@ class Resource::ResultsController < ApplicationController
   def create
     raise BadRequestError.new "Malformed or missing data."   unless params.has_key?(:resource_result)
     
-    @resource_result = Resource::Result.new(params[:resource_result])
+    if params.has_key?(:identity_id)
+      @identity = Identity.find_by_id_identifier_or_nickname(params[:identity_id], :find_deleted => staff?) # only staff can see deleted users
+    elsif params[:resource_result].has_key?(:identity_id)
+      @identity = Identity.find_by_id_identifier_or_nickname(params[:resource_result][:identity_id], :find_deleted => staff?) # only staff can see deleted users
+    else
+      raise BadRequestError.new "Missing identity id" 
+    end
+    
+    @resource_result = @identity.results.build(params[:resource_result])
     
     if !current_game.nil?
       raise ForbiddenError.new "Access to character in different game forbidden."  if params[:resource_result].has_key?(:game_id) && params[:resource_result][:game_id] != current_game.id
