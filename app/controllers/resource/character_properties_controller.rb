@@ -109,16 +109,25 @@ class Resource::CharacterPropertiesController < ApplicationController
 
   # PUT /resource/character_properties/1
   # PUT /resource/character_properties/1.json
-  def update
-    @resource_character_property = Resource::CharacterProperty.find(params[:id])
-
+  def update    
+    
     if !current_game.nil?
       raise BadRequestError.new "Malformed or missing data."                        unless params.has_key?(:resource_character_property)
+      
+      @identity = Identity.find_by_identifier(params[:id])
+      if @identity.nil?
+        @resource_character_property = Resource::CharacterProperty.find(params[:id])
+      else
+        @resource_character_property = @identity.character_properties.where(:game_id => current_game.id).first
+      end
+      raise NotFoundError.new "Character properties not found."  if @resource_character_property.nil?
 
-      raise ForbiddenError.new  "Access to character in different game forbidden."  if @resource_character_property.game_id != current_game.id
       raise BadRequestError.new "Forbidden to change game id"                       if params[:resource_character_property].has_key?(:game_id)     && params[:resource_character_property][:game_id]     != current_game.id
       raise BadRequestError.new "Forbidden to change identity id"                   if params[:resource_character_property].has_key?(:identity_id) && params[:resource_character_property][:identity_id] != resource_character_property.identity_id
+    else
+      @resource_character_property = Resource::CharacterProperty.find(params[:id])
     end
+    
     
     respond_to do |format|
       if @resource_character_property.update_attributes(params[:resource_character_property])
