@@ -22,7 +22,8 @@ class Resource::CharacterPropertiesController < ApplicationController
         @resource_character_properties = identity.character_properties
       else
         property = identity.character_properties.where(:game_id => current_game.id).first
-        raise NotFoundError.new "No properties found on server for that identity."
+        logger.debug "Property: #{property.inspect}."
+        raise NotFoundError.new "No properties found on server for that identity."   if property.nil?
         @resource_character_properties = [property]
       end
     else 
@@ -73,6 +74,7 @@ class Resource::CharacterPropertiesController < ApplicationController
   # POST /resource/character_properties
   # POST /resource/character_properties.json
   def create
+    logger.debug params.inspect
     raise BadRequestError.new "Malformed or missing data."   unless params.has_key?(:resource_character_property)
     
     @resource_character_property = Resource::CharacterProperty.new(params[:resource_character_property])
@@ -82,8 +84,14 @@ class Resource::CharacterPropertiesController < ApplicationController
       @resource_character_property.game_id = current_game.id
     end
     
+    if !params[:identity_id].blank?
+      identity = Identity.find_by_id_identifier_or_nickname(params[:identity_id], :find_deleted => staff?)
+      raise NotFoundError.new "Identity with given id not found."   if identity.nil?
+      @resource_character_property.identity_id = identity.id
+    end
+      
     raise BadRequestError.new "Game id missing"              if @resource_character_property.game_id.nil?
-    raise BadRequestError.new "Identity id missing"          if @resource_character_property.identity_id.nil?
+    raise BadRequestError.new "Identity id missing"          if @resource_character_property.identity_id.blank?
 
     old_entry = Resource::CharacterProperty.find_by_identity_id_and_game_id(@resource_character_property.identity_id, @resource_character_property.game_id)
     raise ConflictError.new "Already have properties for this player and game."  unless old_entry.nil?
