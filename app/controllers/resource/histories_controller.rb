@@ -77,6 +77,10 @@ class Resource::HistoriesController < ApplicationController
     if !current_game.nil?
       raise ForbiddenError.new "Access to character in different game forbidden."  if params[:resource_history].has_key?(:game_id) && params[:resource_history][:game_id] != current_game.id
       @resource_history.game_id = current_game.id
+      
+      @identity = Identity.find_by_id_identifier_or_nickname(params[:identity_id], :find_deleted => staff?)
+      raise NotFoundError.new "Identity not found"           if @identity.nil?
+      @resource_history.identity_id = @identity.id
     end
     
     raise BadRequestError.new "Game id missing"              if @resource_history.game_id.nil?
