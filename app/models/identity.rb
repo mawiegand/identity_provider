@@ -103,7 +103,7 @@ class Identity < ActiveRecord::Base
   validates :identifier, :uniqueness => { :case_sensitive => true }
   
   
-  default_scope :order => 'identities.nickname ASC'
+  default_scope :order => 'identities.email ASC'
                        
   before_save :set_encrypted_password, :set_unique_identifier
   

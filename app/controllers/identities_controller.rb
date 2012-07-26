@@ -148,6 +148,12 @@ class IdentitiesController < ApplicationController
                 invitation.save
                 IdentityMailer.validation_email(identity).deliver  # send email validation email
               else 
+                # hack: backend activation button missing -> don't put them on the waiting list for manual activation
+                
+                identity.destroy
+                raise BadRequestError.new "Die mit dieser Einladung verbundenen Slots wurden bereits restlos verbraucht."
+                
+                # hack end
                 IdentityMailer.waiting_list_email(identity, params[:invitation]).deliver# send waiting-list email
               end
             else
