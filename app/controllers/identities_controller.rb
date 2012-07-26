@@ -291,7 +291,7 @@ class IdentitiesController < ApplicationController
   def index
     role = current_identity ? current_identity.role : :default
 
-    @identities = Identity.paginate(:order => :email, :page => params[:page], :per_page => 60)  # here also show deleted users! (index is staff only)
+    @identities = Identity.paginate(:page => params[:page], :per_page => 60)  # here also show deleted users! (index is staff only)
     
     @sanitized_identities = []
     
