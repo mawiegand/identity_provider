@@ -15,7 +15,7 @@
       <%= link_to I18n.t('identities.show.link.edit'), {:action => "edit", :id => @attributes[:id]}, :class => 'button-on-white' if @options[:show_edit_link] %>
       <%= link_to I18n.t('identities.show.link.delete'), {:action => "destroy", :id => @attributes[:id]}, :method => "delete", :confirm => I18n.t('identities.show.confirm.delete'), :class => 'button-on-white' if @options[:show_delete_link] %>
     <% end %>
-    <% if signed_in? %>
+    <% if signed_in? && staff? %>
       <%= link_to "Sign in to Wack-a-Doo", { :action => "signin", :id => @attributes[:id], :client => "WACKADOOHTML5"}, :class => 'button-on-white' %>
     <%end%><br />
   </end>

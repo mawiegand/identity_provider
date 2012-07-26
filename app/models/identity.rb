@@ -75,7 +75,8 @@ class Identity < ActiveRecord::Base
   attr_readable *readable_attributes(:user), :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt,  :as => :staff
   attr_readable *readable_attributes(:staff),   :as => :admin
   
-  @email_regex      = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  @email_regex      = /(?:[a-z0-9!#$\%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$\%&'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i
+  #/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   @nickname_regex   = /^[^\d\s]+[^\s]*$/i
   @identifier_regex = /[a-z]{16}/i
   
@@ -146,7 +147,7 @@ class Identity < ActiveRecord::Base
   # It returns nil otherwise.
   def self.authenticate(login, submittedPassword)
     return nil if login.blank? || submittedPassword.blank?    
-    identity = find_by_email_and_deleted(login.downcase, false) if identity.nil?
+    identity = Identity.find(:first, :conditions => ["lower(email) = lower(?) AND (deleted IS NULL OR NOT deleted)", login])  if identity.nil?
     identity = find_by_identifier_and_deleted(login, false) if identity.nil?
     identity = Identity.find(:first, :conditions => ["lower(nickname) = lower(?) AND (deleted IS NULL OR NOT deleted)", login]) if identity.nil? && Identity.valid_nickname?(login)
     return nil if identity.nil?
