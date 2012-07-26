@@ -3,7 +3,9 @@ defaults: &defaults
   redirect_after_activation: '/activation.html'
   
   default_scope: '5dentity'
-  
+
+  cookie_name: 'ip_remember_token'
+      
 development:
   <<: *defaults
 
