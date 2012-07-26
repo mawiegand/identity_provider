@@ -151,14 +151,12 @@ class IdentitiesController < ApplicationController
                 # hack: backend activation button missing -> don't put them on the waiting list for manual activation
                 
                 identity.destroy
-                raise BadRequestError.new "Die mit dieser Einladung verbundenen Plätze wurden bereits restlos verbraucht."
+                raise BadRequestError.new "Die mit dieser Einladung verbundenen Slots wurden bereits restlos verbraucht."
                 
                 # hack end
                 IdentityMailer.waiting_list_email(identity, params[:invitation]).deliver# send waiting-list email
               end
             else
-  
-              
               IdentityMailer.waiting_list_email(identity).deliver  # send waiting-list email
             end
             render :status => :created, :json => identity.sanitized_hash(:owner).delete_if { |k,v| v.blank? }, :location => identity     
