@@ -85,7 +85,7 @@ module SessionsHelper
   # and sets the current_identity to the given identity. The identity to sign-in
   # must have been authenticated (e.g. checked credentials) before hand.
   def sign_in(identity)
-    cookies.permanent.signed[:ip_remember_token] = [identity.id, identity.salt]
+    cookies.permanent.signed[IDENTITY_PROVIDER_CONFIG['cookie_name']] = [identity.id, identity.salt]
     self.current_identity = identity
   end
   
@@ -109,7 +109,7 @@ module SessionsHelper
   # Signs the present user out by destroying the cookie and unsetting
   # the current_identity .
   def sign_out
-    cookies.delete(:ip_remember_token)
+    cookies.delete(IDENTITY_PROVIDER_CONFIG['cookie_name'])
     self.current_identity = nil
   end
   
@@ -185,7 +185,7 @@ module SessionsHelper
   # Returns either the remember_token that has been set in the cookie
   # or a nil - array.
   def remember_token
-    cookies.signed[:ip_remember_token] || [nil, nil]
+    cookies.signed[IDENTITY_PROVIDER_CONFIG['cookie_name']] || [nil, nil]
   end
   
   # Method that should be called to block the user from accessing the 
