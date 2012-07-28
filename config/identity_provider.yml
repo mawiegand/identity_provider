@@ -8,7 +8,7 @@ defaults: &defaults
 
   cookie_name: 'ip_remember_token'
   
-  token_expiration: 3600*8
+  token_expiration: '28800'
       
 development:
   <<: *defaults
