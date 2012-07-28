@@ -23,6 +23,7 @@ de:
   
   application:
     layout:
+      dashboard: Dashboard
       profile: Profil
       signin:  Anmelden
       signout: Abmelden

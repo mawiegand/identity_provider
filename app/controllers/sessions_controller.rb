@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
     else 
       logSigninSuccess(params[:session][:login], identity)
       sign_in identity
-      redirect_back_or identity
+      redirect_back_or (staff? ? dashboard_path : identity)
     end
   end
   

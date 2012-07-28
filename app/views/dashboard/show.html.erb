@@ -1,0 +1,56 @@
+<div class="dashboard">
+
+  <div class="profile">
+    <%= gravatar_img_tag_for @current_identity.gravatar_url(:size => 120), :class => 'gravatar-float', :alt => @current_identity.address_informal %>
+  
+    <div class="profile-info">
+      <h1>Hi <%="#{@current_identity.address_informal}" %>.</h1>
+      <p>Your role: <%= (admin? ? '<span class="red">admin</span>' : staff? ? '<span class="orange">staff</span>' : "user").html_safe %>.
+    </div>
+
+    <div class="profile-button-bar">
+    <%= link_to "Sign in to Wack-a-Doo", { :controller => :identities, :action => "signin", :id => @current_identity.id, :client => "WACKADOOHTML5"}, :class => 'button-on-white' %><br />
+    </div>
+  </div>
+  
+  <h1>User Stats</h1>
+  <b>Accounts:</b> <%= @user_stats[:validated_accounts]%> / <%= @user_stats[:total_accounts]%> (activated / total)<br/> 
+  <b>Sign Ups:</b> 
+    <%= @user_stats[:signups_last_hour] %> / 
+    <%= @user_stats[:signups_last_day]  %> /
+    <%= @user_stats[:signups_last_week] %> /
+    <%= @user_stats[:signups_last_month]%> (last 1 hour / 24 hours / week / month) <br/>
+  <b>Due activations:</b> <%= @user_stats[:due_activations]%> <br/>
+  <b>On waiting lists:</b> <%= @user_stats[:on_waiting_lists] %><br/>
+  <p><b>Latest User</b>: signed up <b><%= time_ago_in_words @latest_identity.created_at %></b> ago<br/>
+     <%= link_to @latest_identity.address_informal, @latest_identity %> (<%= @latest_identity.email %>)</p>
+  
+
+  <div class="waiting-list">
+    <h1>Identities on Waiting Lists</h1>
+
+    <table>
+      <tr>
+        <th>Id</th>
+        <th>Identifier</th>
+        <th>Email</th>
+        <th>Signed Up</th>
+        <th></th>
+        <th></th>
+      </tr>
+      
+      <% @waiting_identities.each do |identity| %>
+        <tr>
+          <td><%= identity.id %></td>
+          <td><%= identity.identifier %></td>
+          <td><%= identity.email %></td>
+          <td>signed up <%= time_ago_in_words identity.created_at %> ago</td>
+          <td><%= link_to 'Show', identity %></td>
+          <td><%= link_to 'Destroy', identity, confirm: 'Are you sure?', method: :delete %></td>
+        </tr>
+      <% end %>
+    </table>    
+  </div>
+
+</div>
+

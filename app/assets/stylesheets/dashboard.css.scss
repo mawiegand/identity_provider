@@ -1,0 +1,29 @@
+// Place all the styles related to the Dashboard controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.dashboard .profile {
+  float: right;
+  border-radius: 20px;
+  border: #777 12px solid;
+  
+  min-width: 440px;
+  min-height: 145px;
+}
+
+
+.dashboard .profile-info p {
+  margin-top: -20px;
+}
+
+.red {
+  color: #F00;
+}
+
+.orange {
+  color: #FA0;
+}
+
+
+
