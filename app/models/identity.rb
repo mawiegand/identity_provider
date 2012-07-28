@@ -72,7 +72,7 @@ class Identity < ActiveRecord::Base
   attr_readable :identifier, :nickname, :id, :admin, :staff,               :as => :default 
   attr_readable *readable_attributes(:default), :created_at,  :as => :user
   attr_readable *readable_attributes(:user), :email, :firstname, :surname, :activated, :updated_at, :deleted,         :as => :owner
-  attr_readable *readable_attributes(:user), :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt,  :as => :staff
+  attr_readable *readable_attributes(:user), :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt, :password_token, :as => :staff
   attr_readable *readable_attributes(:staff),   :as => :admin
   
   @email_regex      = /(?:[a-z0-9!#$\%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$\%&'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i
@@ -264,6 +264,11 @@ class Identity < ActiveRecord::Base
     return validation_code().eql? code
   end
   
+  # create a random-string with len chars
+  def make_random_string(len = 64)
+    chars = ('a'..'z').to_a + ('A'..'Z').to_a
+    (0..(len-1)).collect { chars[Kernel.rand(chars.length)] }.join
+  end    
 
   
   private
@@ -277,14 +282,17 @@ class Identity < ActiveRecord::Base
         end while !Identity.find_by_identifier(self.identifier).nil? || !Identity.find(:first, :conditions => ["lower(nickname) = lower(?)", self.identifier]).nil?
       end
     end
-    
+
     # create salt, if not already set, and set the encrypted
     # password by salting and encrypting the plain-text
     # password sent by the user.
     def set_encrypted_password
+      puts 'ping'
       self.salt = make_random_string if new_record? # salt will be created once for a new record
       if !password.blank?
+        puts 'pong'
         self.encrypted_password = encrypt_password(self.password)
+        puts self.encrypted_password
       end
     end
     
@@ -300,10 +308,5 @@ class Identity < ActiveRecord::Base
       Digest::SHA2.hexdigest(string)
     end  
     
-    # create a random-string with len chars
-    def make_random_string(len = 64)
-      chars = ('a'..'z').to_a + ('A'..'Z').to_a
-      (0..(len-1)).collect { chars[Kernel.rand(chars.length)] }.join
-    end    
 end
 
