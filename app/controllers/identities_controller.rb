@@ -339,15 +339,19 @@ class IdentitiesController < ApplicationController
 
     identity = Identity.find_by_email(params[:identifier])
     
-    raise NotFoundError.new "Mail not found" if identity.nil?
-    # token erzeugen
-    # in db eintragen
-    identity.password_token = identity.make_random_string(32)
-    identity.save
-    logger.debug '---> ' + identity.inspect
+    # hide error for user. otherwise he is able to check which mail adresses are already registered
+    # raise NotFoundError.new "Mail not found" if identity.nil?
 
-    # mail raushauen
-    IdentityMailer.password_token_email(identity).deliver    # send waiting-list email
+    unless identity.nil?
+      # create password token      
+      identity.password_token = identity.make_random_string(32)
+      identity.save
+      logger.debug '---> ' + identity.inspect
+  
+      # send mail with token
+      IdentityMailer.password_token_email(identity).deliver
+    end
+      
     render :status => :ok, :json => {}                 
   end
   
@@ -358,23 +362,20 @@ class IdentitiesController < ApplicationController
 
     identity = Identity.find(params[:id])
     
-    # if token
-    if identity && identity.password_token == params[:password_token] 
-      # passwort erzeugen
-      new_password = identity.make_random_string(8)
-      identity.password = new_password
-      identity.password_confirmation = new_password
-      identity.password_token = nil
-      identity.save
-      logger.debug '---> ' + identity.inspect
-  
-      # mail raushauen
-      IdentityMailer.password_email(identity, new_password).deliver    # send waiting-list email
-      
-      render :status => :ok, :json => {}
-    else
-      render :status => :bad_request, :json => {}
-    end                 
+    raise NotFoundError.new "No password token set" if identity.nil? || identity.password_token != params[:password_token] 
+
+    # passwort erzeugen
+    new_password = identity.make_random_string(8)
+    identity.password = new_password
+    identity.password_confirmation = new_password
+    identity.password_token = nil
+    identity.save
+    logger.debug '---> ' + identity.inspect
+
+    # mail raushauen
+    IdentityMailer.password_email(identity, new_password).deliver    # send waiting-list email
+    
+    render :status => :ok, :json => {}
   end
   
   private
