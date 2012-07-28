@@ -336,27 +336,45 @@ class IdentitiesController < ApplicationController
     accessing_client = Client.find_by_id_or_identifier(params[:client_id])
     raise ForbiddenError.new "Access forbidden. Client id not found." if accessing_client.nil?
     raise ForbiddenError.new "Access forbidden. Wrong credentials."   if params[:client_password].nil? || params[:client_password] != accessing_client.password
+
+    identity = Identity.find_by_email(params[:identifier])
     
-    respond_to do |format|
-      format.json { 
-        render :status => :ok, :json => {}
-      }      
-      format.html {}
-    end    
-
-
-
+    raise NotFoundError.new "Mail not found" if identity.nil?
     # token erzeugen
     # in db eintragen
+    identity.password_token = identity.make_random_string(32)
+    identity.save
+    logger.debug '---> ' + identity.inspect
+
     # mail raushauen
+    IdentityMailer.password_token_email(identity).deliver    # send waiting-list email
+    render :status => :ok, :json => {}                 
   end
   
   def send_password
+    accessing_client = Client.find_by_id_or_identifier(params[:client_id])
+    raise ForbiddenError.new "Access forbidden. Client id not found." if accessing_client.nil?
+    raise ForbiddenError.new "Access forbidden. Wrong credentials."   if params[:client_password].nil? || params[:client_password] != accessing_client.password
+
+    identity = Identity.find(params[:id])
+    
     # if token
-    # passwort erzeugen
-    # in db eintragen
-    # token löschen
-    # mail raushauen
+    if identity && identity.password_token == params[:password_token] 
+      # passwort erzeugen
+      new_password = identity.make_random_string(8)
+      identity.password = new_password
+      identity.password_confirmation = new_password
+      identity.password_token = nil
+      identity.save
+      logger.debug '---> ' + identity.inspect
+  
+      # mail raushauen
+      IdentityMailer.password_email(identity, new_password).deliver    # send waiting-list email
+      
+      render :status => :ok, :json => {}
+    else
+      render :status => :bad_request, :json => {}
+    end                 
   end
   
   private

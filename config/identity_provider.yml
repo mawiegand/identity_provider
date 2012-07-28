@@ -2,6 +2,8 @@ defaults: &defaults
   allow_jsonp: true
   redirect_after_activation: '/activation.html'
   
+  portal_base_url: 'https://wack-a-doo.de'
+  
   default_scope: '5dentity'
 
   cookie_name: 'ip_remember_token'
@@ -9,6 +11,8 @@ defaults: &defaults
 development:
   <<: *defaults
 
+  portal_base_url: 'https://localhost'
+  
 test:
   <<: *defaults
 
