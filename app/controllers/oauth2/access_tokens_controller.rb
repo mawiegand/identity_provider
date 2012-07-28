@@ -14,8 +14,8 @@ module Oauth2
     before_filter :authenticate,    :except => [ :create, :redirect_test_start, :redirect_test_end  ]
     before_filter :authorize_staff, :except => [ :create, :redirect_test_start, :redirect_test_end   ]
     
-    @@default_scope    = IDENTITY_PROVIDER_CONFIG[:default_scope]    || ['5dentity']
-    @@token_expiration = IDENTITY_PROVIDER_CONFIG[:token_expiration] || 3600
+    @@default_scope    = IDENTITY_PROVIDER_CONFIG['default_scope']    || ['5dentity']
+    @@token_expiration = IDENTITY_PROVIDER_CONFIG['token_expiration'] || 3600
       
     # Implementes the POST method endpoint for obtaining an access token.
     # Presently it only implements the 'resource owner password credentials' flow.
@@ -136,6 +136,8 @@ module Oauth2
         return
       end
       
+      logger.debug "Create token that exipres in #{ @@token_expiration } seconds. Time in configuration #{ IDENTITY_PROVIDER_CONFIG['token_expiration']  }."
+      
       body = {
         :access_token => access_token.token,
         :token_type => 'bearer',
@@ -143,6 +145,8 @@ module Oauth2
         #   :refresh_token => 'myrefreshtoken',
         :user_identifer => identity.identifier
       }
+      
+      logger.debug "Response Body #{ body.inspect }."
 
       if (!request.post?) # JSONP
         render :status => :ok, :json => JSON.pretty_generate(body), :callback => params[:callback]
