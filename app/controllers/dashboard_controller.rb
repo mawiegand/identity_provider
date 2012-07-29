@@ -9,7 +9,7 @@ class DashboardController < ApplicationController
     @title = "Dashboard"
 
     @current_identity = current_identity
-    @latest_identity = Identity.order('created_at DESC').first
+    @latest_identity = Identity.unscoped.order('created_at DESC').first
     
     @user_stats = {
       total_accounts:      Identity.count,
