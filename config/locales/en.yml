@@ -34,6 +34,14 @@ en:
       grants: Grants
       keys: Keys
   
+  mailing:
+    manually_granted_access:
+      subject: Start playing Wack-a-Doo NOW!
+    validation:
+      subject: Welcome to Wack-a-Doo!
+    waiting_list:
+      subject: You're on the waiting list to Wack-a-Doo!
+  
   identities:
     
     attributes:

@@ -1,5 +1,12 @@
 class IdentityMailer < ActionMailer::Base
   default from: "no-reply@5dlab.com"
+
+  def manually_granted_access_email(identity)
+    @identity = identity
+    @validation_url = root_url(:host => 'wack-a-doo.de')  + "/identities/#{identity.id}/validation?code=#{identity.validation_code}"
+    
+    mail :to => identity.email, :subject => I18n.t('mailing.manually_granted_access.subject') 
+  end
   
   def validation_email(identity)
     @identity = identity

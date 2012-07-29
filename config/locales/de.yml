@@ -31,6 +31,15 @@ de:
       index:   Profilliste
       clients: Clients
   
+  mailing:
+    manually_granted_access:
+      subject: Fang JETZT an Wack-a-Doo zu spielen!
+    validation:
+      subject: Herzlich willkommen bei Wack-a-Doo!
+    waiting_list:
+      subject: Du bist auf der Warteliste von Wack-a-Doo!
+
+  
   identities:
     
     attributes:

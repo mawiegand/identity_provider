@@ -37,6 +37,7 @@
         <th>Signed Up</th>
         <th></th>
         <th></th>
+        <th></th>
       </tr>
       
       <% @waiting_identities.each do |identity| %>
@@ -46,6 +47,13 @@
           <td><%= identity.email %></td>
           <td>signed up <%= time_ago_in_words identity.created_at %> ago</td>
           <td><%= link_to 'Show', identity %></td>
+          <td>      
+            <%= form_tag(dashboard_path, :method => :post) do  %>
+              <%= hidden_field_tag 'grant[identity_id]', identity.id %>
+              <%= hidden_field_tag 'grant[client_id]',   @wackadoo_grant[:client_id] %>
+              <%= hidden_field_tag 'grant[scopes]',      @wackadoo_grant[:scopes] %>
+              <%= submit_tag 'Grant Wack-a-Doo'%>
+            <% end %></td>
           <td><%= link_to 'Destroy', identity, confirm: 'Are you sure?', method: :delete %></td>
         </tr>
       <% end %>
