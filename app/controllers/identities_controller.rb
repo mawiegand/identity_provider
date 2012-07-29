@@ -117,6 +117,7 @@ class IdentitiesController < ApplicationController
           identity = Identity.new
           identity.nickname = disambiguated_name
           identity.email = params[:email]
+          identity.locale = I18n.locale
           identity.password = params[:password]
           identity.password_confirmation = params[:password_confirmation]
           identity.sign_up_with_client_id = client.id

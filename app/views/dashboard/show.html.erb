@@ -34,6 +34,7 @@
         <th>Id</th>
         <th>Identifier</th>
         <th>Email</th>
+        <th>Locale</th>
         <th>Signed Up</th>
         <th></th>
         <th></th>
@@ -45,6 +46,7 @@
           <td><%= identity.id %></td>
           <td><%= identity.identifier %></td>
           <td><%= identity.email %></td>
+          <td><%= identity.locale %></td>
           <td>signed up <%= time_ago_in_words identity.created_at %> ago</td>
           <td><%= link_to 'Show', identity %></td>
           <td>      

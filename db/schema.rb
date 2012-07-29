@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120727213807) do
+ActiveRecord::Schema.define(:version => 20120729130716) do
 
   create_table "clients", :force => true do |t|
     t.string   "identifier"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(:version => 20120727213807) do
     t.string   "identifier",             :default => "a",   :null => false
     t.integer  "sign_up_with_client_id"
     t.string   "password_token"
+    t.string   "locale"
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true

@@ -41,20 +41,30 @@ class DashboardController < ApplicationController
       grant = params[:grant]
       
       identity = Identity.find_by_id(grant[:identity_id])
-      redirect_to dashboard_path, :notice => "Identity not found."     if identity.nil?
+      redirect_to dashboard_path,   :notice => "Identity not found."     if identity.nil?
 
       if !identity.grants.create({client_id: grant[:client_id], scopes: grant[:scopes],}) 
         logger.error "Could not grant #{ grant.inspect } to #{ identity.inspect}."
         redirect_to dashboard_path, :notice => "Failed to grant access to #{ identity.email }."    
       else
         logger.info "Send email about granted access to #{ identity.email }."
-        IdentityMailer.manually_granted_access_email(identity).deliver      # send email notification
-
+        send_manually_granted_access_email(identity)      # send email notification
         redirect_to dashboard_path, :notice => "Granted #{ identity.email } access to Wack-a-Doo. Email sent."      
       end
     else                              # UNKOWN DASHBOARD ACTION
-      redirect_to dashboard_path, :notice => "Unknown action."
+      redirect_to dashboard_path,   :notice => "Unknown action."
     end
   end
+  
+  protected
+  
+    # this method sends the email in the locale of the recipient
+    def send_manually_granted_access_email(identity)
+      old_locale = I18n.locale
+      I18n.locale = identity.locale unless identity.locale.blank?
+      IdentityMailer.manually_granted_access_email(identity).deliver      # send email notification
+    ensure
+      I18n.locale = old_locale  
+    end
   
 end
