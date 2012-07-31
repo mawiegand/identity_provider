@@ -347,7 +347,6 @@ class IdentitiesController < ApplicationController
       # create password token      
       identity.password_token = identity.make_random_string(32)
       identity.save
-      logger.debug '---> ' + identity.inspect
   
       # send mail with token
       IdentityMailer.password_token_email(identity).deliver
@@ -371,7 +370,6 @@ class IdentitiesController < ApplicationController
     identity.password_confirmation = new_password
     identity.password_token = nil
     identity.save
-    logger.debug '---> ' + identity.inspect
 
     # mail raushauen
     IdentityMailer.password_email(identity, new_password).deliver    # send waiting-list email
