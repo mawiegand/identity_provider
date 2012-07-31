@@ -38,6 +38,10 @@ de:
       subject: Herzlich willkommen bei Wack-a-Doo!
     waiting_list:
       subject: Du bist auf der Warteliste von Wack-a-Doo!
+    password_token:
+      subject: Fordere ein neues Passwort an
+    password: 
+      subject: Dein neues Passwort
 
   
   identities:
