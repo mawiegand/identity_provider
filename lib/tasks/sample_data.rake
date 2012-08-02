@@ -61,6 +61,25 @@ namespace :db do
       client_id: wackadoo_client.id,
       scopes:    wackadoo_client.scopes,
     })
+
+    max = Identity.new({
+      :nickname              => "max",
+      :surname               => "Buck",
+      :firstname             => "Max",
+      :email                 => "max@5dlab.com",
+      :password              => "123456",
+      :password_confirmation => "123456"
+    }, :as => :creator)
+    
+    max.admin = true
+    max.staff = true
+    max.save
+
+    max.grants.create({
+      client_id: wackadoo_client.id,
+      scopes:    wackadoo_client.scopes,
+    })
+
   end
 
   desc "Fill database with additonal sample users"
