@@ -30,6 +30,8 @@ de:
       confirm: Wirklich abmelden?
       index:   Profilliste
       clients: Clients
+      messages: Nachrichten
+
   
   mailing:
     manually_granted_access:
