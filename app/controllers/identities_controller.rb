@@ -339,11 +339,11 @@ class IdentitiesController < ApplicationController
     raise ForbiddenError.new "Access forbidden. Wrong credentials."   if params[:client_password].nil? || params[:client_password] != accessing_client.password
 
     identity = Identity.find_by_email(params[:identifier])
+    identity = Identity.find_by_nickname(params[:identifier]) if identity.nil?
     
-    # hide error for user. otherwise he is able to check which mail adresses are already registered
-    # raise NotFoundError.new "Mail not found" if identity.nil?
-
-    unless identity.nil?
+    if identity.nil?
+      raise NotFoundError.new "Mail not found"
+    else
       # create password token      
       identity.password_token = identity.make_random_string(32)
       identity.save
