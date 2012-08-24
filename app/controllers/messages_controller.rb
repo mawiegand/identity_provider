@@ -1,8 +1,10 @@
 class MessagesController < ApplicationController
 
-  before_filter :authenticate,    :except     => []      # these pages can be seen without logging-in
-  before_filter :authorize_staff, :except     => [:post] # presently, users can only post messages
+  before_filter :authenticate_game_or_backend,    :only   => [ :create ]
+  before_filter :authenticate,                    :except => [ :create ]
 
+  before_filter :authorize_staff,                 :except => [ :create ]                         
+  before_filter :deny_api,                        :except => [ :create ]
 
   def index
     
@@ -65,6 +67,7 @@ class MessagesController < ApplicationController
       if @message.save
         format.html { redirect_to @message, notice: 'Message was successfully created.' }
         format.json { render json: @message, status: :created, location: @message }
+        @message.send_via_email
       else
         format.html { render action: "new" }
         format.json { render json: @message.errors, status: :unprocessable_entity }
