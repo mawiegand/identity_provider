@@ -1,0 +1,65 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Recipient:</b>
+  <%= @message.recipient_id %>
+</p>
+
+<p>
+  <b>Recipient character name:</b>
+  <%= @message.recipient_character_name %>
+</p>
+
+<p>
+  <b>Game:</b>
+  <%= @message.game_id %>
+</p>
+
+<p>
+  <b>Received at:</b>
+  <%= @message.received_at %>
+</p>
+
+<p>
+  <b>Delivered at:</b>
+  <%= @message.delivered_at %>
+</p>
+
+<p>
+  <b>Delivered via:</b>
+  <%= @message.delivered_via %>
+</p>
+
+<p>
+  <b>Read:</b>
+  <%= @message.read %>
+</p>
+
+<p>
+  <b>Subject:</b>
+  <%= @message.subject %>
+</p>
+
+<p>
+  <b>Body:</b>
+  <%= @message.body %>
+</p>
+
+<p>
+  <b>Sender character name:</b>
+  <%= @message.sender_character_name %>
+</p>
+
+<p>
+  <b>Sender:</b>
+  <%= @message.sender_id %>
+</p>
+
+<p>
+  <b>System message:</b>
+  <%= @message.system_message %>
+</p>
+
+
+<%= link_to 'Edit', edit_message_path(@message) %> |
+<%= link_to 'Back', messages_path %>

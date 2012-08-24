@@ -2,6 +2,7 @@ IdentityProvider::Application.routes.draw do
 
 
 
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -21,7 +22,9 @@ IdentityProvider::Application.routes.draw do
       
       resource  :dashboard,             :controller => "Dashboard", :only => [:show, :create]
       
-      resources :identities,  :only => [:new, :create, :show, :index, :edit, :destroy, :update]
+      resources :identities,  :only => [:new, :create, :show, :index, :edit, :destroy, :update] do
+        resources :messages 
+      end
       resources :sessions,    :only => [:new, :create, :destroy]
       resources :log_entries, :only => [:index]
       resources :clients
@@ -31,6 +34,9 @@ IdentityProvider::Application.routes.draw do
       resources :character_properties,  :path => "identities/:identity_id/character_properties",  :module => 'resource'            
       resources :results,               :path => "identities/:identity_id/results",               :module => 'resource'            
       resources :histories,             :path => "identities/:identity_id/histories",             :module => 'resource'            
+  
+      resources :messages
+
   
       namespace :resource do 
         resources :character_properties
