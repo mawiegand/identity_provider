@@ -1,0 +1,45 @@
+<h1>Listing messages</h1>
+
+<table>
+  <tr>
+    <th>Recipient</th>
+    <th>Recipient character name</th>
+    <th>Game</th>
+    <th>Received at</th>
+    <th>Delivered at</th>
+    <th>Delivered via</th>
+    <th>Read</th>
+    <th>Subject</th>
+    <th>Body</th>
+    <th>Sender character name</th>
+    <th>Sender</th>
+    <th>System message</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @messages.each do |message| %>
+  <tr>
+    <td><%= message.recipient_id %></td>
+    <td><%= message.recipient_character_name %></td>
+    <td><%= message.game_id %></td>
+    <td><%= message.received_at %></td>
+    <td><%= message.delivered_at %></td>
+    <td><%= message.delivered_via %></td>
+    <td><%= message.read %></td>
+    <td><%= message.subject %></td>
+    <td><%= message.body %></td>
+    <td><%= message.sender_character_name %></td>
+    <td><%= message.sender_id %></td>
+    <td><%= message.system_message %></td>
+    <td><%= link_to 'Show', message %></td>
+    <td><%= link_to 'Edit', edit_message_path(message) %></td>
+    <td><%= link_to 'Destroy', message, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Message', new_message_path %>

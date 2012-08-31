@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120729130716) do
+ActiveRecord::Schema.define(:version => 20120824083348) do
 
   create_table "clients", :force => true do |t|
     t.string   "identifier"
@@ -82,6 +82,23 @@ ActiveRecord::Schema.define(:version => 20120729130716) do
 
   add_index "log_entries", ["event_type"], :name => "index_log_entries_on_type"
   add_index "log_entries", ["identity_id"], :name => "index_log_entries_on_identity_id"
+
+  create_table "messages", :force => true do |t|
+    t.integer  "recipient_id"
+    t.string   "recipient_character_name"
+    t.integer  "game_id"
+    t.datetime "received_at"
+    t.datetime "delivered_at"
+    t.string   "delivered_via"
+    t.boolean  "read",                     :default => false, :null => false
+    t.string   "subject"
+    t.text     "body"
+    t.string   "sender_character_name"
+    t.integer  "sender_id"
+    t.boolean  "system_message"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "resource_character_properties", :force => true do |t|
     t.integer  "game_id"

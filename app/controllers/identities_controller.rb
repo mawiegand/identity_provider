@@ -61,6 +61,7 @@ class IdentitiesController < ApplicationController
         @options = {
           :address_informal             => identity.address_informal(role),
           :gravatar_url                 => identity.gravatar_url(:size => 120),
+          :messages_count               => (staff? ? identity.received_messages.count : nil), 
           :show_edit_link               => [ :owner, :staff, :admin ].include?(role),
           :show_delete_link             => [ :owner, :staff, :admin ].include?(role),
           :show_delete_immediately_link => [ :admin ].include?(role)

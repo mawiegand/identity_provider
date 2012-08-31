@@ -19,5 +19,10 @@
     <% if signed_in? && staff? %>
       <%= link_to "Sign in to Wack-a-Doo", { :action => "signin", :id => @attributes[:id], :client => "WACKADOOHTML5"}, :class => 'button-on-white' %>
     <%end%><br />
+    
+    <%if staff? %>
+      <p><b>Received <%= @options[:messages_count]%> messages.</b> <%= link_to "Show", identity_messages_path(@attributes[:id]) %></p>
+    <%end%>
+    
   </end>
 </end>
