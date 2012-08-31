@@ -27,7 +27,7 @@ en:
       dashboard: Dashboard
       profile: Profile
       signin: Sign In
-      signout: Sing Out
+      signout: Sign Out
       confirm: Do you really want to sign out?
       index: Profile List
       clients: Clients

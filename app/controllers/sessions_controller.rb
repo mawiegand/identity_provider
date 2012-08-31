@@ -26,7 +26,7 @@ class SessionsController < ApplicationController
     end
   end
   
-  # Sings the user out by destroying the session.
+  # Signs the user out by destroying the session.
   def destroy
     logSignout(current_identity)
     sign_out
