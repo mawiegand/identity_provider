@@ -6,8 +6,9 @@ require 'active_support/secure_random'
 # the system.
 class IdentitiesController < ApplicationController
 
-  before_filter :authenticate,    :except   => [:new, :show, :create, :validation, :send_password_token, :send_password]   # these pages can be seen without logging-in
-  before_filter :authorize_staff, :only     => [:index]                              # only staff can access these pages
+  before_filter :authenticate,                 :except   => [:new, :show, :create, :update, :validation, :send_password_token, :send_password]   # these pages can be seen without logging-in
+  before_filter :authorize_staff,              :only     => [:index]                              # only staff can access these pages
+  before_filter :authenticate_game_or_backend, :only     => [:update]                          
   
   # Returns a representation of a single identity-resource by either rendering 
   # a html page or sending a JSON-representation. 
@@ -237,29 +238,41 @@ class IdentitiesController < ApplicationController
     @identity = nil
     bad_request = (name_blacklisted?(params[:id]) && !staff?) || !Identity.valid_user_identifier?(params[:id])
     raise BadRequestError.new('Bad Request for Identity %s' % params[:id]) if bad_request
-
+    
     @identity = Identity.find_by_id_identifier_or_nickname(params[:id])
     raise NotFoundError.new('Page Not Found') if @identity.nil? || (@identity.deleted && !staff?)  # only staff can see deleted users
     
     role = current_identity ? current_identity.role : :default
-    role = :owner if !admin? && current_identity && current_identity.id == @identity.id
-
-    deny_access("You're not allowed to edit identity %s." % params[:id]) unless role == :owner || staff?  
+    if !admin? && current_identity && current_identity.id == @identity.id
+      role = :owner 
+    elsif game_signed_in?
+      role = :game
+    end
+    
+    deny_access("You're not allowed to edit identity %s." % params[:id]) unless role == :owner || role == :game || staff?  
               
     @identity.assign_attributes params[:identity].delete_if { |k,v| v.nil? }, :as => role
         
     if @identity.save
-      redirect_to :action => "show"
+      respond_to do |format|
+        format.json { render json: {}, status: :ok }      
+        format.html { redirect_to :action => "show" }
+      end
     else
-      flash[:error] = I18n.t('identities.update.flash.error', :name => @identity.address_informal)
-      
-      @sanitized_identity = @identity.sanitized_hash(role)
-      @sanitized_identity[:gravatar_url] = @identity.gravatar_url :size => 120
-      @sanitized_identity[:address_informal] = @identity.address_informal(role)
-
-      @accessible_attributes = Identity.accessible_attributes(role) 
-      
-      render :action => "edit", :status => 500
+      respond_to do |format|
+        format.json { render json: {}, status: :conflict }      
+        format.html do
+          flash[:error] = I18n.t('identities.update.flash.error', :name => @identity.address_informal)
+          
+          @sanitized_identity = @identity.sanitized_hash(role)
+          @sanitized_identity[:gravatar_url] = @identity.gravatar_url :size => 120
+          @sanitized_identity[:address_informal] = @identity.address_informal(role)
+    
+          @accessible_attributes = Identity.accessible_attributes(role) 
+          
+          render :action => "edit", :status => 500
+        end
+      end
     end
   end
   

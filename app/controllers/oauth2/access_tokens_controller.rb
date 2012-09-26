@@ -121,8 +121,8 @@ module Oauth2
       
       # check whether requested scopes were granted to the identity
       grants_for_client = identity.grants.where(:client_id => client.id).first
-      logger.debug "Grants the idenetity has for this client: #{grants_for_client.inspect}"
-      logger.debug "Grants the idenetity requested:           #{requested_scopes.inspect}"
+      logger.debug "Grants the identity has for this client: #{grants_for_client.inspect}"
+      logger.debug "Grants the identity requested:           #{requested_scopes.inspect}"
       if requested_scopes.any? { |rscope| grants_for_client.nil? || !grants_for_client.scope_authorized?(rscope) }
         render_endpoint_error params[:client_id], :invalid_scope, "The requested scope is invalid, unknown, malformed, or "+
               "exceeds the scope granted to the identity. In short: you're not allowed to access the resource. In case of an error, please contact the support staff."
