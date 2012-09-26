@@ -18,7 +18,7 @@ class DashboardController < ApplicationController
       signups_last_day:    Identity.where(['created_at > ?', Time.now - 1.days]).count,
       signups_last_week:   Identity.where(['created_at > ?', Time.now - 1.weeks]).count,
       signups_last_month:  Identity.where(['created_at > ?', Time.now - 1.months]).count,
-      on_waiting_lists:    Identity.joins('LEFT OUTER JOIN granted_scopes ON granted_scopes.identity_id = identities.id').where('granted_scopes.identity_id IS NULL').count,
+      on_waiting_lists:    Identity.joins('LEFT OUTER JOIN granted_scopes ON granted_scopes.identity_id = identities.id').where(['granted_scopes.identity_id IS NULL AND identities.deleted = ?', false]).count,
 
       due_activations:     Identity.where(['activated IS NULL AND created_at < ?', Time.now - 3.days]).count,
     }
@@ -31,7 +31,7 @@ class DashboardController < ApplicationController
       scopes:    @wackadoo_client.scopes,
     }
 
-    @waiting_identities =  Identity.unscoped.joins('LEFT OUTER JOIN granted_scopes ON granted_scopes.identity_id = identities.id').where('granted_scopes.identity_id IS NULL').order('created_at ASC');
+    @waiting_identities =  Identity.unscoped.joins('LEFT OUTER JOIN granted_scopes ON granted_scopes.identity_id = identities.id').where(['granted_scopes.identity_id IS NULL AND identities.deleted = ?', false]).order('created_at ASC');
 
   end
   
