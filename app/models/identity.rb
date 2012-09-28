@@ -70,7 +70,7 @@ class Identity < ActiveRecord::Base
   attr_accessible *accessible_attributes(:owner), :email, :as => :creator # fields accesible during creation
   attr_accessible :nickname, :firstname, :surname, :activated, :deleted, :staff, :as => :staff
   attr_accessible *accessible_attributes(:staff), :email, :admin, :password, :password_confirmation, :as => :admin
-  attr_accessible :password, :password_confirmation, :as => :game
+  attr_accessible :nickname, :password, :password_confirmation, :as => :game
     
   attr_readable :identifier, :nickname, :id, :admin, :staff,               :as => :default 
   attr_readable *readable_attributes(:default), :created_at,  :as => :user
