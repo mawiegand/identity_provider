@@ -55,5 +55,5 @@ IdentityProvider::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
   
-  config.assets.prefix = "/identity_provider/assets"
+  config.assets.prefix = "/assets"
 end
