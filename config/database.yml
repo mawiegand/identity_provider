@@ -22,5 +22,7 @@ production:
   adapter: postgresql
   encoding: UTF8
   database: identity_provider
-  port: 5686
+  host: gs02.wack-a-doo.de
+  port: 5432
   username: run-ip
+  password: bohdoeD3
