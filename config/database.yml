@@ -25,4 +25,4 @@ production:
   host: gs02.wack-a-doo.de
   port: 5432
   username: run-ip
-  password: bohdoeD3
+#  password: bohdoeD3

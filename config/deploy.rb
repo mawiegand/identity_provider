@@ -18,9 +18,9 @@ set :use_sudo, false
 set :deploy_to, "/var/www/identity_provider"
 set :deploy_via, :remote_cache
 
-role :web, "wackadoo.de"                          # Your HTTP server, Apache/etc
-role :app, "wackadoo.de"                          # This may be the same as your `Web` server
-role :db,  "wackadoo.de", :primary => true        # This is where Rails migrations will run
+role :web, "test1.wack-a-doo.de", "gs02.wack-a-doo.de"   # Your HTTP server, Apache/etc
+role :app, "test1.wack-a-doo.de", "gs02.wack-a-doo.de"   # This may be the same as your `Web` server
+role :db,  "gs02.wack-a-doo.de", :primary => true        # This is where Rails migrations will run
 #role :db,  "your slave db-server here"
 
 # if you're still using the script/reaper helper you will need
