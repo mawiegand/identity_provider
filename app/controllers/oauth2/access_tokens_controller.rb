@@ -70,7 +70,7 @@ module Oauth2
         return
       end
       
-      client_identifier = params[:client_id].split('-')[0]   
+      client_identifier = params[:client_id]   
       client = Client.find_by_identifier(client_identifier) # get client from database
       
       if !client
