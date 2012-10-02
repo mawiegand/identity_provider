@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120824083348) do
+ActiveRecord::Schema.define(:version => 20121002202008) do
 
   create_table "clients", :force => true do |t|
     t.string   "identifier"
@@ -25,8 +25,9 @@ ActiveRecord::Schema.define(:version => 20120824083348) do
     t.string   "scopes"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "signup_mode",          :default => 1, :null => false
-    t.integer  "signin_mode",          :default => 1, :null => false
+    t.integer  "signup_mode",          :default => 1,     :null => false
+    t.integer  "signin_mode",          :default => 1,     :null => false
+    t.boolean  "automatic_signup",     :default => false, :null => false
   end
 
   create_table "granted_scopes", :force => true do |t|

@@ -55,6 +55,10 @@
     <%= f.label :signup_mode %><br />
     <%= select(:client, :signup_mode, Client::SIGNUP_MODES.enum_for(:each_with_index).collect {|mode, index| [ mode, index ] } ) %>
   </div>
+  <div class="field">
+    <%= f.label :automatic_signup %><br />
+    <%= f.check_box :automatic_signup %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

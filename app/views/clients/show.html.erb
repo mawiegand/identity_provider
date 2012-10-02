@@ -55,6 +55,10 @@
   <%= Client::SIGNUP_MODES[@client.signup_mode] %>
 </p>
 
+<p>
+  <b>Automatic Signup:</b>
+  <%= @client.automatic_signup %>
+</p>
 
 <%= link_to 'Edit', edit_client_path(@client) %> |
 <%= link_to 'Back', clients_path %>

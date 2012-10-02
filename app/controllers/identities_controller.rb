@@ -109,11 +109,15 @@ class IdentitiesController < ApplicationController
           base_name = params[:nickname_base ].blank? ? "User" : params[:nickname_base]
           disambiguated_name = base_name
           
-          # TODO: the following is the most simple algorithm and must be replaced
-          # before there's noteworthy traffic on the server!!!!
+          # OPTIMIZE: the following is a very simple algorithm and should be replaced
+          # at some point in time.
           while !(Identity.find_by_nickname(disambiguated_name)).nil?
+            if i == 0 
+              disambiguated_name = base_name + (Identity.count || 0)
+            else
+              disambiguated_name = base_name + (Identity.count || 0) + i.to_s
+            end
             i = i+1
-            disambiguated_name = base_name + i.to_s
           end
           
           identity = Identity.new

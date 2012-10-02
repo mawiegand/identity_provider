@@ -14,6 +14,7 @@
     <th>Scopes</th>
     <th>Signin Mode</th>
     <th>Signup Mode</th>
+    <th>Automatic Signup</th>
     <th></th>
     <th></th>
     <th></th>
@@ -33,6 +34,7 @@
     <td><%= client.scopes %></td>
     <td><%= Client::SIGNIN_MODES[client.signin_mode] %></td>
     <td><%= Client::SIGNUP_MODES[client.signup_mode] %></td>
+    <td><%= client.automatic_signup %></td>
     <td><%= link_to 'Show', client %></td>
     <td><%= link_to 'Edit', edit_client_path(client) %></td>
     <td><%= link_to 'Destroy', client, confirm: 'Are you sure?', method: :delete %></td>
