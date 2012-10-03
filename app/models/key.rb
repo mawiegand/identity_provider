@@ -1,6 +1,7 @@
 class Key < ActiveRecord::Base
   
   belongs_to  :client,    :class_name => "Client",   :foreign_key => :client_id, :inverse_of => :grants
+  serialize :gift  
   
   # create a random-string with len chars
   def set_unique_random_key(len = 16)

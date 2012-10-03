@@ -1,13 +1,46 @@
 class Resource::SignupGiftsController < ApplicationController
+
+  before_filter :authenticate_game_or_backend
+
+  before_filter :authorize_staff,                 :except => [ :index ]                         
+  before_filter :deny_api,                        :except => [ :index ]
+
   # GET /resource/signup_gifts
   # GET /resource/signup_gifts.json
   def index
-    @resource_signup_gifts = Resource::SignupGift.all
+    
+    if params.has_key?(:identity_id)
+      # first: filter out bad requests (malformed addresses, black-listed ressources)
+      #bad_request = (name_blacklisted?(params[:identity_id]) && !staff?) || !Identity.valid_user_identifier?(params[:identity_id])
+      #raise BadRequestError.new('Bad Request for Identity %s' % params[:identity_id]) if bad_request
+
+      # second: find (non-deleted) identity or fail with a 404 not found error
+      identity = Identity.find_by_id_identifier_or_nickname(params[:identity_id], :find_deleted => staff?) # only staff can see deleted users
+      raise NotFoundError.new('Page Not Found') if identity.nil?    
+      if !params.has_key?(:client_id)
+        @resource_signup_gifts = identity.signup_gifts
+      else
+        gift = identity.signup_gifts.where(:client_id => params[:client_id]).first
+        logger.debug "Gift: #{gift.inspect}."
+        raise NotFoundError.new "No gift found on server for that identity."   if gift.nil?
+        @resource_signup_gifts = [gift]
+      end
+    else 
+      @asked_for_index = true
+    end
 
     respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @resource_signup_gifts }
-    end
+      format.html do
+        if @resource_signup_gifts.nil?
+          @resource_signup_gifts =  Resource::SignupGift.paginate(:order => "identity_id ASC", :page => params[:page], :per_page => 50)    
+          @paginate = true   
+        end 
+      end
+      format.json do
+        raise ForbiddenError.new('Access Forbidden')        if @asked_for_index
+        render json: @resource_signup_gifts 
+      end
+    end    
   end
 
   # GET /resource/signup_gifts/1
