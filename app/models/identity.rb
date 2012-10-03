@@ -56,6 +56,7 @@ class Identity < ActiveRecord::Base
   
   has_many  :log_entries;
   has_many  :grants,  :class_name => "GrantedScope", :foreign_key => :identity_id, :inverse_of => :identity
+  has_many  :waiting_list_entries,  :class_name => "Resource::WaitingList",       :foreign_key => :identity_id,  :inverse_of => :identity
   
   has_many  :results,               :class_name => "Resource::Result",            :foreign_key => :identity_id,  :inverse_of => :identity
   has_many  :events,                :class_name => "Resource::History",           :foreign_key => :identity_id,  :inverse_of => :identity

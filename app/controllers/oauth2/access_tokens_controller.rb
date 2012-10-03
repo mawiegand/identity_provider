@@ -123,7 +123,7 @@ module Oauth2
       grants_for_client = identity.grants.where(:client_id => client.id).first
       if grants_for_client.nil? && client.automatic_signup?
         logger.info "Automatic signup for #{identity.email} with client #{client.id} to scopes: #{requested_scopes.inspect}."
-        client.automatic_signup(identity, params[:invitation])
+        client.signup_existing_identity(identity, params[:invitation])
         grants_for_client = identity.grants.where(:client_id => client.id).first
       end
 

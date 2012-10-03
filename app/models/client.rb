@@ -1,7 +1,8 @@
 class Client < ActiveRecord::Base
   
-  has_many  :grants,  :class_name => "GrantedScope", :foreign_key => :client_id, :inverse_of => :client
-  has_many  :keys,    :class_name => "Key",          :foreign_key => :client_id, :inverse_of => :client
+  has_many  :grants,                :class_name => "GrantedScope",                :foreign_key => :client_id,    :inverse_of => :client
+  has_many  :keys,                  :class_name => "Key",                         :foreign_key => :client_id,    :inverse_of => :client
+  has_many  :waiting_list_entries,  :class_name => "Resource::WaitingList",       :foreign_key => :client_id,    :inverse_of => :client
 
   attr_readable :as => :default 
   attr_readable :signup_mode, :signin_mode,      :as => :owner 
@@ -41,20 +42,68 @@ class Client < ActiveRecord::Base
     id.index(/^[1-9]\d*$/) != nil
   end
   
-  def automatic_signup(identity, invitation_string)
-    invitation = client.keys.where(key: invitation_string).first     unless invitation_string.blank?
-    if !invitation.nil? && invitation.num_used >= invitation.number
-      invitation = nil   # invitation link is used up
-    elsif !invitation.nil?
-      invitation.increment(:num_used)
-      invitation.save 
-    end
-
+  def grant_scopes_to_identity(identity, invitation, automatic)
     identity.grants.create({
-      client_id: client.id,
-      scopes:    client.scopes,
+      client_id: self.id,
+      scopes:    self.scopes,
       key_id:    invitation.nil? ? nil : invitation.id,
-    })     
+    })         
+    register_signup(identity, invitation, automatic)    
+    remove_from_waiting_list(identity)
+  end
+
+  def remove_from_waiting_list(identity)
+    waiting_list_entry = self.waiting_list_entries.where(identity_id: identity.id).first
+    waiting_list_entry.destroy   unless waiting_list_entry.nil? 
+  end
+  
+  def signup_existing_identity(identity, invitation_string)
+    if self.signup_mode == Client::SIGNUP_MODE_NORMAL  ||     # normal mode -> always grant all scopes.
+       self.signup_mode == Client::SIGNUP_MODE_INVITATION     # invitation mode -> only grand all scopes if invitation is present and valid
+       
+      invitation = client.keys.where(key: invitation_string).first     unless invitation_string.blank?
+      if !invitation.nil? && invitation.num_used >= invitation.number
+        invitation = nil   # invitation link is used up
+      elsif !invitation.nil?
+        invitation.increment(:num_used)
+        invitation.save 
+      end
+      
+      if invitation.nil? && self.signup_mode == Client::SIGNUP_MODE_INVITATION 
+        add_to_waiting_list(identity, invitation_string)   
+        return 
+      else
+        grant_scopes_to_identity(identity, invitation, true)
+      end
+    else
+      add_to_waiting_list(identity, invitation_string)   
+    end
+  end
+  
+  def add_to_waiting_list(identity, invitation_string)
+    if !waiting_list_entries.where(identity_id: identity.id).first.nil? 
+      return false   # already on waiting list
+    end
+    
+    invitation = client.keys.where(key: invitation_string).first     unless invitation_string.blank?
+    
+    Resource::WaitingList.create({
+      client_id:   self.id,
+      identity_id: identity.id,
+      key_id:      invitation.nil? ? nil : invitation.id,
+#      ip:          request.remote_ip,
+    })
+  end
+  
+  def register_signup(identity, invitation, automatic=false)
+    Resource::Signup.create({
+      client_id:   self.id,
+      identity_id: identity.id,
+      automatic:   automatic,
+#     ip:          request.remote_ip, 
+      invitation:  invitation.nil? ? nil : invitation.key,
+      key_id:      invitation.nil? ? nil : invitation.id  
+    })
   end
   
 end

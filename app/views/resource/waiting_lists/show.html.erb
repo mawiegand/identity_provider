@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Client:</b>
+  <%= @resource_waiting_list.client_id %>
+</p>
+
+<p>
+  <b>Identity:</b>
+  <%= @resource_waiting_list.identity_id %>
+</p>
+
+<p>
+  <b>Key:</b>
+  <%= @resource_waiting_list.key_id %>
+</p>
+
+<p>
+  <b>Ip:</b>
+  <%= @resource_waiting_list.ip %>
+</p>
+
+
+<%= link_to 'Edit', edit_resource_waiting_list_path(@resource_waiting_list) %> |
+<%= link_to 'Back', resource_waiting_lists_path %>

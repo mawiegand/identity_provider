@@ -1,6 +1,7 @@
 IdentityProvider::Application.routes.draw do
 
 
+
   # all resources and paths are scoped in an optional path_prefix determining the
   # locale to use. Presently only available: en, de
 
@@ -32,6 +33,7 @@ IdentityProvider::Application.routes.draw do
         resources :histories
         resources :games 
         resources :signups
+        resources :waiting_lists
       end
       
       namespace :oauth2 do

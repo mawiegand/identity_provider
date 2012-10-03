@@ -113,9 +113,9 @@ class IdentitiesController < ApplicationController
           # at some point in time.
           while !(Identity.find_by_nickname(disambiguated_name)).nil?
             if i == 0 
-              disambiguated_name = base_name + (Identity.count || 0)
+              disambiguated_name = "#{ base_name }#{(Identity.count || 0)}"
             else
-              disambiguated_name = base_name + (Identity.count || 0) + i.to_s
+              disambiguated_name = "#{ base_name }#{(Identity.count || 0) + i.to_s}"
             end
             i = i+1
           end

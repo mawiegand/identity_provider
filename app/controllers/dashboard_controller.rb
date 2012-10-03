@@ -10,6 +10,14 @@ class DashboardController < ApplicationController
 
     @current_identity = current_identity
     @latest_identity = Identity.unscoped.order('created_at DESC').first
+        
+    @waiting_lists = []
+    Client.find(:all).each do |client|
+      @waiting_lists.push({
+        client:  client,
+        entries: Resource::WaitingList.where(client_id: client.id).order('created_at ASC')
+      })
+    end
     
     @user_stats = {
       total_accounts:      Identity.count,
@@ -18,7 +26,7 @@ class DashboardController < ApplicationController
       signups_last_day:    Identity.where(['created_at > ?', Time.now - 1.days]).count,
       signups_last_week:   Identity.where(['created_at > ?', Time.now - 1.weeks]).count,
       signups_last_month:  Identity.where(['created_at > ?', Time.now - 1.months]).count,
-      on_waiting_lists:    Identity.joins('LEFT OUTER JOIN granted_scopes ON granted_scopes.identity_id = identities.id').where(['granted_scopes.identity_id IS NULL AND identities.deleted = ?', false]).count,
+      on_waiting_lists:    Resource::WaitingList.count,
 
       due_activations:     Identity.where(['activated IS NULL AND created_at < ?', Time.now - 3.days]).count,
     }
@@ -30,9 +38,6 @@ class DashboardController < ApplicationController
       client_id: @wackadoo_client.id,
       scopes:    @wackadoo_client.scopes,
     }
-
-    @waiting_identities =  Identity.unscoped.joins('LEFT OUTER JOIN granted_scopes ON granted_scopes.identity_id = identities.id').where(['granted_scopes.identity_id IS NULL AND identities.deleted = ?', false]).order('created_at ASC');
-
   end
   
   def create 
@@ -40,16 +45,17 @@ class DashboardController < ApplicationController
     if params.has_key?('grant')       # GRANTING ACCESS TO IDENTITIES
       grant = params[:grant]
       
-      identity = Identity.find_by_id(grant[:identity_id])
-      redirect_to dashboard_path,   :notice => "Identity not found."     if identity.nil?
+      entry = Resource::WaitingList.find_by_id(grant[:entry_id])
 
-      if !identity.grants.create({client_id: grant[:client_id], scopes: grant[:scopes],}) 
-        logger.error "Could not grant #{ grant.inspect } to #{ identity.inspect}."
-        redirect_to dashboard_path, :notice => "Failed to grant access to #{ identity.email }."    
+      redirect_to dashboard_path,   :notice => "Waiting list entry not found."     if entry.nil?
+
+      if !entry.client.grant_scopes_to_identity(entry.identity, entry.invitation, false) 
+        logger.error "Could not grant scopes of client #{ entry.client.inspect } to #{ entry.identity.inspect}."
+        redirect_to dashboard_path, :notice => "Failed to grant access to #{ entry.identity.email }."    
       else
-        logger.info "Send email about granted access to #{ identity.email }."
-        send_manually_granted_access_email(identity)      # send email notification
-        redirect_to dashboard_path, :notice => "Granted #{ identity.email } access to Wack-a-Doo. Email sent."      
+        logger.info "Send email about granted access to #{ entry.identity.email }."
+        send_manually_granted_access_email(entry.identity)      # send email notification
+        redirect_to dashboard_path, :notice => "Granted #{ entry.identity.email } access to #{ entry.client.identifier }. Email sent."      
       end
     else                              # UNKOWN DASHBOARD ACTION
       redirect_to dashboard_path,   :notice => "Unknown action."

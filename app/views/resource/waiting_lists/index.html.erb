@@ -1,0 +1,29 @@
+<h1>Listing resource_waiting_lists</h1>
+
+<table>
+  <tr>
+    <th>Client</th>
+    <th>Identity</th>
+    <th>Key</th>
+    <th>Ip</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @resource_waiting_lists.each do |resource_waiting_list| %>
+  <tr>
+    <td><%= resource_waiting_list.client_id %></td>
+    <td><%= resource_waiting_list.identity_id %></td>
+    <td><%= resource_waiting_list.key_id %></td>
+    <td><%= resource_waiting_list.ip %></td>
+    <td><%= link_to 'Show', resource_waiting_list %></td>
+    <td><%= link_to 'Edit', edit_resource_waiting_list_path(resource_waiting_list) %></td>
+    <td><%= link_to 'Destroy', resource_waiting_list, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Waiting list', new_resource_waiting_list_path %>

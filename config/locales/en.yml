@@ -36,6 +36,8 @@ en:
       keys: Keys
       games: Games
       signups: Signups
+      waitinglist: Waiting
+
   
   mailing:
     manually_granted_access:

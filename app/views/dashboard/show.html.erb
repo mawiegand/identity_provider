@@ -25,41 +25,52 @@
   <p><b>Latest User</b>: signed up <b><%= time_ago_in_words @latest_identity.created_at %></b> ago<br/>
      <%= link_to @latest_identity.address_informal, @latest_identity %> (<%= @latest_identity.email %>)</p>
   
-
   <div class="waiting-list">
-    <h1>Identities on Waiting Lists</h1>
+    <h1>Waiting Lists</h1>
 
-    <table>
-      <tr>
-        <th>Id</th>
-        <th>Identifier</th>
-        <th>Email</th>
-        <th>Locale</th>
-        <th>Signed Up</th>
-        <th></th>
-        <th></th>
-        <th></th>
-      </tr>
+    <% @waiting_lists.each do |waiting_list| %>
+    
+      <p><b>Waiting List for Client <%= waiting_list[:client].identifier %> 
+            (Scopes: <%= waiting_list[:client].scopes %>)</b><p>
+        
+      <% if waiting_list[:entries].nil? || waiting_list[:entries].count == 0 %>
+        <p><b>Empty!</b></p>
+      <% else %>
+        <table>
+          <tr>
+            <th>Id</th>
+            <th>Identifier</th>
+            <th>Email</th>
+            <th>Inivtation</th>
+            <th>Locale</th>
+            <th>Signed Up</th>
+            <th>Waiting Since</th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
       
-      <% @waiting_identities.each do |identity| %>
-        <tr>
-          <td><%= identity.id %></td>
-          <td><%= identity.identifier %></td>
-          <td><%= identity.email %></td>
-          <td><%= identity.locale %></td>
-          <td>signed up <%= time_ago_in_words identity.created_at %> ago</td>
-          <td><%= link_to 'Show', identity %></td>
-          <td>      
-            <%= form_tag(dashboard_path, :method => :post) do  %>
-              <%= hidden_field_tag 'grant[identity_id]', identity.id %>
-              <%= hidden_field_tag 'grant[client_id]',   @wackadoo_grant[:client_id] %>
-              <%= hidden_field_tag 'grant[scopes]',      @wackadoo_grant[:scopes] %>
-              <%= submit_tag 'Grant Wack-a-Doo'%>
-            <% end %></td>
-          <td><%= link_to 'Destroy', identity, confirm: 'Are you sure?', method: :delete %></td>
-        </tr>
+          <% waiting_list[:entries].each do |entry| %>
+            <tr>
+              <td><%= entry.identity.id %></td>
+              <td><%= entry.identity.identifier %></td>
+              <td><%= entry.identity.email %></td>
+              <td><%= entry.key_id.nil? ? 'none' : entry.key_id %></td>
+              <td><%= entry.identity.locale %></td>
+              <td><%= time_ago_in_words entry.identity.created_at %> ago</td>
+              <td><%= time_ago_in_words entry.created_at %></td>
+              <td><%= link_to 'Show', entry.identity %></td>
+              <td>      
+                <%= form_tag(dashboard_path, :method => :post) do  %>
+                  <%= hidden_field_tag 'grant[entry_id]', entry.id %>
+                  <%= submit_tag 'Grant Scopes'%>
+                <% end %></td>
+              <td><%= link_to 'Destroy', entry.identity, confirm: 'Are you sure?', method: :delete %></td>
+            </tr>
+          <% end %>
+        </table>    
       <% end %>
-    </table>    
+    <% end %>
   </div>
 
 </div>
