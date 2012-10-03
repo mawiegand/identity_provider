@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121003151945) do
+ActiveRecord::Schema.define(:version => 20121003152542) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
