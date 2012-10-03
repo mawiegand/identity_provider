@@ -20,7 +20,9 @@ class Resource::SignupGiftsController < ApplicationController
       if !params.has_key?(:client_id)
         @resource_signup_gifts = identity.signup_gifts
       else
-        gift = identity.signup_gifts.where(:client_identifier => params[:client_id]).first
+        client = Client.find_by_identifier(params[:client_id] || "")
+        raise NotFoundError.new "Unknown client identifier."   if client.nil?
+        gift = identity.signup_gifts.where(:client_id => client.id).first
         logger.debug "Gift: #{gift.inspect}."
         raise NotFoundError.new "No gift found on server for that identity."   if gift.nil?
         @resource_signup_gifts = [gift]
