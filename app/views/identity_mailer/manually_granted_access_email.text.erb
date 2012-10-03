@@ -1,19 +1,17 @@
-Welcome to Wack-a-doo, <%= @identity.address_informal %>
+Congratulation, you were activated for Wack-a-doo, <%= @identity.address_informal %>
 
-The waiting has end, your account (see the registered email 
-address below) has been granted access to wack-a-doo.de just 
-a second ago. 
-<%= @identity.email %>
+Your Account with your Emailadresse <%= @identity.email %> has been activated for the round "<%= @identity.localized_name %>".
 
-You can sign in using your email address NOW. If you haven't 
-already done so, please validate your email address and identity
-within 72 hours by clicking the following link:
-<%= @validation_url %>
+You can log in to your account with this link:
 
-Presently, Wack-a-doo is still under heavy development
-and changes weekly. We hope for your understanding
-if anything does not work properly or as expected. We'd 
-appreciate any feedback you might have. You can reach us via
-email or in the forum.
+<%= @link %>
 
-Thanks for joining and have a great day!
+If you have any questions, please contact the support:
+
+support@5dlab.com
+
+Thanks for joining and have fun with Wack-a-doo!
+
+
+
+

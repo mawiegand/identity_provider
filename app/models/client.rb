@@ -3,6 +3,7 @@ class Client < ActiveRecord::Base
   has_many  :grants,                :class_name => "GrantedScope",                :foreign_key => :client_id,    :inverse_of => :client
   has_many  :keys,                  :class_name => "Key",                         :foreign_key => :client_id,    :inverse_of => :client
   has_many  :waiting_list_entries,  :class_name => "Resource::WaitingList",       :foreign_key => :client_id,    :inverse_of => :client
+  has_many  :names,                 :class_name => "ClientName",                  :foreign_key => :client_id,    :inverse_of => :client
 
   attr_readable :as => :default 
   attr_readable :signup_mode, :signin_mode,      :as => :owner 
@@ -106,4 +107,21 @@ class Client < ActiveRecord::Base
     })
   end
   
+  def localized_name
+    
+    logger.debug '-----> ' + request.inspect
+    
+    
+    client_name = self.names.where({lang: I18n.locale}).first
+    unless client_name.nil?
+      return client_name.name
+    end
+  end
+  
+  def localized_description
+    client_name = self.names.where({lang: I18n.locale}).first
+    unless client_name.nil?
+      return client_name.description
+    end
+  end
 end

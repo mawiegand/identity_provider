@@ -17,6 +17,8 @@ class ClientsController < ApplicationController
     @client = Client.find_by_id_or_identifier(params[:id])
     raise NotFoundError.new "Client not found." if @client.nil?
     
+    logger.debug @client.request.protocol + @client.request.host
+    
     role = :default  
     if params[:client_id]
       accessing_client = Client.find_by_id_or_identifier(params[:client_id])

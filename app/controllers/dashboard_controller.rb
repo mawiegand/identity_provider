@@ -54,7 +54,7 @@ class DashboardController < ApplicationController
         redirect_to dashboard_path, :notice => "Failed to grant access to #{ entry.identity.email }."    
       else
         logger.info "Send email about granted access to #{ entry.identity.email }."
-        send_manually_granted_access_email(entry.identity)      # send email notification
+        send_manually_granted_access_email(entry.identity, entry.client)      # send email notification
         redirect_to dashboard_path, :notice => "Granted #{ entry.identity.email } access to #{ entry.client.identifier }. Email sent."      
       end
     else                              # UNKOWN DASHBOARD ACTION
@@ -65,10 +65,10 @@ class DashboardController < ApplicationController
   protected
   
     # this method sends the email in the locale of the recipient
-    def send_manually_granted_access_email(identity)
+    def send_manually_granted_access_email(identity, client)
       old_locale = I18n.locale
       I18n.locale = identity.locale unless identity.locale.blank?
-      IdentityMailer.manually_granted_access_email(identity).deliver      # send email notification
+      IdentityMailer.manually_granted_access_email(identity, client).deliver      # send email notification
     ensure
       I18n.locale = old_locale  
     end

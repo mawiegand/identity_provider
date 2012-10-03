@@ -1,7 +1,5 @@
 IdentityProvider::Application.routes.draw do
 
-
-
   # all resources and paths are scoped in an optional path_prefix determining the
   # locale to use. Presently only available: en, de
 
@@ -19,6 +17,7 @@ IdentityProvider::Application.routes.draw do
       resources :clients
       resources :granted_scopes
       resources :keys
+      resources :client_names
       
       resources :character_properties,  :path => "identities/:identity_id/character_properties",  :module => 'resource'            
       resources :results,               :path => "identities/:identity_id/results",               :module => 'resource'            

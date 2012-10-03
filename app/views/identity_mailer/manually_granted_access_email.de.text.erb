@@ -1,23 +1,15 @@
-Willkommen bei Wack-a-doo, <%= @identity.address_informal %>
+Herzlichen Glückwunsch zur Freischaltung bei Wack-a-doo, <%= @identity.address_informal %>
 
-Das warten hat ein Ende, Du wurdest soeben mit folgender
-Email für Wack-a-Doo freigeschaltet: 
-<%= @identity.email %>.
+Dein Account unter der E-Mailadresse <%= @identity.email %> wurde soeben für die Runde "<%= @identity.localized_name %>" freigeschaltet.
 
-Du kannst Dich ab jetzt sofort mit dieser Emailadresse im 
-Portal einloggen und spielen. Falls Du es noch nicht 
-erledigt hast, bestätige Deine Emailadresse und Identität 
-bitte innerhalb der nächsten 72 Stunden durch einen Klick
-auf folgenden Link:
-<%= @validation_url %>
+Du kannst Dich ab sofort mit deiner E-Mailadresse und Deinem Passwort einlogen:
 
-Im Moment befindet sich Wack-A-Doo noch in der Entwicklungs-
-und Erprobungsphase (Public Beta).
-Wack-A-Doo ist zwar vollständig spielbar, enthält aber nur einen 
-Bruchteil der geplanten Funktionen und Spielinhalte. Wir werden in
-der laufenden offenen Testrunde weitere Neuheiten einbauen und 
-hoffen, dass Du auch mögliche Fehler verzeihst. Wir freuen uns 
-über jede Rückmeldung im Forum oder per Email und bitten um Dein 
-Verständnis, falls etwas nicht so funktioniert wie geplant. 
+<%= @link %>
 
-Vielen Dank für Deine Registrierung, hab' viel Spaß!
+Bei Fragen sende bitte eine E-Mail an den Wack-a-doo-Support:
+
+support@5dlab.com
+
+Viel Spass mit Wack-a-doo wünscht Dir
+
+Dein Wack-a-doo-Team

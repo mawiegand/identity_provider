@@ -10,7 +10,7 @@ class Resource::WaitingList < ActiveRecord::Base
   protected
   
     def deliver_email
-      IdentityMailer.waiting_list_email(self.identity).deliver  # send waiting-list email
+      IdentityMailer.waiting_list_email(self.identity, self.client).deliver  # send waiting-list email
     end
 
   #end protected
