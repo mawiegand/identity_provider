@@ -38,6 +38,8 @@ de:
       gifts: Geschenke
   
   mailing:
+    automatically_granted_access:
+      subject: Herzlich willkommen im Spiel
     manually_granted_access:
       subject: Fang JETZT an Wack-a-Doo zu spielen!
     validation:

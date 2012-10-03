@@ -42,6 +42,8 @@ en:
 
   
   mailing:
+    automatically_granted_access:
+      subject: Welcome to the game
     manually_granted_access:
       subject: Start playing Wack-a-Doo NOW!
     validation:
