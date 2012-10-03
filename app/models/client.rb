@@ -41,4 +41,20 @@ class Client < ActiveRecord::Base
     id.index(/^[1-9]\d*$/) != nil
   end
   
+  def automatic_signup(identity, invitation_string)
+    invitation = client.keys.where(key: invitation_string).first     unless invitation_string.blank?
+    if !invitation.nil? && invitation.num_used >= invitation.number
+      invitation = nil   # invitation link is used up
+    elsif !invitation.nil?
+      invitation.increment(:num_used)
+      invitation.save 
+    end
+
+    identity.grants.create({
+      client_id: client.id,
+      scopes:    client.scopes,
+      key_id:    invitation.nil? ? nil : invitation.id,
+    })     
+  end
+  
 end

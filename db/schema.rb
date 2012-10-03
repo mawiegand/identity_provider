@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121002202008) do
+ActiveRecord::Schema.define(:version => 20121003101149) do
 
   create_table "clients", :force => true do |t|
     t.string   "identifier"
@@ -139,6 +139,16 @@ ActiveRecord::Schema.define(:version => 20121002202008) do
     t.string   "alliance_name"
     t.string   "character_name"
     t.boolean  "won"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "resource_signups", :force => true do |t|
+    t.integer  "client_id"
+    t.integer  "identity_id"
+    t.string   "invitation"
+    t.boolean  "automatic"
+    t.string   "ip"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

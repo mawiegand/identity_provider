@@ -31,6 +31,8 @@ de:
       index:   Profilliste
       clients: Clients
       messages: Nachrichten
+      games: Spiele
+      signups: Registrierungen
 
   
   mailing:

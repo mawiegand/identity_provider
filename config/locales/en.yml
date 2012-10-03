@@ -34,6 +34,8 @@ en:
       messages: Messages
       grants: Grants
       keys: Keys
+      games: Games
+      signups: Signups
   
   mailing:
     manually_granted_access:

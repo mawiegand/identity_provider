@@ -1,0 +1,2 @@
+module Resource::SignupsHelper
+end

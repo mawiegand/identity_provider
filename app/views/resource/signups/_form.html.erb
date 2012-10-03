@@ -1,0 +1,37 @@
+<%= form_for(@resource_signup) do |f| %>
+  <% if @resource_signup.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@resource_signup.errors.count, "error") %> prohibited this resource_signup from being saved:</h2>
+
+      <ul>
+      <% @resource_signup.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :client_id %><br />
+    <%= f.number_field :client_id %>
+  </div>
+  <div class="field">
+    <%= f.label :identity_id %><br />
+    <%= f.number_field :identity_id %>
+  </div>
+  <div class="field">
+    <%= f.label :invitation %><br />
+    <%= f.text_field :invitation %>
+  </div>
+  <div class="field">
+    <%= f.label :automatic %><br />
+    <%= f.check_box :automatic %>
+  </div>
+  <div class="field">
+    <%= f.label :ip %><br />
+    <%= f.text_field :ip %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

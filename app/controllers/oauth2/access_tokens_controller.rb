@@ -119,8 +119,15 @@ module Oauth2
         return 
       end
       
-      # check whether requested scopes were granted to the identity
+      # if the client has the automatic signup feature, grant all missing scopes on the fly
       grants_for_client = identity.grants.where(:client_id => client.id).first
+      if grants_for_client.nil? && client.automatic_signup?
+        logger.info "Automatic signup for #{identity.email} with client #{client.id} to scopes: #{requested_scopes.inspect}."
+        client.automatic_signup(identity, params[:invitation])
+        grants_for_client = identity.grants.where(:client_id => client.id).first
+      end
+
+      # check whether requested scopes were granted to the identity
       logger.debug "Grants the identity has for this client: #{grants_for_client.inspect}"
       logger.debug "Grants the identity requested:           #{requested_scopes.inspect}"
       if requested_scopes.any? { |rscope| grants_for_client.nil? || !grants_for_client.scope_authorized?(rscope) }

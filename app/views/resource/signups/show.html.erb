@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Client:</b>
+  <%= @resource_signup.client_id %>
+</p>
+
+<p>
+  <b>Identity:</b>
+  <%= @resource_signup.identity_id %>
+</p>
+
+<p>
+  <b>Invitation:</b>
+  <%= @resource_signup.invitation %>
+</p>
+
+<p>
+  <b>Automatic:</b>
+  <%= @resource_signup.automatic %>
+</p>
+
+<p>
+  <b>Ip:</b>
+  <%= @resource_signup.ip %>
+</p>
+
+
+<%= link_to 'Edit', edit_resource_signup_path(@resource_signup) %> |
+<%= link_to 'Back', resource_signups_path %>
