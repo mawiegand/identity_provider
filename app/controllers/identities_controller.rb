@@ -105,6 +105,9 @@ class IdentitiesController < ApplicationController
         raise ConflictError.new(I18n.translate "error.emailTaken")        if email && Identity.find_by_email(email)
         raise BadRequestError.new(I18n.translate "error.passwordToShort") if !params[:password].blank? && params[:password].length < 6
         i = 0
+        
+        # STEP ONE: create identity
+        
         begin
           base_name = params[:nickname_base ].blank? ? "User" : params[:nickname_base]
           disambiguated_name = base_name
@@ -133,44 +136,23 @@ class IdentitiesController < ApplicationController
           saved = identity.save          
         end while !identity.errors.messages[:nickname].nil?    # did save fail due to duplicate nickname? 
         
+        # STEP TWO: now 'sign up' the identity to the client's scopes (that is, grant the corresponding scopes to the identity)
+        
         if saved
-          # now grant scopes according to present sign_up_mode 
-          if client.signup_mode == Client::SIGNUP_MODE_NORMAL      # normal mode -> always grant all scopes.
-            identity.grants.create({
-              client_id: client.id,
-              scopes:    client.scopes
-            });
-            IdentityMailer.validation_email(identity).deliver      # send email validation email
-            render :status => :created, :json => identity.sanitized_hash(:owner).delete_if { |k,v| v.blank? }, :location => identity     
-          elsif client.signup_mode == Client::SIGNUP_MODE_INVITATION    # invitation mode -> grant scopes, if identity has a valid invitation
-            if !params[:invitation].nil?
-              invitation = client.keys.where(key: params[:invitation]).first
-              if !invitation.nil? && invitation.num_used < invitation.number
-                identity.grants.create({
-                  client_id: client.id,
-                  scopes:    client.scopes,
-                  key_id:    invitation.id,
-                })
-                invitation.increment(:num_used)
-                invitation.save
-                IdentityMailer.validation_email(identity).deliver  # send email validation email
-              else 
-                # hack: backend activation button missing -> don't put them on the waiting list for manual activation
-                
-                identity.destroy
-                raise BadRequestError.new "Die mit dieser Einladung verbundenen Slots wurden bereits restlos verbraucht."
-                
-                # hack end
-                IdentityMailer.waiting_list_email(identity, params[:invitation]).deliver# send waiting-list email
-              end
-            else
-              IdentityMailer.waiting_list_email(identity).deliver  # send waiting-list email
-            end
-            render :status => :created, :json => identity.sanitized_hash(:owner).delete_if { |k,v| v.blank? }, :location => identity     
-          else # sign up mode off
-            IdentityMailer.waiting_list_email(identity).deliver    # send waiting-list email
-            render :status => :created, :json => identity.sanitized_hash(:owner).delete_if { |k,v| v.blank? }, :location => identity                 
+          
+          # try to signup the identity for the cient's scopes
+          client.signup_existing_identity(identity, params[:invitation])
+          
+          # have a look at the results; on waiting list or granted access?
+          on_waiting_list = !client.waiting_list_entries.where(identity_id: identity.id).first.nil?
+          granted_access  = !client.grants.where(identity_id: identity.id).first.nil?
+          
+          if granted_access || on_waiting_list
+            render :status => :created, :json => identity.sanitized_hash(:owner).delete_if { |k,v| v.blank? }, :location => identity  
+          else
+            render json: {error: :error}, status: :error          
           end
+          
         else
           render json: {error: :error}, status: :error          
         end

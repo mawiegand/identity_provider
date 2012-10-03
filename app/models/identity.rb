@@ -110,7 +110,9 @@ class Identity < ActiveRecord::Base
   
   default_scope :order => 'identities.email ASC'
                        
+                       
   before_save :set_encrypted_password, :set_unique_identifier
+  after_create :send_validation_email
   
   
   
@@ -274,6 +276,9 @@ class Identity < ActiveRecord::Base
     (0..(len-1)).collect { chars[Kernel.rand(chars.length)] }.join
   end    
 
+  def send_validation_email
+    IdentityMailer.validation_email(self).deliver  # send email validation email
+  end
   
   private
 
