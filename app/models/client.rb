@@ -76,6 +76,7 @@ class Client < ActiveRecord::Base
         return 
       else
         grant_scopes_to_identity(identity, invitation, true)
+        IdentityMailer.automatically_granted_access_email(identity, self).deliver  # send email validation email
       end
     else
       add_to_waiting_list(identity, invitation_string)   
@@ -109,10 +110,6 @@ class Client < ActiveRecord::Base
   end
   
   def localized_name
-    
-    logger.debug '-----> ' + request.inspect
-    
-    
     client_name = self.names.where({lang: I18n.locale}).first
     unless client_name.nil?
       return client_name.name

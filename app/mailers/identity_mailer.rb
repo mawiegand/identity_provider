@@ -5,9 +5,16 @@ class IdentityMailer < ActionMailer::Base
     @identity = identity
     @client = client
     @link = request.protocol + request.host
-    @validation_url = @link + "/identities/#{identity.id}/validation?code=#{identity.validation_code}"
     
     mail :to => identity.email, :subject => I18n.t('mailing.manually_granted_access.subject') 
+  end
+  
+  def automatically_granted_access_email(identity, client)
+    @identity = identity
+    @client = client
+    @link = request.protocol + request.host
+    
+    mail :to => identity.email, :subject => I18n.t('mailing.automatically_granted_access.subject') 
   end
   
   def validation_email(identity)
@@ -22,8 +29,6 @@ class IdentityMailer < ActionMailer::Base
     @identity   = identity
     @client = client
     @link = request.protocol + request.host
-    @invitation = invitation
-    @validation_url = @link + "/identities/#{identity.id}/validation?code=#{identity.validation_code}"
     
     mail :to => identity.email, :subject => I18n.t('mailing.waiting_list.subject')   
   end
