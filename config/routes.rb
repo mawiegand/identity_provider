@@ -19,6 +19,8 @@ IdentityProvider::Application.routes.draw do
       resources :keys
       resources :client_names
       
+
+      resources :signup_gifts,          :path => "identities/:identity_id/signup_gifts",          :module => 'resource'                  
       resources :character_properties,  :path => "identities/:identity_id/character_properties",  :module => 'resource'            
       resources :results,               :path => "identities/:identity_id/results",               :module => 'resource'            
       resources :histories,             :path => "identities/:identity_id/histories",             :module => 'resource'            
@@ -33,6 +35,7 @@ IdentityProvider::Application.routes.draw do
         resources :games 
         resources :signups
         resources :waiting_lists
+        resources :signup_gifts
       end
       
       namespace :oauth2 do

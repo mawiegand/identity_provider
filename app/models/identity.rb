@@ -61,6 +61,7 @@ class Identity < ActiveRecord::Base
   has_many  :results,               :class_name => "Resource::Result",            :foreign_key => :identity_id,  :inverse_of => :identity
   has_many  :events,                :class_name => "Resource::History",           :foreign_key => :identity_id,  :inverse_of => :identity
   has_many  :character_properties,  :class_name => "Resource::CharacterProperty", :foreign_key => :identity_id,  :inverse_of => :identity
+  has_many  :signup_gifts,          :class_name => "Resource::SignupGift",        :foreign_key => :identity_id,  :inverse_of => :identity
   has_many  :sent_messages,         :class_name => "Message",                     :foreign_key => :sender_id,    :inverse_of => :sender
   has_many  :received_messages,     :class_name => "Message",                     :foreign_key => :recipient_id, :inverse_of => :recipient
   

@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Identity:</b>
+  <%= @resource_signup_gift.identity_id %>
+</p>
+
+<p>
+  <b>Client:</b>
+  <%= @resource_signup_gift.client_id %>
+</p>
+
+<p>
+  <b>Key:</b>
+  <%= @resource_signup_gift.key_id %>
+</p>
+
+<p>
+  <b>Data:</b>
+  <%= @resource_signup_gift.data %>
+</p>
+
+
+<%= link_to 'Edit', edit_resource_signup_gift_path(@resource_signup_gift) %> |
+<%= link_to 'Back', resource_signup_gifts_path %>

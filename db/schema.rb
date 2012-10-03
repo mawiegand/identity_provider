@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(:version => 20121003151945) do
     t.datetime "updated_at"
     t.integer  "num_used",   :default => 0, :null => false
     t.text     "comment"
+    t.text     "gift"
   end
 
   create_table "log_entries", :force => true do |t|
@@ -148,6 +149,15 @@ ActiveRecord::Schema.define(:version => 20121003151945) do
     t.string   "alliance_name"
     t.string   "character_name"
     t.boolean  "won"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "resource_signup_gifts", :force => true do |t|
+    t.integer  "identity_id"
+    t.integer  "client_id"
+    t.integer  "key_id"
+    t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

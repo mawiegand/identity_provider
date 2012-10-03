@@ -108,6 +108,8 @@ class IdentitiesController < ApplicationController
         
         # STEP ONE: create identity
         
+        saved = false
+        
         begin
           base_name = params[:nickname_base ].blank? ? "User" : params[:nickname_base]
           disambiguated_name = base_name

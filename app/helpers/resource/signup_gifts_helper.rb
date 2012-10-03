@@ -1,0 +1,2 @@
+module Resource::SignupGiftsHelper
+end

@@ -123,7 +123,23 @@ module Oauth2
       grants_for_client = identity.grants.where(:client_id => client.id).first
       if grants_for_client.nil? && client.automatic_signup?
         logger.info "Automatic signup for #{identity.email} with client #{client.id} to scopes: #{requested_scopes.inspect}."
+
+        # already ON waiting list?
+        on_waiting_list = !client.waiting_list_entries.where(identity_id: identity.id).first.nil?
+        if on_waiting_list
+          render_endpoint_error params[:client_id], :invalid_grant, "Du bist bereits auf der Warteliste und solltest eine entsprechende Email erhalten haben."
+          return
+        end
+
         client.signup_existing_identity(identity, params[:invitation])
+
+        # put on waiting list?
+        on_waiting_list = !client.waiting_list_entries.where(identity_id: identity.id).first.nil?
+        if on_waiting_list
+          render_endpoint_error params[:client_id], :invalid_grant, "Du wurdest auf der Warteliste platziert und solltest gleich eine Email erhalten."
+          return
+        end
+
         grants_for_client = identity.grants.where(:client_id => client.id).first
       end
 

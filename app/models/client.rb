@@ -62,11 +62,12 @@ class Client < ActiveRecord::Base
     if self.signup_mode == Client::SIGNUP_MODE_NORMAL  ||     # normal mode -> always grant all scopes.
        self.signup_mode == Client::SIGNUP_MODE_INVITATION     # invitation mode -> only grand all scopes if invitation is present and valid
        
-      invitation = client.keys.where(key: invitation_string).first     unless invitation_string.blank?
+      invitation = self.keys.where(key: invitation_string).first     unless invitation_string.blank?
       if !invitation.nil? && invitation.num_used >= invitation.number
         invitation = nil   # invitation link is used up
       elsif !invitation.nil?
         invitation.increment(:num_used)
+        invitation.grant_gift(identity)
         invitation.save 
       end
       

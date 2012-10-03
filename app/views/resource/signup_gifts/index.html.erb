@@ -1,0 +1,29 @@
+<h1>Listing resource_signup_gifts</h1>
+
+<table>
+  <tr>
+    <th>Identity</th>
+    <th>Client</th>
+    <th>Key</th>
+    <th>Data</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @resource_signup_gifts.each do |resource_signup_gift| %>
+  <tr>
+    <td><%= resource_signup_gift.identity_id %></td>
+    <td><%= resource_signup_gift.client_id %></td>
+    <td><%= resource_signup_gift.key_id %></td>
+    <td><%= resource_signup_gift.data %></td>
+    <td><%= link_to 'Show', resource_signup_gift %></td>
+    <td><%= link_to 'Edit', edit_resource_signup_gift_path(resource_signup_gift) %></td>
+    <td><%= link_to 'Destroy', resource_signup_gift, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Signup gift', new_resource_signup_gift_path %>

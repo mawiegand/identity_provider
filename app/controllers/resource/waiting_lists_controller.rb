@@ -1,4 +1,10 @@
 class Resource::WaitingListsController < ApplicationController
+  
+  before_filter :authenticate                  
+
+  before_filter :authorize_staff                                    
+  before_filter :deny_api   
+  
   # GET /resource/waiting_lists
   # GET /resource/waiting_lists.json
   def index
