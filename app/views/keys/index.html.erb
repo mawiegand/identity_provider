@@ -6,6 +6,7 @@
     <th>Key</th>
     <th>Number</th>
     <th>Used</th>
+    <th>Gift</th>
     <th>Comment</th>
     <th></th>
     <th></th>
@@ -18,6 +19,7 @@
     <td><%= key.key %></td>
     <td><%= key.number %></td>
     <td><%= key.num_used %></td>
+    <td><%= key.gift %></td>
     <td><%= !key.comment.nil? && key.comment.length > 64 ? key.comment[0..64] + ' ...' : key.comment %></td>
     <td><%= link_to 'Show', key %></td>
     <td><%= link_to 'Edit', edit_key_path(key) %></td>

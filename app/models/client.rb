@@ -66,6 +66,7 @@ class Client < ActiveRecord::Base
         invitation = nil   # invitation link is used up
       elsif !invitation.nil?
         invitation.increment(:num_used)
+        invitation.grant_gift(identity)
         invitation.save 
       end
       

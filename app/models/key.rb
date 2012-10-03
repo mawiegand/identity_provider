@@ -9,4 +9,16 @@ class Key < ActiveRecord::Base
       self.key = (0..(len-1)).collect { chars[Kernel.rand(chars.length)] }.join
     end while Key.find_by_key(self.key)
   end    
+  
+  def grant_gift(identity)
+    if !self.gift.nil?
+      Resource::SignupGift.create({
+        identity_id: identity.id,
+        client_id:   self.client.id,
+        key_id:      self.id,
+        data:        self.gift,
+      })
+    end
+  end
+  
 end

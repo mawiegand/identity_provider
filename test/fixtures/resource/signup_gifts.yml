@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  identity_id: 1
+  client_id: 1
+  key_id: 1
+  data: MyText
+
+two:
+  identity_id: 1
+  client_id: 1
+  key_id: 1
+  data: MyText
