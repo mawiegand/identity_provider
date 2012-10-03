@@ -237,8 +237,12 @@ class IdentitiesController < ApplicationController
       role = :game
     end
     
-    deny_access("You're not allowed to edit identity %s." % params[:id]) unless role == :owner || role == :game || staff?  
-              
+    deny_access("You're not allowed to edit identity %s." % params[:id]) unless role == :owner || role == :game || staff?
+    
+    if role == :game && params[:identity].has_key?(:nickname) && !(@identity.nickname.nil? || @identity.nickname.starts_with?('WackyUser'))
+      params[:identity].delete(:nickname)
+    end
+    
     @identity.assign_attributes params[:identity].delete_if { |k,v| v.nil? }, :as => role
         
     if @identity.save
