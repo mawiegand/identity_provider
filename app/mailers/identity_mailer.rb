@@ -1,24 +1,29 @@
 class IdentityMailer < ActionMailer::Base
   default from: "no-reply@5dlab.com"
 
-  def manually_granted_access_email(identity)
+  def manually_granted_access_email(identity, client)
     @identity = identity
-    @validation_url = root_url(:host => 'wack-a-doo.de')  + "/identities/#{identity.id}/validation?code=#{identity.validation_code}"
+    @client = client
+    @link = request.protocol + request.host
+    @validation_url = @link + "/identities/#{identity.id}/validation?code=#{identity.validation_code}"
     
     mail :to => identity.email, :subject => I18n.t('mailing.manually_granted_access.subject') 
   end
   
   def validation_email(identity)
     @identity = identity
-    @validation_url = root_url(:host => 'wack-a-doo.de')  + "/identities/#{identity.id}/validation?code=#{identity.validation_code}"
+    @link = request.protocol + request.host
+    @validation_url = @link + "/identities/#{identity.id}/validation?code=#{identity.validation_code}"
     
     mail :to => identity.email, :subject => I18n.t('mailing.validation.subject') 
   end
   
-  def waiting_list_email(identity, invitation=nil)
+  def waiting_list_email(identity, client, invitation=nil)
     @identity   = identity
+    @client = client
+    @link = request.protocol + request.host
     @invitation = invitation
-    @validation_url = root_url(:host => 'wack-a-doo.de')  + "/identities/#{identity.id}/validation?code=#{identity.validation_code}"
+    @validation_url = @link + "/identities/#{identity.id}/validation?code=#{identity.validation_code}"
     
     mail :to => identity.email, :subject => I18n.t('mailing.waiting_list.subject')   
   end

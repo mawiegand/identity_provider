@@ -7,7 +7,9 @@ class ApplicationController < ActionController::Base
   include SessionsHelper     # session helpers must be available to all controllers
   
   before_filter :set_locale  # get the locale from the user parameters
+  around_filter :request_access
   around_filter :time_action
+
   after_filter { |controller|    
     logger.debug("Response headers: #{controller.response.headers}")
   }
@@ -108,6 +110,21 @@ class ApplicationController < ActionController::Base
     
     def render_400
       raise ActionController::RoutingError.new('Bad Request')
+    end
+
+    def request_access
+      model_classes = [ActiveRecord::Base, ActiveRecord::Base.class, ActionMailer::Base]
+      request_method = instance_variable_get(:@_request) 
+
+      model_classes.each do |model_class|
+        model_class.send(:define_method, 'request', proc { request_method })
+      end
+
+      yield
+  
+      model_classes.each do |model_class|
+        model_class.send :remove_method, 'request'
+      end
     end
 
 end

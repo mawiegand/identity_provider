@@ -1,20 +1,19 @@
-Willkommen auf der Warteliste zu Wack-a-doo, <%= @identity.address_informal %>
-    
-<%if @invitation%>
-Du hast versucht, Dich mit dem Einladungscode 
-<%=@invitation%> anzumelden. Leider ist das Kontingent 
-für diesen Code bereits verbraucht. 
-<% else %>
-Du hast Dich erfolgreich bei wack-a-doo.de angemeldet. 
-Im Moment sind allerdings alle Plätze im Spiel belegt.
-<% end %>
-Aus diesem Grund haben wir Dich mit Deiner Email-Adresse
-<%= @identity.email %> 
-auf die Warteliste gesetzt und werden Dich freischalten, 
-sobald weitere Plätze verfügbar werden. Wir werden Dich 
-darüber in einer weiteren Email informieren.
+Welcome to the waiting list of Wack-a-doo, <%= @identity.address_informal %>
 
-Bitte sei so nett und bestätige Deine Emailadresse und 
-Identität innerhalb der nächsten 72 Stunden durch einen
-Klick auf folgenden Link: 
-<%= @validation_url %>
+At this time there are no free accounts available in the round "<%= @client.localized_name %>" of Wack-a-doo.
+
+We put you with your mail address "<%= @identity.email %>" on the waiting list. 
+
+You will receive a different mail with information about the activation.
+
+Information about Wack-a-doo on our homepage:
+
+<%= @link %>
+
+If you have any questions, please contact our support:
+
+support@5dlab.com
+
+We will inform you about the activation as soon as possible.
+
+The Wack-a-doo-Team

@@ -13,6 +13,15 @@
 
 ActiveRecord::Schema.define(:version => 20121003152542) do
 
+  create_table "client_names", :force => true do |t|
+    t.string   "lang"
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "client_id"
+  end
+
   create_table "clients", :force => true do |t|
     t.string   "identifier"
     t.string   "name"
