@@ -297,10 +297,8 @@ class Identity < ActiveRecord::Base
     # password by salting and encrypting the plain-text
     # password sent by the user.
     def set_encrypted_password
-      puts 'ping'
       self.salt = make_random_string if new_record? # salt will be created once for a new record
       if !password.blank?
-        puts 'pong'
         self.encrypted_password = encrypt_password(self.password)
         puts self.encrypted_password
       end
