@@ -9,6 +9,7 @@
     <th>Password</th>
     <th>Refresh token secret</th>
     <th>Description</th>
+    <th>Direct Backend URL</th>
     <th>Homepage</th>
     <th>Grant types</th>
     <th>Scopes</th>
@@ -30,6 +31,7 @@
     <td><%= client.refresh_token_secret %></td>
     <td><%= client.description %></td>
     <td><%= client.homepage %></td>
+    <td><%= client.direct_backend_login_url %></td>
     <td><%= client.grant_types %></td>
     <td><%= client.scopes %></td>
     <td><%= Client::SIGNIN_MODES[client.signin_mode] %></td>

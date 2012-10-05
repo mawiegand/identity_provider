@@ -44,37 +44,36 @@ class IdentitiesController < ApplicationController
     raise BadRequestError.new('Bad Request for Identity %s' % params[:id]) if bad_request
 
     # second: find (non-deleted) identity or fail with a 404 not found error
-    identity = Identity.find_by_id_identifier_or_nickname(params[:id], :find_deleted => staff?) # only staff can see deleted users
-    raise NotFoundError.new('Page Not Found') if identity.nil?
+    @identity = Identity.find_by_id_identifier_or_nickname(params[:id], :find_deleted => staff?) # only staff can see deleted users
+    raise NotFoundError.new('Page Not Found') if @identity.nil?
     
     # third: determine the role of the current user. 
     role = current_identity ? current_identity.role : :default
-    role = :owner if !admin? && current_identity && current_identity.id == identity.id # here :owner beats :staff
+    role = :owner if !admin? && current_identity && current_identity.id == @identity.id # here :owner beats :staff
         
     # fourth: collect and sanitize values then render output (either html or JSON)
     respond_to do |format|
       format.json { 
-        @attributes = identity.sanitized_hash(role)           # only those, that may be read by present user
-        @attributes[:gravatar_hash] = identity.gravatar_hash
+        @attributes = @identity.sanitized_hash(role)           # only those, that may be read by present user
+        @attributes[:gravatar_hash] = @identity.gravatar_hash
         render :json => @attributes.delete_if { |k,v| v.blank? } # to compact the return string to non-blank attrs
       }      
       format.html {
         @options = {
-          :address_informal             => identity.address_informal(role),
-          :gravatar_url                 => identity.gravatar_url(:size => 120),
-          :messages_count               => (staff? ? identity.received_messages.count : nil), 
+          :address_informal             => @identity.address_informal(role),
+          :gravatar_url                 => @identity.gravatar_url(:size => 120),
+          :messages_count               => (staff? ? @identity.received_messages.count : nil), 
           :show_edit_link               => [ :owner, :staff, :admin ].include?(role),
           :show_delete_link             => [ :owner, :staff, :admin ].include?(role),
           :show_delete_immediately_link => [ :admin ].include?(role)
         }
-        @attributes = identity.sanitized_hash(role)           # the easiest way to make sure, we don't display
+        @attributes = @identity.sanitized_hash(role)           # the easiest way to make sure, we don't display
                                                               # some attributes that should not be visible to
                                                               # the requesting user, is to only access the 
                                                               # sanitized hash in the view, that only contains
                                                               # the attributes visible to the given role. 
         @title = @options[:address_informal]                  # never forget to set this for the side-wide layout
       }
-
     end
   end
   
@@ -179,12 +178,12 @@ class IdentitiesController < ApplicationController
   end
   
   def signin
-    raise BadRequestError.new('Client Identifier Missing') if params[:client].blank?
+    raise BadRequestError.new('Client Identifier Missing') if params[:client_id].blank?
 
     @identity = Identity.find_by_id_identifier_or_nickname(params[:id])
     raise NotFoundError.new('Page Not Found') if @identity.nil? || (@identity.deleted && !staff?)  # only staff can see deleted users
 
-    @client = Client.find_by_identifier(params[:client])
+    @client = Client.find_by_id(params[:client_id])
     raise BadRequestError.new('Unknown Client') if @client.nil?
 
     access_token = FiveDAccessToken.generate_access_token(@identity.identifier, @client.scopes)
@@ -194,7 +193,7 @@ class IdentitiesController < ApplicationController
 
     @parameters = {
       access_token: access_token,
-      client_url: params[:client] == "WACKADOOHTML5" ? "URL" : "", # TODO: make dynamic 
+      client_url: @client.direct_backend_login_url 
     }
   end
 

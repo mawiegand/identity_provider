@@ -136,7 +136,7 @@ module Oauth2
         # put on waiting list?
         on_waiting_list = !client.waiting_list_entries.where(identity_id: identity.id).first.nil?
         if on_waiting_list
-          render_endpoint_error params[:client_id], :invalid_grant, "Du wurdest auf der Warteliste platziert und solltest gleich eine Email erhalten."
+          render_endpoint_error params[:client_id], :invalid_grant, "Du wurdest auf der Warteliste platziert und solltest eine Email erhalten."
           return
         end
 

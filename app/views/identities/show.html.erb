@@ -17,7 +17,9 @@
       <%= link_to I18n.t('identities.show.link.delete'), {:action => "destroy", :id => @attributes[:id]}, :method => "delete", :confirm => I18n.t('identities.show.confirm.delete'), :class => 'button-on-white' if @options[:show_delete_link] %>
     <% end %>
     <% if signed_in? && staff? %>
-      <%= link_to "Sign in to Wack-a-Doo", { :action => "signin", :id => @attributes[:id], :client => "WACKADOOHTML5"}, :class => 'button-on-white' %>
+      <% @identity.grants.each do |grant| %>
+      <%= link_to "Sign in to #{ grant.client.identifier }", { :action => "signin", :id => @attributes[:id], :client_id => grant.client.id }, :class => 'button-on-white' %>        
+      <% end %>
     <%end%><br />
     
     <%if staff? %>

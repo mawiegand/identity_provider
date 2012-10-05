@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121003152542) do
+ActiveRecord::Schema.define(:version => 20121005094634) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -34,9 +34,10 @@ ActiveRecord::Schema.define(:version => 20121003152542) do
     t.string   "scopes"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "signup_mode",          :default => 1,     :null => false
-    t.integer  "signin_mode",          :default => 1,     :null => false
-    t.boolean  "automatic_signup",     :default => false, :null => false
+    t.integer  "signup_mode",              :default => 1,     :null => false
+    t.integer  "signin_mode",              :default => 1,     :null => false
+    t.boolean  "automatic_signup",         :default => false, :null => false
+    t.string   "direct_backend_login_url"
   end
 
   create_table "granted_scopes", :force => true do |t|

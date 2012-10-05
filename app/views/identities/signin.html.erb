@@ -4,13 +4,7 @@
     window.name = JSON.stringify({
       accessToken: "<%= @parameters[:access_token].token %>",
     });
-    window.location = GAME_SERVER_URL; 
+    window.location = '<%= @parameters[:client_url] %>'; 
   });
 
-  CONFIG = {
-    // automatically determine the server to use -> same origin policy
-    SERVER_ROOT: !document.location.host ? 'http://localhost' : document.location.protocol + '//' + document.location.host, 
-  };
-  
-  GAME_SERVER_URL = CONFIG.SERVER_ROOT + (document.location.host === "wack-a-doo.de" ? '/client/' : '/client/');
 </script>
