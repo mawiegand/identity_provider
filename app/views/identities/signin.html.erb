@@ -3,6 +3,7 @@
   $(document).ready(function() {
     window.name = JSON.stringify({
       accessToken: "<%= @parameters[:access_token].token %>",
+      locale: "de_DE",
     });
     window.location = '<%= @parameters[:client_url] %>'; 
   });
