@@ -50,12 +50,20 @@
   </div>
   <% end %>
   
-  <% if @accessible_attributes.include?(:activated)%>
+  
+  <% if @accessible_attributes.include?(:banned)%>
   <div class="field">
-    <%= f.label I18n.t 'identities.edit.form.activated' %><br/>
-    <%= f.text_field :activated %>
+    <%= f.label I18n.t 'identities.edit.form.banned' %><br/>
+    <%= f.check_box :banned %>
   </div>
-  <% end %>
+  <% end %>  
+  
+  <% if @accessible_attributes.include?(:ban_reason)%>
+  <div class="field">
+    <%= f.label I18n.t 'identities.edit.form.ban_reason' %><br/>
+    <%= f.text_field :ban_reason %>
+  </div>
+  <% end %>  
   
   <% if @accessible_attributes.include?(:password)%>
   <div class="field">
