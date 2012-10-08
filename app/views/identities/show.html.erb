@@ -9,6 +9,8 @@
         <%="joined #{ time_ago_in_words @attributes[:created_at]} ago." if @attributes[:created_at] %>        
         <%="activated #{ time_ago_in_words @attributes[:activated]} ago." if @attributes[:activated] %><br />
         <%="Password Token: #{@attributes[:password_token]}" if @attributes[:password_token] %><br />
+        <%="Banned until #{@attributes[:ban_ended_at]} for #{@attributes[:ban_reason]}" if @attributes[:banned] %><br />
+
   </div>
 
   <div class="profile-button-bar">

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121005094634) do
+ActiveRecord::Schema.define(:version => 20121007202113) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -66,6 +66,9 @@ ActiveRecord::Schema.define(:version => 20121005094634) do
     t.integer  "sign_up_with_client_id"
     t.string   "password_token"
     t.string   "locale"
+    t.boolean  "banned"
+    t.string   "ban_reason"
+    t.datetime "ban_ended_at"
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true

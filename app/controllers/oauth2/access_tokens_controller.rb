@@ -119,6 +119,11 @@ module Oauth2
         return 
       end
       
+      if identity.banned? 
+        render_endpoint_error params[:client_id], :invalid_grant, "User is banned."
+        return
+      end 
+      
       # if the client has the automatic signup feature, grant all missing scopes on the fly
       grants_for_client = identity.grants.where(:client_id => client.id).first
       if grants_for_client.nil? && client.automatic_signup?

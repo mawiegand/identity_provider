@@ -19,7 +19,12 @@ class SessionsController < ApplicationController
       flash.now[:error] = I18n.translate('sessions.signin.flash.invalid')
       @title = I18n.translate('sessions.signin.title')
       render 'new'
-    else 
+    elsif identity.banned?
+      logSigninFailure(params[:session][:login], current_identity)
+      @title = I18n.translate('sessions.signin.title')
+      flash.now[:error] = 'Der Account ist gesperrt.'   #I18n.translate('sessions.signin.flash.invalid')
+      render 'new'
+    else
       logSigninSuccess(params[:session][:login], identity)
       sign_in identity
       redirect_back_or (staff? ? dashboard_path : identity)
