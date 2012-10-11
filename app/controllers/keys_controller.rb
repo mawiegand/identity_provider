@@ -6,7 +6,7 @@ class KeysController < ApplicationController
   # GET /keys
   # GET /keys.json
   def index
-    @keys = Key.all
+    @keys = Key.all(:order => 'created_at asc')
 
     respond_to do |format|
       format.html # index.html.erb
