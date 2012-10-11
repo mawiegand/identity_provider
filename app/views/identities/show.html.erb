@@ -5,7 +5,7 @@
   <div class="profile-info">
     <h1><%="#{@options[:address_informal]}" %></h1>
         <%="#{@attributes[:firstname]} #{@attributes[:surname]}" unless @attributes[:firstname].blank?  && @attributes[:surname].blank?   %><br />
-        <%="#{@attributes[:email]}" unless @attributes[:email].blank? %>, <%= "#{@attributes[:identifier]}" %><br />
+        <%="#{@attributes[:email]}, " unless @attributes[:email].blank? %> <%= "#{@attributes[:identifier]}" if staff? %><br />
         <%="joined #{ time_ago_in_words @attributes[:created_at]} ago." if @attributes[:created_at] %>        
         <%="activated #{ time_ago_in_words @attributes[:activated]} ago." if @attributes[:activated] %><br />
         <%="Password Token: #{@attributes[:password_token]}" if @attributes[:password_token] %><br />
