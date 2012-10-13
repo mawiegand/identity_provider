@@ -78,7 +78,7 @@ class LogEntry < ActiveRecord::Base
   
 
   def self.create_signup_attempt(params, as_identity, remote_ip = 'unknwon')
-    username = params.has_key?(:identity) ? (params[:identity][:email] || params[:identity][:nickname]) : 'no username'
+    username = params.has_key?(:identity) ? (params[:identity][:email] || params[:identity][:nickname]) : params[:email] || 'no username'
     
     entry = LogEntry.new(:affected_table => 'identity',
                          :event_type     => 'signup_attempt',
@@ -96,7 +96,7 @@ class LogEntry < ActiveRecord::Base
   end
 
   def self.create_signup_success(params, identity, remote_ip = 'unknwon')
-    username = params.has_key?(:identity) ? (params[:identity][:email] || params[:identity][:nickname]) : 'no username'
+    username = params.has_key?(:identity) ? (params[:identity][:email] || params[:identity][:nickname]) : params[:email] || 'no username'
     
     LogEntry.create(:identity_id    => identity.id,
                     :role           => identity.role_string,
@@ -108,7 +108,7 @@ class LogEntry < ActiveRecord::Base
   end 
 
   def self.create_signup_failure(params, as_identity, remote_ip = 'unknown')
-    username = params.has_key?(:identity) ? (params["identity"][:email] || params[:identity][:nickname]) : 'no username'
+    username = params.has_key?(:identity) ? (params["identity"][:email] || params[:identity][:nickname]) : params[:email] || 'no username'
     
     entry = LogEntry.new(:affected_table => "identity",
                          :event_type     => 'signup_failure', 
