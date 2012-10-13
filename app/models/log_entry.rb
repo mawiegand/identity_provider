@@ -76,6 +76,55 @@ class LogEntry < ActiveRecord::Base
                     :ip             => remote_ip);
   end 
   
+
+  def self.create_signup_attempt(params, as_identity, remote_ip = 'unknwon')
+    username = params.has_key?(:identity) ? (params[:identity][:email] || params[:identity][:nickname]) : 'no username'
+    
+    entry = LogEntry.new(:affected_table => 'identity',
+                         :event_type     => 'signup_attempt',
+                         :description    => "Sign-up attempt with #{ username }.",
+                         :ip             => remote_ip);
+    if !as_identity.nil?
+      entry.identity_id = as_identity.id;
+      entry.role = as_identity.role_string;
+    else
+      entry.role = 'none'
+    end
+    entry.save
+    
+    entry
+  end
+
+  def self.create_signup_success(params, identity, remote_ip = 'unknwon')
+    username = params.has_key?(:identity) ? (params[:identity][:email] || params[:identity][:nickname]) : 'no username'
+    
+    LogEntry.create(:identity_id    => identity.id,
+                    :role           => identity.role_string,
+                    :affected_table => 'identity',
+                    :affected_id    => identity.id,
+                    :event_type     => 'signup_success',
+                    :description    => "Sign-up with #{username} (user #{ identity.nickname }) did succeed.",
+                    :ip             => remote_ip);
+  end 
+
+  def self.create_signup_failure(params, as_identity, remote_ip = 'unknown')
+    username = params.has_key?(:identity) ? (params["identity"][:email] || params[:identity][:nickname]) : 'no username'
+    
+    entry = LogEntry.new(:affected_table => "identity",
+                         :event_type     => 'signup_failure', 
+                         :ip             => remote_ip);
+    if !as_identity.nil?
+      entry.identity_id = as_identity.id;
+      entry.role = as_identity.role_string;
+    else
+      entry.role = 'none'
+    end
+    entry.description = "Sign-up with #{ username } did fail#{ as_identity.nil? ? '' : ' for current_user ' + (as_identity.nickname.nil? ? as_identity.email : as_identity.email) }."
+    entry.save
+    
+    entry
+  end
+
   
   def self.create_auth_token_success(username, identity, client_id, remote_ip = 'unknwon')
     LogEntry.create(:identity_id    => identity.id,

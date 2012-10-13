@@ -94,6 +94,8 @@ class IdentitiesController < ApplicationController
   
   # create a new identity from the posted form data
   def create
+    LogEntry.create_signup_attempt(params, current_identity, request.remote_ip)
+
     respond_to do |format|
       format.json {
         client = Client.find_by_identifier(params[:client_id])
@@ -140,6 +142,7 @@ class IdentitiesController < ApplicationController
         # STEP TWO: now 'sign up' the identity to the client's scopes (that is, grant the corresponding scopes to the identity)
         
         if saved
+          LogEntry.create_signup_success(params, identity, request.remote_ip)
           
           # try to signup the identity for the cient's scopes
           client.signup_existing_identity(identity, params[:invitation])
@@ -155,6 +158,8 @@ class IdentitiesController < ApplicationController
           end
           
         else
+          LogEntry.create_signup_failure(params, current_identity, request.remote_ip)
+                    
           render json: {error: :error}, status: :error          
         end
       }
@@ -162,14 +167,16 @@ class IdentitiesController < ApplicationController
         @identity = Identity.new(params[:identity], :as => :creator)
       
         if @identity.save                                      # created successfully
-          logRegisterSuccess(@identity)                        # log creation
+          LogEntry.create_signup_success(params, @identity, request.remote_ip)
+                        # log creation
           IdentityMailer.validation_email(@identity).deliver   # send email validation email
           sign_in @identity                                    # sign in with newly created identity
           flash[:success] =    
             I18n.t('identities.signup.flash.welcome', :name => @identity.address_informal(:owner))
           redirect_to @identity                                # redirect to new identity
         else 
-          logRegisterFailure(params[:identity][:email], params[:identity][:nickname])
+          LogEntry.create_signup_failure(params, current_identity, request.remote_ip)
+          
           @title = I18n.t('identities.signup.title')
           render :new
         end
@@ -385,39 +392,9 @@ class IdentitiesController < ApplicationController
   private
   
     def name_blacklisted?(name)
-      black_list = %w{index edit new admin staff user adolf hitler}
+      black_list = %w{index edit new admin staff user adolf hitler 5d service root owner}
       black_list.include? name.downcase
     end
     
-    def logRegisterSuccess(identity)
-      entry = LogEntry.new(:affected_table => 'identity',
-                           :affected_id => identity.id,
-                           :event_type => 'register_success',
-                           :description => "Registered new user for #{identity.email} as #{ identity.address_informal } with id #{ identity.id }.");
-
-      if current_identity.nil? 
-        entry.role = 'none'
-      else
-        entry.identity_id = current_identity.id
-        entry.role = current_identity.role_string
-      end                     
-      
-      entry.save
-    end
-    
-    def logRegisterFailure(email, name)
-      entry = LogEntry.new(:affected_table => 'identity',
-                           :event_type => 'register_failure',
-                           :description => "Registering new user for #{email} as #{ name } did fail.");
-
-      if current_identity.nil? 
-        entry.role = 'none'
-      else
-        entry.identity_id = current_identity.id
-        entry.role = current_identity.role_string
-      end
-
-      entry.save
-    end
 
 end
