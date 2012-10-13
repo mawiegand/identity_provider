@@ -16,8 +16,8 @@ class LogEntriesController < ApplicationController
   def index
     @title = "Log"
     
-    where_string = "1";
-    where_parameters = [];
+    where_string = "?";
+    where_parameters = [true];
     
     if !params[:description].nil? && params[:description] != ""
       where_string += " AND description LIKE ?"
