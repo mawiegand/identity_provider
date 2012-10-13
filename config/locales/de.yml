@@ -36,6 +36,9 @@ de:
       signups: Registrierungen
       waitinglist: Warteliste
       gifts: Geschenke
+      log: Protokoll
+      grants: Rechte
+      keys: Einladungen
   
   mailing:
     automatically_granted_access:
