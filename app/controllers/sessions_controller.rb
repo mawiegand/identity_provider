@@ -43,39 +43,15 @@ class SessionsController < ApplicationController
 
     # Logging  
     def logSignout(identity)
-      LogEntry.create(:identity_id => identity.id,
-                      :role => identity.role_string,
-                      :affected_table => 'identity',
-                      :affected_id => identity.id,
-                      :event_type => 'signout_destroy',
-                      :description => "User #{ identity.address_informal } signed out.");
+      return LogEntry.create_signout(identity, request.remote_ip)
     end
   
     def logSigninFailure(email, as_identity)
-      identity = Identity.find_by_email(email);
-      entry = LogEntry.new(:affected_table => "identity",
-                           :event_type => 'signin_failure');
-      if !as_identity.nil?
-        entry.identity_id = as_identity.id;
-        entry.role = as_identity.role_string;
-      else
-        entry.role = 'none'
-      end
-      if !identity.nil?
-        entry.affected_id = identity.id
-      end
-      entry.description = "Sign-in with email #{email} (#{ identity.nil? || identity.nickname.nil? ? 'unknown user' : 'user ' + identity.nickname  }) did fail#{ as_identity.nil? ? '' : ' for current_user ' + (as_identity.nickname.nil? ? as_identity.email : as_identity.email) }."
-      entry.save
+      return LogEntry.create_signin_failure(email, as_identity, request.remote_ip)
     end
   
     def logSigninSuccess(email, identity)
-      entry = LogEntry.new(:identity_id => identity.id,
-                           :role => identity.role_string,
-                           :affected_table => 'identity',
-                           :affected_id => identity.id,
-                           :event_type => 'signin_success',
-                           :description => "Sign-in with #{email} (user #{ identity.nickname }) did succeed.");
-      entry.save
+      return LogEntry.create_signin_success(email, identity, request.remote_ip)
     end
     
 

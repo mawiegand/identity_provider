@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121007202113) do
+ActiveRecord::Schema.define(:version => 20121013163914) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(:version => 20121007202113) do
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "ip"
   end
 
   add_index "log_entries", ["event_type"], :name => "index_log_entries_on_type"

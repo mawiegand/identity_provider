@@ -173,8 +173,10 @@ module Oauth2
         #   :refresh_token => 'myrefreshtoken',
         :user_identifer => identity.identifier
       }
-      
+            
       logger.debug "Response Body #{ body.inspect }."
+      LogEntry.create_auth_token_success(params[:username], identity, params[:client_id], request.remote_ip)
+
 
       if (!request.post?) # JSONP
         render :status => :ok, :json => JSON.pretty_generate(body), :callback => params[:callback]
@@ -230,6 +232,8 @@ module Oauth2
           :error_description => error_description,
           :error_uri         => error_uri
         }
+        
+        LogEntry.create_auth_token_failure(params[:username], current_identity, params[:client_id], error_code, error_description, request.remote_ip)
 
         if (!request.post? && !params[:callback].blank?) # JSONP
           render :status => :bad_request, :json => JSON.pretty_generate(body.delete_if { |k,v| v.blank? }), :callback => params[:callback]

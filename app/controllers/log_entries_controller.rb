@@ -16,8 +16,8 @@ class LogEntriesController < ApplicationController
   def index
     @title = "Log"
     
-    where_string = "?";
-    where_parameters = [true];
+    where_string = "?=?";
+    where_parameters = [ true, true ];
     
     if !params[:description].nil? && params[:description] != ""
       where_string += " AND description LIKE ?"
@@ -27,6 +27,11 @@ class LogEntriesController < ApplicationController
     if !params[:event_type].nil? && params[:event_type] != ""
       where_string += " AND event_type LIKE ?"
       where_parameters  << params[:event_type] 
+    end
+
+    if !params[:ip].nil? && params[:ip] != ""
+      where_string += " AND ip LIKE ?"
+      where_parameters  << params[:ip] 
     end
     
     if !params[:affected_table].nil? && params[:affected_table] != ""

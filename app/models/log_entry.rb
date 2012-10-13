@@ -30,10 +30,85 @@
 class LogEntry < ActiveRecord::Base
   belongs_to :identity      # entries are connected to the current_user
 
-  attr_accessible :identity_id, :role, :affected_table, :affected_id, :event_type, :description 
-  attr_readonly :identity_id, :role, :affected_table, :affected_id, :event_type, :description
+  attr_accessible :identity_id, :role, :affected_table, :affected_id, :event_type, :description, :ip
+  attr_readonly :identity_id, :role, :affected_table, :affected_id, :event_type, :description, :ip
   
   default_scope :order => 'log_entries.created_at DESC'   # most recent entry comes first
+  
+    # Logging  
+  def self.create_signout(identity, remote_ip = 'unknown')
+    LogEntry.create(:identity_id    => identity.id,
+                    :role           => identity.role_string,
+                    :affected_table => 'identity',
+                    :affected_id    => identity.id,
+                    :event_type     => 'signout_destroy',
+                    :description    => "User #{ identity.address_informal } signed out.",
+                    :ip             => remote_ip);
+  end
+  
+  def self.create_signin_failure(email, as_identity, remote_ip = 'unknown')
+    identity = Identity.find_by_email(email);
+    entry = LogEntry.new(:affected_table => "identity",
+                         :event_type     => 'signin_failure', 
+                         :ip             => remote_ip);
+    if !as_identity.nil?
+      entry.identity_id = as_identity.id;
+      entry.role = as_identity.role_string;
+    else
+      entry.role = 'none'
+    end
+    if !identity.nil?
+      entry.affected_id = identity.id
+    end
+    entry.description = "Sign-in with email #{email} (#{ identity.nil? || identity.nickname.nil? ? 'unknown user' : 'user ' + identity.nickname  }) did fail#{ as_identity.nil? ? '' : ' for current_user ' + (as_identity.nickname.nil? ? as_identity.email : as_identity.email) }."
+    entry.save
+    
+    entry
+  end
+
+  def self.create_signin_success(email, identity, remote_ip = 'unknwon')
+    LogEntry.create(:identity_id    => identity.id,
+                    :role           => identity.role_string,
+                    :affected_table => 'identity',
+                    :affected_id    => identity.id,
+                    :event_type     => 'signin_success',
+                    :description    => "Sign-in with #{email} (user #{ identity.nickname }) did succeed.",
+                    :ip             => remote_ip);
+  end 
+  
+  
+  def self.create_auth_token_success(username, identity, client_id, remote_ip = 'unknwon')
+    LogEntry.create(:identity_id    => identity.id,
+                    :role           => identity.role_string,
+                    :affected_table => 'identity',
+                    :affected_id    => identity.id,
+                    :event_type     => 'auth_token_success',
+                    :description    => "Authentication with client id #{client_id} for #{username} (user #{ identity.nickname }) did succeed.",
+                    :ip             => remote_ip);
+  end  
+  
+  def self.create_auth_token_failure(username, as_identity, client_id, error_code, error_description, remote_ip = 'unknown')
+    identity = Identity.find_by_email(username);
+    identity = Identity.find_by_id_identifier_or_nickname(username)  if identity.nil?
+
+    entry = LogEntry.new(:affected_table => "identity",
+                         :event_type     => 'auth_token_failure', 
+                         :ip             => remote_ip);
+    if !as_identity.nil?
+      entry.identity_id = as_identity.id;
+      entry.role = as_identity.role_string;
+    else
+      entry.role = 'none'
+    end
+    if !identity.nil?
+      entry.affected_id = identity.id
+    end
+    entry.description = "Authentication with client id #{client_id} for #{username} (#{ identity.nil? || identity.nickname.nil? ? 'unknown user' : 'user ' + identity.nickname  }) did fail#{ as_identity.nil? ? '' : ' for current_user ' + (as_identity.nickname.nil? ? as_identity.email : as_identity.email) }. Error #{ error_code }: #{error_description}"
+    entry.save
+    
+    entry
+  end  
+  
 end
 
 

@@ -30,6 +30,11 @@
       <%= text_field_tag :identity_id, params[:identity_id]  %>
     </span>
   
+    <span class="field">
+      <%= label_tag :ip %>
+      <%= text_field_tag :ip, params[:ip]  %>
+    </span>  
+  
     <span class="actions">
       <%= submit_tag "Filter" %>
     </span>
@@ -53,6 +58,7 @@
     <th>Row-ID</th>
     <th>Identity-ID</th>
     <th>Role</th>
+    <th>IP</th>
   </tr>
   <%= render @log_entries %>
 </table>
