@@ -1,0 +1,16 @@
+
+<p>Redirecting to: <a id="external-link" href="<%= @target %>"><%= @target %></a></p>
+<p>Please click the link, if the automatic redirect fails.</p>
+
+<script>
+
+  var a = document.getElementById("external-link");
+  
+  if(!a.click) { //Only IE has .click
+    location.href = "<%= @target %>";
+  }
+  else {
+    a.click();
+  }
+
+</script>

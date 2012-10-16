@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  identity_id: 1
+  origin: MyString
+  destination: MyString
+  agent: MyString
+
+two:
+  identity_id: 1
+  origin: MyString
+  destination: MyString
+  agent: MyString

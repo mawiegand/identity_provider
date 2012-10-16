@@ -9,6 +9,12 @@ defaults: &defaults
   cookie_name: 'ip_remember_token'
   
   token_expiration: '28800'
+  
+  redirect_whitelist: [
+    "www.kostenlose-browsergames.de",
+    "www.xbrowsergames.de",
+    "www.browsergamer.de",
+  ]
       
 development:
   <<: *defaults

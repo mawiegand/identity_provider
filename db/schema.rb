@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121013163914) do
+ActiveRecord::Schema.define(:version => 20121016094342) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -112,6 +112,15 @@ ActiveRecord::Schema.define(:version => 20121013163914) do
     t.string   "sender_character_name"
     t.integer  "sender_id"
     t.boolean  "system_message"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "redirects", :force => true do |t|
+    t.integer  "identity_id"
+    t.string   "origin"
+    t.string   "destination"
+    t.string   "agent"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

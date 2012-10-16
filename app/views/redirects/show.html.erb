@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Identity:</b>
+  <%= @redirect.identity_id %>
+</p>
+
+<p>
+  <b>Origin:</b>
+  <%= @redirect.origin %>
+</p>
+
+<p>
+  <b>Destination:</b>
+  <%= @redirect.destination %>
+</p>
+
+<p>
+  <b>Agent:</b>
+  <%= @redirect.agent %>
+</p>
+
+
+<%= link_to 'Edit', edit_redirect_path(@redirect) %> |
+<%= link_to 'Back', redirects_path %>
