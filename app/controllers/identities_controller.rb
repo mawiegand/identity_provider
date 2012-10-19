@@ -94,7 +94,12 @@ class IdentitiesController < ApplicationController
   
   # create a new identity from the posted form data
   def create
-    LogEntry.create_signup_attempt(params, current_identity, request.remote_ip)
+    agent   = request.env["HTTP_USER_AGENT"]
+    referer = request.env["HTTP_X_ALT_REFERER"]
+        
+    logger.debug "Trying to sgnup with user agent #{agent} and referer #{referer}."
+    
+    LogEntry.create_signup_attempt(params, current_identity, request.remote_ip, agent, referer)
 
     respond_to do |format|
       format.json {
