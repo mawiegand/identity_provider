@@ -135,6 +135,7 @@ class IdentitiesController < ApplicationController
           identity.nickname = disambiguated_name
           identity.email = params[:email]
           identity.locale = I18n.locale
+          identity.referer = referer.blank? ? "none" : referer[0..250]
           identity.password = params[:password]
           identity.password_confirmation = params[:password_confirmation]
           identity.sign_up_with_client_id = client.id
@@ -150,7 +151,7 @@ class IdentitiesController < ApplicationController
           LogEntry.create_signup_success(params, identity, request.remote_ip)
           
           # try to signup the identity for the cient's scopes
-          client.signup_existing_identity(identity, params[:invitation])
+          client.signup_existing_identity(identity, params[:invitation], referer)
           
           # have a look at the results; on waiting list or granted access?
           on_waiting_list = !client.waiting_list_entries.where(identity_id: identity.id).first.nil?
@@ -170,6 +171,8 @@ class IdentitiesController < ApplicationController
       }
       format.html {
         @identity = Identity.new(params[:identity], :as => :creator)
+
+        identity.referer = referer.blank? ? "none" : referer[0..250]      
       
         if @identity.save                                      # created successfully
           LogEntry.create_signup_success(params, @identity, request.remote_ip)

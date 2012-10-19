@@ -8,7 +8,7 @@ class Resource::SignupsController < ApplicationController
   # GET /resource/signups
   # GET /resource/signups.json
   def index
-    @resource_signups = Resource::Signup.all
+    @resource_signups = Resource::Signup.order('created_at DESC').paginate(:page => params[:page], :per_page => 6)
 
     respond_to do |format|
       format.html # index.html.erb

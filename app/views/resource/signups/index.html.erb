@@ -1,31 +1,35 @@
 <h1>Listing resource_signups</h1>
 
+<%= will_paginate @resource_signups %>
+
+
 <table>
   <tr>
+    <th>Date</th>
     <th>Client</th>
+    <th>Nickname</th>
     <th>Identity</th>
+    <th>Email</th>
     <th>Invitation</th>
+    <th>Referer</th>
     <th>Automatic</th>
     <th>Ip</th>
-    <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @resource_signups.each do |resource_signup| %>
   <tr>
-    <td><%= resource_signup.client_id %></td>
-    <td><%= resource_signup.identity_id %></td>
-    <td><%= resource_signup.invitation %></td>
+    <td><%= time_ago_in_words resource_signup.created_at %></td>
+    <td><%= resource_signup.client.identifier %></td>
+    <td><%= resource_signup.identity.nickname %></td>
+    <td><%= link_to "#{resource_signup.identity_id}, #{resource_signup.identity.identifier}", identity_path(resource_signup.identity_id) %></td>
+    <td><%= resource_signup.identity.email %></td>
+    <td><%= link_to resource_signup.invitation, key_path(resource_signup.invitation) unless resource_signup.invitation.blank? %></td>
+    <td><%= resource_signup.referer %></td>
     <td><%= resource_signup.automatic %></td>
     <td><%= resource_signup.ip %></td>
-    <td><%= link_to 'Show', resource_signup %></td>
-    <td><%= link_to 'Edit', edit_resource_signup_path(resource_signup) %></td>
-    <td><%= link_to 'Destroy', resource_signup, confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
 </table>
 
-<br />
-
-<%= link_to 'New Signup', new_resource_signup_path %>
+<br/>
+<%= will_paginate @resource_signups %>

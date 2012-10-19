@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121016094342) do
+ActiveRecord::Schema.define(:version => 20121019160954) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(:version => 20121016094342) do
     t.boolean  "banned"
     t.string   "ban_reason"
     t.datetime "ban_ended_at"
+    t.string   "referer"
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true
@@ -185,6 +186,7 @@ ActiveRecord::Schema.define(:version => 20121016094342) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "key_id"
+    t.string   "referer"
   end
 
   create_table "resource_waiting_lists", :force => true do |t|
