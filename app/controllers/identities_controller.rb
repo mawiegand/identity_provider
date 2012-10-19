@@ -172,7 +172,7 @@ class IdentitiesController < ApplicationController
       format.html {
         @identity = Identity.new(params[:identity], :as => :creator)
 
-        identity.referer = referer.blank? ? "none" : referer[0..250]      
+        @identity.referer = referer.blank? ? "none" : referer[0..250]      
       
         if @identity.save                                      # created successfully
           LogEntry.create_signup_success(params, @identity, request.remote_ip)
