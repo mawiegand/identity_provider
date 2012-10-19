@@ -17,13 +17,15 @@
   </tr>
 
 <% @resource_signups.each do |resource_signup| %>
+  <% invitation = Key.find_by_key('resource_signup.invitation') unless resource_signup.invitation.blank? %>
+
   <tr>
     <td><%= time_ago_in_words resource_signup.created_at %></td>
     <td><%= resource_signup.client.identifier %></td>
     <td><%= resource_signup.identity.nickname %></td>
     <td><%= link_to "#{resource_signup.identity_id}, #{resource_signup.identity.identifier}", identity_path(resource_signup.identity_id) %></td>
     <td><%= resource_signup.identity.email %></td>
-    <td><%= link_to resource_signup.invitation, key_path(resource_signup.invitation) unless resource_signup.invitation.blank? %></td>
+    <td><%= link_to resource_signup.invitation, key_path(invitation) unless invitation.blank? %></td>
     <td><%= resource_signup.referer %></td>
     <td><%= resource_signup.automatic %></td>
     <td><%= resource_signup.ip %></td>
