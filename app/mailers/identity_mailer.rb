@@ -1,5 +1,5 @@
 class IdentityMailer < ActionMailer::Base
-  default from: "no-reply@5dlab.com"
+  default from: "team@5dlab.com"
 
   def manually_granted_access_email(identity, client)
     @identity = identity
