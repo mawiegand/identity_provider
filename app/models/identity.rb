@@ -176,11 +176,11 @@ class Identity < ActiveRecord::Base
   end
   
   def self.valid_identifier?(identifier)
-    identifier.index(@identifier_regex) != nil
+    !identifier.nil? && identifier.index(@identifier_regex) != nil
   end
   
   def self.valid_id?(id)
-    id.index(/^[1-9]\d*$/) != nil
+    !id.nil? && id.index(/^[1-9]\d*$/) != nil
   end
   
   def self.valid_nickname?(name)
