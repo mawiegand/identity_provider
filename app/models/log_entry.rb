@@ -119,7 +119,7 @@ class LogEntry < ActiveRecord::Base
     else
       entry.role = 'none'
     end
-    entry.description = "Sign-up with #{ username } did fail#{ as_identity.nil? ? '' : ' for current_user ' + (as_identity.nickname.nil? ? as_identity.email : as_identity.email) }."
+    entry.description = ("Sign-up with #{ username } did fail#{ as_identity.nil? ? '' : ' for current_user ' + (as_identity.nickname.nil? ? as_identity.email : as_identity.email) }.")[0..200]
     entry.save
     
     entry
