@@ -184,7 +184,7 @@ class Identity < ActiveRecord::Base
   end
   
   def self.valid_nickname?(name)
-    name.index(@nickname_regex) != nil    # does not start with digit, no whitespaces
+    !name.nil? && name.index(@nickname_regex) != nil    # does not start with digit, no whitespaces
   end
   
   # returns a string representation of the identities role
