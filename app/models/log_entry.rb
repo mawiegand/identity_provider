@@ -82,8 +82,8 @@ class LogEntry < ActiveRecord::Base
     
     entry = LogEntry.new(:affected_table => 'identity',
                          :event_type     => 'signup_attempt',
-                         :description    => ("Sign-up attempt with #{ username } using agent #{ (user_agent || 'unknown')[0..70] } refered by #{ referer || 'unknown' }.")[0..250],
-                         :ip             => remote_ip);
+                         :description    => ("Sign-up attempt with #{ username } using agent #{ (user_agent || 'unknown')[0..70] } refered by #{ referer || 'unknown' }.")[0..200],
+                         :ip             => remote_ip[0..200]);
     if !as_identity.nil?
       entry.identity_id = as_identity.id;
       entry.role = as_identity.role_string;
