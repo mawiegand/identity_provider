@@ -83,7 +83,7 @@ class LogEntry < ActiveRecord::Base
     entry = LogEntry.new(:affected_table => 'identity',
                          :event_type     => 'signup_attempt',
                          :description    => ("Sign-up attempt with #{ username } using agent #{ (user_agent || 'unknown')[0..70] } refered by #{ referer || 'unknown' }.")[0..200],
-                         :ip             => remote_ip[0..200]);
+                         :ip             => remote_ip);
     if !as_identity.nil?
       entry.identity_id = as_identity.id;
       entry.role = as_identity.role_string;
@@ -152,7 +152,7 @@ class LogEntry < ActiveRecord::Base
     if !identity.nil?
       entry.affected_id = identity.id
     end
-    entry.description = "Authentication with client id #{client_id} for #{username} (#{ identity.nil? || identity.nickname.nil? ? 'unknown user' : 'user ' + identity.nickname  }) did fail#{ as_identity.nil? ? '' : ' for current_user ' + (as_identity.nickname.nil? ? as_identity.email : as_identity.email) }. Error #{ error_code }: #{error_description}"
+    entry.description = ("Authentication with client id #{client_id} for #{username} (#{ identity.nil? || identity.nickname.nil? ? 'unknown user' : 'user ' + identity.nickname  }) did fail#{ as_identity.nil? ? '' : ' for current_user ' + (as_identity.nickname.nil? ? as_identity.email : as_identity.email) }. Error #{ error_code }: #{error_description}")[0..200]
     entry.save
     
     entry
