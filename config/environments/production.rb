@@ -1,3 +1,5 @@
+require 'five_d_logger'  
+
 IdentityProvider::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
