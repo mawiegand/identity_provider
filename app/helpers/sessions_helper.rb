@@ -130,6 +130,8 @@ module SessionsHelper
     raise BearerAuthInvalidRequest.new('Multiple access tokens sent within one request.') if !valid_authorization_header?
     @current_identifier ||= identity_from_access_token if api_request?
     @current_identifier ||= identity_from_remember_token if website_request?
+    
+    @current_identifier
   end
   
   def identity_from_access_token
