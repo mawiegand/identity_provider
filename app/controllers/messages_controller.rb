@@ -56,7 +56,7 @@ class MessagesController < ApplicationController
     
     raise BadRequestError.new('Identity and recipient_id do not match.')  if !params[:identity_id].nil? && params[:identity_id] != params[:message][:recipient_id]
     
-    sender    = Identity.find_by_id_identifier_or_nickname(params[:message][:sender_id],                            :find_deleted => true)
+    sender    = Identity.find_by_id_identifier_or_nickname(params[:message][:sender_id], :find_deleted => true) unless params[:message][:sender_id].nil?
     recipient = Identity.find_by_id_identifier_or_nickname(params[:identity_id] || params[:message][:recipient_id], :find_deleted => true)
     
     raise NotFoundError.new('Recipient #{params[:message][:recipient_id]} unknown.')  if recipient.nil?
