@@ -78,6 +78,7 @@ class IdentitiesController < ApplicationController
   end
   
   def self
+    logger.debug "Accessed self with access token in url / body #{ params[:access_token] } and current identity #{ current_identity }."
     # this is to handle a bug in Safari (and other browsers), that lose a custom Authorization header when following a redirect
     if !params[:access_token].blank? && request_authorization && request_authorization[:method] != :header  # if a_t was in body (POST) or query (GET), append it as argument 
       redirect_to polymorphic_path(current_identity, :access_token => params[:access_token])
