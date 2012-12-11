@@ -141,6 +141,10 @@ module SessionsHelper
     raise BearerAuthInsufficientScope.new('Requested resource is not in authorized scope.') unless request_access_token.in_scope?('5dentity')
   
     identity = Identity.find_by_id_identifier_or_nickname(request_access_token.identifier, :deleted => false)
+    
+    logger.debug "Current identity from access token: #{identity}. Identitfier in token was: #{ request_access_token.identifier }"
+    
+    identity
   end
   
   def request_access_token
