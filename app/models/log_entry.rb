@@ -77,12 +77,12 @@ class LogEntry < ActiveRecord::Base
   end 
   
 
-  def self.create_signup_attempt(params, as_identity, remote_ip = 'unknwon', user_agent = nil, referer =nil)
+  def self.create_signup_attempt(params, as_identity, remote_ip = 'unknwon', user_agent = nil, referer =nil, request_url=nil)
     username = params.has_key?(:identity) ? (params[:identity][:email] || params[:identity][:nickname]) : params[:email] || 'no username'
     
     entry = LogEntry.new(:affected_table => 'identity',
                          :event_type     => 'signup_attempt',
-                         :description    => ("Sign-up attempt with #{ username } using agent #{ (user_agent || 'unknown')[0..70] } refered by #{ referer || 'unknown' }.")[0..200],
+                         :description    => ("Sign-up attempt with #{ username } using agent #{ (user_agent || 'unknown')[0..70] } refered by #{ referer || 'unknown' }, originial request #{ request_url || 'unknown' }.")[0..254],
                          :ip             => remote_ip);
     if !as_identity.nil?
       entry.identity_id = as_identity.id;

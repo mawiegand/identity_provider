@@ -43,13 +43,13 @@ class Client < ActiveRecord::Base
     id.index(/^[1-9]\d*$/) != nil
   end
   
-  def grant_scopes_to_identity(identity, invitation, automatic, referer=nil)
+  def grant_scopes_to_identity(identity, invitation, automatic, referer=nil, request_url=nil)
     identity.grants.create({
       client_id: self.id,
       scopes:    self.scopes,
       key_id:    invitation.nil? ? nil : invitation.id,
     })         
-    register_signup(identity, invitation, automatic, referer)    
+    register_signup(identity, invitation, automatic, referer, request_url)    
     remove_from_waiting_list(identity)
   end
 
@@ -58,7 +58,7 @@ class Client < ActiveRecord::Base
     waiting_list_entry.destroy   unless waiting_list_entry.nil? 
   end
   
-  def signup_existing_identity(identity, invitation_string, referer=nil)
+  def signup_existing_identity(identity, invitation_string, referer=nil, request_url=nil)
     if self.signup_mode == Client::SIGNUP_MODE_NORMAL  ||     # normal mode -> always grant all scopes.
        self.signup_mode == Client::SIGNUP_MODE_INVITATION     # invitation mode -> only grand all scopes if invitation is present and valid
        
@@ -75,7 +75,7 @@ class Client < ActiveRecord::Base
         add_to_waiting_list(identity, invitation_string)   
         return 
       else
-        grant_scopes_to_identity(identity, invitation, true, referer)
+        grant_scopes_to_identity(identity, invitation, true, referer, request_url)
         IdentityMailer.automatically_granted_access_email(identity, self).deliver  # send email validation email
       end
     else
@@ -98,12 +98,13 @@ class Client < ActiveRecord::Base
     })
   end
   
-  def register_signup(identity, invitation, automatic=false, referer=nil)
+  def register_signup(identity, invitation, automatic=false, referer=nil, request_url=nil)
     Resource::Signup.create({
       client_id:   self.id,
       identity_id: identity.id,
       automatic:   automatic,
       referer:     referer.blank? ? "unknown" : referer[0..250],
+      request_url: request_url.blank? ? "unknown" : request_url,
 #     ip:          request.remote_ip, 
       invitation:  invitation.nil? ? nil : invitation.key,
       key_id:      invitation.nil? ? nil : invitation.id  

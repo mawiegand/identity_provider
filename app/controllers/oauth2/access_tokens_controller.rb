@@ -137,7 +137,8 @@ module Oauth2
 #        end
 
         referer = request.env["HTTP_X_ALT_REFERER"]
-        client.signup_existing_identity(identity, params[:invitation], referer)
+        request_url = request.env["HTTP_X_ALT_REQUEST"]
+        client.signup_existing_identity(identity, params[:invitation], referer, request_url)
 
         # put on waiting list?
         on_waiting_list = !client.waiting_list_entries.where(identity_id: identity.id).first.nil?

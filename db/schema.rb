@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121019160954) do
+ActiveRecord::Schema.define(:version => 20121211120028) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -187,6 +187,7 @@ ActiveRecord::Schema.define(:version => 20121019160954) do
     t.datetime "updated_at"
     t.integer  "key_id"
     t.string   "referer"
+    t.text     "request_url"
   end
 
   create_table "resource_waiting_lists", :force => true do |t|

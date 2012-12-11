@@ -94,12 +94,13 @@ class IdentitiesController < ApplicationController
   
   # create a new identity from the posted form data
   def create
-    agent   = request.env["HTTP_USER_AGENT"]
-    referer = request.env["HTTP_X_ALT_REFERER"]
+    agent       = request.env["HTTP_USER_AGENT"]
+    referer     = request.env["HTTP_X_ALT_REFERER"]
+    request_url = request.env["HTTP_X_ALT_REQUEST"]
         
-    logger.debug "Trying to sgnup with user agent #{agent} and referer #{referer}."
+    logger.debug "Trying to signup with user agent #{agent}, referer #{referer} and request url #{request_url}."
     
-    LogEntry.create_signup_attempt(params, current_identity, request.remote_ip, agent, referer)
+    LogEntry.create_signup_attempt(params, current_identity, request.remote_ip, agent, referer, request_url)
 
     respond_to do |format|
       format.json {
@@ -151,7 +152,7 @@ class IdentitiesController < ApplicationController
           LogEntry.create_signup_success(params, identity, request.remote_ip)
           
           # try to signup the identity for the cient's scopes
-          client.signup_existing_identity(identity, params[:invitation], referer)
+          client.signup_existing_identity(identity, params[:invitation], referer, request_url)
           
           # have a look at the results; on waiting list or granted access?
           on_waiting_list = !client.waiting_list_entries.where(identity_id: identity.id).first.nil?

@@ -12,6 +12,7 @@
     <th>Email</th>
     <th>Invitation</th>
     <th>Referer</th>
+    <th>Request Url</th>
     <th>Automatic</th>
     <th>Ip</th>
   </tr>
@@ -27,6 +28,7 @@
     <td><%= resource_signup.identity.email %></td>
     <td><%= link_to resource_signup.invitation, key_path(invitation) unless invitation.blank? %></td>
     <td><%= resource_signup.referer %></td>
+    <td><%= resource_signup.request_url %></td>
     <td><%= resource_signup.automatic %></td>
     <td><%= resource_signup.ip %></td>
   </tr>
