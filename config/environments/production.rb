@@ -1,3 +1,5 @@
+require 'five_d_logger'  
+
 IdentityProvider::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -35,7 +37,12 @@ IdentityProvider::Application.configure do
   config.force_ssl = true
 
   # See everything in the log (default is :info)
-  # config.log_level = :debug
+  config.log_level = ActiveSupport::BufferedLogger::Severity::DEBUG  
+  config.log_path = 'log/production.log'
+  config.logger = FiveDLogger.new(config.log_path, config.log_level)
+  config.active_support.deprecation = :log
+
+
 
   # Use a different logger for distributed setups
   # config.logger = SyslogLogger.new

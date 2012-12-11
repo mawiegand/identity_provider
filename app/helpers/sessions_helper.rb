@@ -2,6 +2,7 @@ module SessionsHelper
   
   
   def requested_json?
+    logger.debug "API request: #{ request.format == "application/json" }."
     return request.format == "application/json"
   end  
 
@@ -129,6 +130,8 @@ module SessionsHelper
     raise BearerAuthInvalidRequest.new('Multiple access tokens sent within one request.') if !valid_authorization_header?
     @current_identifier ||= identity_from_access_token if api_request?
     @current_identifier ||= identity_from_remember_token if website_request?
+    
+    @current_identifier
   end
   
   def identity_from_access_token
@@ -140,6 +143,10 @@ module SessionsHelper
     raise BearerAuthInsufficientScope.new('Requested resource is not in authorized scope.') unless request_access_token.in_scope?('5dentity')
   
     identity = Identity.find_by_id_identifier_or_nickname(request_access_token.identifier, :deleted => false)
+    
+    logger.debug "Current identity from access token: #{identity}. Identitfier in token was: #{ request_access_token.identifier }"
+    
+    identity
   end
   
   def request_access_token
