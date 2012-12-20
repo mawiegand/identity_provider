@@ -4,7 +4,8 @@ class Message < ActiveRecord::Base
   belongs_to  :sender,     :class_name => "Identity",       :foreign_key => :sender_id,    :inverse_of => :sent_messages  
     
   def send_via_email
-    raise NotFoundError.new('No valid recipient. Could not send message via email.') if self.recipient.nil?
+    raise NotFoundError.new('No valid recipient. Could not send message via email.')           if self.recipient.nil?
+    raise NotFoundError.new('No valid email for recipient. Could not send message via email.') if self.recipient.generic_email?
     
     MessageMailer.message_email(self.recipient, self).deliver      # send email validation email
     

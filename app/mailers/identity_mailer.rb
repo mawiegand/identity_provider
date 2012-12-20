@@ -1,15 +1,8 @@
 class IdentityMailer < ActionMailer::Base
   default from: "team@5dlab.com"
   
-  def do_not_deliver!
-    Rails.logger.debug "Stopped delivery of email."
-    def self.deliver! ; false ; end
-  end
-    
 
   def manually_granted_access_email(identity, client)
-    do_not_deliver! if identity.generic_email? 
-
     @identity = identity
     @client = client
     @link = request.protocol + request.host
@@ -18,8 +11,6 @@ class IdentityMailer < ActionMailer::Base
   end
   
   def automatically_granted_access_email(identity, client)
-    do_not_deliver! if identity.generic_email? 
-
     @identity = identity
     @client = client
     @link = request.protocol + request.host
@@ -28,8 +19,6 @@ class IdentityMailer < ActionMailer::Base
   end
   
   def validation_email(identity)
-    do_not_deliver! if identity.generic_email? 
-
     @identity = identity
     @link = request.protocol + request.host
     @validation_url = @link + "/identity_provider/identities/#{identity.id}/validation?code=#{identity.validation_code}"
@@ -38,8 +27,6 @@ class IdentityMailer < ActionMailer::Base
   end
   
   def waiting_list_email(identity, client, invitation=nil)
-    do_not_deliver! if identity.generic_email? 
-
     @identity   = identity
     @client = client
     @link = request.protocol + request.host
@@ -49,8 +36,6 @@ class IdentityMailer < ActionMailer::Base
   
 
   def password_token_email(identity)
-    do_not_deliver! if identity.generic_email? 
-
     @identity           = identity
     @password_token_url = IDENTITY_PROVIDER_CONFIG['portal_base_url'] + '/' + I18n.locale.to_s + "/new_password/#{identity.id}/#{identity.password_token}"
     
@@ -58,8 +43,6 @@ class IdentityMailer < ActionMailer::Base
   end
   
   def password_email(identity, password)
-    do_not_deliver! if identity.generic_email? 
-
     @identity = identity
     @password = password
     

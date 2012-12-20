@@ -195,7 +195,7 @@ class IdentitiesController < ApplicationController
         if @identity.save                                      # created successfully
           LogEntry.create_signup_success(params, @identity, request.remote_ip)
                         # log creation
-          IdentityMailer.validation_email(@identity).deliver   # send email validation email
+          IdentityMailer.validation_email(@identity).deliver unless @identity.generic_email?  # send email validation email
           sign_in @identity                                    # sign in with newly created identity
           flash[:success] =    
             I18n.t('identities.signup.flash.welcome', :name => @identity.address_informal(:owner))
@@ -381,13 +381,15 @@ class IdentitiesController < ApplicationController
     
     if identity.nil?
       raise NotFoundError.new "Mail not found"
+    elsif identity.generic_email?
+      raise NotFoundError.new "No email address for this user."
     else
       # create password token      
       identity.password_token = identity.make_random_string(32)
       identity.save
   
       # send mail with token
-      IdentityMailer.password_token_email(identity).deliver
+      IdentityMailer.password_token_email(identity).deliver      
     end
       
     render :status => :ok, :json => {}                 
