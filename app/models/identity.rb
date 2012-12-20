@@ -76,7 +76,7 @@ class Identity < ActiveRecord::Base
     
   attr_readable :identifier, :nickname, :id, :admin, :staff,               :as => :default 
   attr_readable *readable_attributes(:default), :created_at,  :as => :user
-  attr_readable *readable_attributes(:user), :email, :firstname, :surname, :activated, :updated_at, :deleted, :banned, :ban_ended_at,       :as => :owner
+  attr_readable *readable_attributes(:user), :email, :firstname, :surname, :activated, :updated_at, :deleted, :banned, :ban_ended_at, :generic_email, :generic_nickname,     :as => :owner
   attr_readable *readable_attributes(:user), :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt, :password_token, :ban_reason, :as => :staff
   attr_readable *readable_attributes(:staff),   :as => :admin
   

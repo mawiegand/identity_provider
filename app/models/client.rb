@@ -6,9 +6,9 @@ class Client < ActiveRecord::Base
   has_many  :names,                 :class_name => "ClientName",                  :foreign_key => :client_id,    :inverse_of => :client
 
   attr_readable :as => :default 
-  attr_readable :signup_mode, :signin_mode,      :as => :owner 
-  attr_readable *accessible_attributes(:owner),  :id, :identifier, :created_at, :updated_at, :name, :identity_id, :password, :refresh_token_secret, :description, :homepage, :grant_types, :scopes,  :as => :staff 
-  attr_readable *accessible_attributes(:staff),  :as => :admin 
+  attr_readable :signup_mode, :signin_mode, :signup_without_email,     :as => :owner 
+  attr_readable *readable_attributes(:owner),  :id, :identifier, :created_at, :updated_at, :name, :identity_id, :password, :refresh_token_secret, :description, :homepage, :grant_types, :scopes,  :as => :staff 
+  attr_readable *readable_attributes(:staff),  :as => :admin 
   
   SIGNUP_MODES = []
   SIGNUP_MODE_OFF = 0

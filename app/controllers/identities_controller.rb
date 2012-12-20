@@ -119,7 +119,12 @@ class IdentitiesController < ApplicationController
         saved = false
         
         begin
-          base_name = params[:nickname_base ].blank? ? "User" : params[:nickname_base]
+          base_name = if !params[:nickname].blank? 
+            params[:nickname]
+          else
+            params[:nickname_base ].blank? ? "User" : params[:nickname_base]
+          end
+          
           disambiguated_name = base_name
           
           # OPTIMIZE: the following is a very simple algorithm and should be replaced
@@ -133,13 +138,24 @@ class IdentitiesController < ApplicationController
             i = i+1
           end
           
+          email = if !params[:email].blank?
+            params[:email]
+          elsif client.signup_without_email?
+            "#{disambiguated_name}@5dlab.com"
+          else
+            nil
+          end
+  
+          
           identity = Identity.new
           identity.nickname = disambiguated_name
-          identity.email = params[:email]
+          identity.email = email
           identity.locale = I18n.locale
           identity.referer = referer.blank? ? "none" : referer[0..250]
           identity.password = params[:password]
           identity.password_confirmation = params[:password_confirmation]
+          identity.generic_nickname = params[:nickname].blank?
+          identity.generic_email    = params[:email].blank?
           identity.sign_up_with_client_id = client.id
           
           raise BadRequestError.new(I18n.translate "error.identityInvalid") unless identity.valid?
