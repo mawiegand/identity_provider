@@ -6,6 +6,11 @@ class IdentityMailer < ActionMailer::Base
     @client = client
     @link = request.protocol + request.host
     
+    if @identity.generic_email? 
+      Rails.logger.debug "Could not send email to #{ identity.identifier } because this identity has a generic email: #{ identity.email }."
+      return
+    end
+    
     mail :to => identity.email, :subject => I18n.t('mailing.manually_granted_access.subject') 
   end
   
@@ -13,6 +18,11 @@ class IdentityMailer < ActionMailer::Base
     @identity = identity
     @client = client
     @link = request.protocol + request.host
+
+    if @identity.generic_email? 
+      Rails.logger.debug "Could not send email to #{ identity.identifier } because this identity has a generic email: #{ identity.email }."
+      return
+    end    
     
     mail :to => identity.email, :subject => I18n.t('mailing.automatically_granted_access.subject') 
   end
@@ -22,6 +32,11 @@ class IdentityMailer < ActionMailer::Base
     @link = request.protocol + request.host
     @validation_url = @link + "/identity_provider/identities/#{identity.id}/validation?code=#{identity.validation_code}"
     
+    if @identity.generic_email? 
+      Rails.logger.debug "Could not send email to #{ identity.identifier } because this identity has a generic email: #{ identity.email }."
+      return
+    end    
+    
     mail :to => identity.email, :subject => I18n.t('mailing.validation.subject') 
   end
   
@@ -29,6 +44,11 @@ class IdentityMailer < ActionMailer::Base
     @identity   = identity
     @client = client
     @link = request.protocol + request.host
+    
+    if @identity.generic_email? 
+      Rails.logger.debug "Could not send email to #{ identity.identifier } because this identity has a generic email: #{ identity.email }."
+      return
+    end    
     
     mail :to => identity.email, :subject => I18n.t('mailing.waiting_list.subject')   
   end
@@ -39,12 +59,22 @@ class IdentityMailer < ActionMailer::Base
     @identity           = identity
     @password_token_url = IDENTITY_PROVIDER_CONFIG['portal_base_url'] + '/' + I18n.locale.to_s + "/new_password/#{identity.id}/#{identity.password_token}"
     
+    if @identity.generic_email? 
+      Rails.logger.debug "Could not send email to #{ identity.identifier } because this identity has a generic email: #{ identity.email }."
+      return
+    end    
+    
     mail :to => identity.email, :subject => I18n.t('mailing.password_token.subject')    
   end
   
   def password_email(identity, password)
     @identity = identity
     @password = password
+    
+    if @identity.generic_email? 
+      Rails.logger.debug "Could not send email to #{ identity.identifier } because this identity has a generic email: #{ identity.email }."
+      return
+    end    
     
     mail :to => identity.email, :subject => I18n.t('mailing.password.subject')
   end
