@@ -22,6 +22,12 @@ class Resource::HistoriesController < ApplicationController
       else
         @resource_histories = identity.events.where(:game_id => current_game.id)
       end
+      
+      # eval the serialized attributes. otherwise, the quotation marks would be escaped in json output string
+      @resource_histories.each do |event|
+        event.data = eval(event.data)
+        event.localized_description = eval(event.localized_description)        
+      end
     else 
       @asked_for_index = true
     end
