@@ -278,7 +278,7 @@ class Identity < ActiveRecord::Base
   end    
 
   def send_validation_email
-    IdentityMailer.validation_email(self).deliver unless @identity.generic_email?   # send email validation email
+    IdentityMailer.validation_email(self).deliver unless self.generic_email?   # send email validation email
     true
   end
   
