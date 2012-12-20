@@ -181,9 +181,9 @@ module Oauth2
 
 
       if (!request.post?) # JSONP
-        render :status => :ok, :json => include_root(body, :access_token), :callback => params[:callback]
+        render :status => :ok, :json => JSON.pretty_generate(include_root(body, :access_token)), :callback => params[:callback]
       else
-        render :status => :ok, :json => include_root(body, :access_token)
+        render :status => :ok, :json => JSON.pretty_generate(include_root(body, :access_token))
       end
 
       headers['Cache-Control'] = 'no-store'
