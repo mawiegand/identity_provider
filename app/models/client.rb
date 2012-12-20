@@ -76,7 +76,7 @@ class Client < ActiveRecord::Base
         return 
       else
         grant_scopes_to_identity(identity, invitation, true, referer, request_url)
-        IdentityMailer.automatically_granted_access_email(identity, self).deliver  # send email validation email
+        IdentityMailer.automatically_granted_access_email(identity, self).deliver  unless identity.generic_email? # send email validation email
       end
     else
       add_to_waiting_list(identity, invitation_string)   
