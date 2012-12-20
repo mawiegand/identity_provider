@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
   include SessionsHelper     # session helpers must be available to all controllers
   
   before_filter :set_locale  # get the locale from the user parameters
+  before_filter :setup_for_restkit
+
   around_filter :request_access
   around_filter :time_action
 
@@ -31,6 +33,26 @@ class ApplicationController < ActionController::Base
       yield
       elapsed = Time.now - started
       logger.debug("Executing #{controller_name}::#{action_name} took #{elapsed*1000}ms in real-time.")
+    end
+    
+    def setup_for_restkit 
+      logger.debug "IN SETUP RESTKIT API, PRESENT BEHAVIOUR: include_root_in_json = #{ ActiveRecord::Base.include_root_in_json == true ? 'true' : 'false' }"
+      
+      if use_restkit_api?  
+        ActiveRecord::Base.include_root_in_json = true 
+        logger.debug "USE RESTKIT API FOR THIS REQUEST"
+      else 
+        ActiveRecord::Base.include_root_in_json = false 
+        logger.debug "USE STANDARD API FOR THIS REQUEST"
+      end
+    end
+    
+    def use_restkit_api?
+      !request.headers['X-RESTKIT-API'].blank?     
+    end
+    
+    def include_root(hash, root) 
+      use_restkit_api? ? { root => hash } : hash
     end
   
     # Set the locale according to the user specified locale or to the default

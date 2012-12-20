@@ -56,7 +56,7 @@ class IdentitiesController < ApplicationController
       format.json { 
         @attributes = @identity.sanitized_hash(role)           # only those, that may be read by present user
         @attributes[:gravatar_hash] = @identity.gravatar_hash
-        render :json => @attributes.delete_if { |k,v| v.blank? } # to compact the return string to non-blank attrs
+        render :json => include_root(@attributes.delete_if { |k,v| v.blank? }, :identity) # first compact the return string to non-blank attrs, then possible re-include the correct root (for RESTKIT access)
       }      
       format.html {
         @options = {
