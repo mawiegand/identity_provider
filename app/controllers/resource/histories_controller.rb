@@ -107,8 +107,8 @@ class Resource::HistoriesController < ApplicationController
         
         logger.debug("present: #{@resource_history.data}, params: #{params[:data]}, after params eval: #{ params[:data].blank? ? "blank" : eval(params[:data]) }")
 
-        @resource_history.data                  = eval(params[:data])                  unless params[:data].blank?
-        @resource_history.localized_description = eval(params[:localized_description]) unless params[:localized_description].blank?
+        @resource_history.data                  = eval(params[:resource_history][:data])                  unless params[:resource_history][:data].blank?
+        @resource_history.localized_description = eval(params[:resource_history][:localized_description]) unless params[:resource_history][:localized_description].blank?
         
         @resource_history.save
 
