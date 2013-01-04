@@ -1,5 +1,6 @@
 class IdentityMailer < ActionMailer::Base
   default from: "team@5dlab.com"
+  
 
   def manually_granted_access_email(identity, client)
     @identity = identity
@@ -13,7 +14,7 @@ class IdentityMailer < ActionMailer::Base
     @identity = identity
     @client = client
     @link = request.protocol + request.host
-    
+
     mail :to => identity.email, :subject => I18n.t('mailing.automatically_granted_access.subject') 
   end
   
@@ -35,7 +36,6 @@ class IdentityMailer < ActionMailer::Base
   
 
   def password_token_email(identity)
-    logger.debug locale.inspect
     @identity           = identity
     @password_token_url = IDENTITY_PROVIDER_CONFIG['portal_base_url'] + '/' + I18n.locale.to_s + "/new_password/#{identity.id}/#{identity.password_token}"
     

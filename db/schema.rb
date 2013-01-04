@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121211120028) do
+ActiveRecord::Schema.define(:version => 20121220171832) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(:version => 20121211120028) do
     t.integer  "signin_mode",              :default => 1,     :null => false
     t.boolean  "automatic_signup",         :default => false, :null => false
     t.string   "direct_backend_login_url"
+    t.boolean  "signup_without_email",     :default => false, :null => false
   end
 
   create_table "granted_scopes", :force => true do |t|
@@ -70,6 +71,8 @@ ActiveRecord::Schema.define(:version => 20121211120028) do
     t.string   "ban_reason"
     t.datetime "ban_ended_at"
     t.string   "referer"
+    t.boolean  "generic_nickname",       :default => false, :null => false
+    t.boolean  "generic_email",          :default => false, :null => false
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true

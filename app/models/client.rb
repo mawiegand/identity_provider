@@ -6,9 +6,9 @@ class Client < ActiveRecord::Base
   has_many  :names,                 :class_name => "ClientName",                  :foreign_key => :client_id,    :inverse_of => :client
 
   attr_readable :as => :default 
-  attr_readable :signup_mode, :signin_mode,      :as => :owner 
-  attr_readable *accessible_attributes(:owner),  :id, :identifier, :created_at, :updated_at, :name, :identity_id, :password, :refresh_token_secret, :description, :homepage, :grant_types, :scopes,  :as => :staff 
-  attr_readable *accessible_attributes(:staff),  :as => :admin 
+  attr_readable :signup_mode, :signin_mode, :signup_without_email,     :as => :owner 
+  attr_readable *readable_attributes(:owner),  :id, :identifier, :created_at, :updated_at, :name, :identity_id, :password, :refresh_token_secret, :description, :homepage, :grant_types, :scopes,  :as => :staff 
+  attr_readable *readable_attributes(:staff),  :as => :admin 
   
   SIGNUP_MODES = []
   SIGNUP_MODE_OFF = 0
@@ -76,7 +76,7 @@ class Client < ActiveRecord::Base
         return 
       else
         grant_scopes_to_identity(identity, invitation, true, referer, request_url)
-        IdentityMailer.automatically_granted_access_email(identity, self).deliver  # send email validation email
+        IdentityMailer.automatically_granted_access_email(identity, self).deliver  unless identity.generic_email? # send email validation email
       end
     else
       add_to_waiting_list(identity, invitation_string)   

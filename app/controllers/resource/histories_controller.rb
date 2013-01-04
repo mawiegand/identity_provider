@@ -112,6 +112,14 @@ class Resource::HistoriesController < ApplicationController
 
     respond_to do |format|
       if @resource_history.update_attributes(params[:resource_history])
+        
+        logger.debug("present: #{@resource_history.data}, params: #{params[:data]}, after params eval: #{ params[:data].blank? ? "blank" : eval(params[:data]) }")
+
+        @resource_history.data                  = eval(params[:resource_history][:data])                  unless params[:resource_history][:data].blank?
+        @resource_history.localized_description = eval(params[:resource_history][:localized_description]) unless params[:resource_history][:localized_description].blank?
+        
+        @resource_history.save
+
         format.html { redirect_to @resource_history, notice: 'History was successfully updated.' }
         format.json { head :ok }
       else
