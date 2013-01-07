@@ -27,21 +27,29 @@
       <p><b>Received <%= @options[:messages_count]%> messages.</b> <%= link_to "Show", identity_messages_path(@attributes[:id]) %></p>
     <%end%>
     
-    <% unless @identity.events.empty? %>
+    <h3>History Events</h3>
+    <% if @identity.events.empty? %>
+      <p>No Events available</p>
+    <% else %>
       <table>
       <tr>
-        <th>History Events</th>
+        <th>Game ID</th>
+        <th>Events</th>
+        <th></th>
         <th></th>
         <th></th>
       </tr>
       <% @identity.events.each do |event| %>
         <tr>
+          <td><%= event.game_id %></td>          
           <td><%= event.localized_description %></td>          
           <td><%= link_to 'Show', event %></td>
           <td><%= link_to 'Edit', edit_resource_history_path(event) %></td>
+          <td><%= link_to 'Destroy', event, confirm: 'Are you sure?', method: :delete %></td>
         </tr>
       <% end %>
       </table>
     <% end %>
+    <p><%= link_to 'New History Event', new_resource_history_path(:identity_id => @identity) %></p>
   </end>
 </end>
