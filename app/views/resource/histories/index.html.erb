@@ -1,5 +1,7 @@
 <h1>Listing resource_histories</h1>
 
+<%= will_paginate %>
+
 <table>
   <tr>
     <th>Game</th>
@@ -11,7 +13,7 @@
     <th></th>
   </tr>
 
-<% @resource_histories.each do |resource_history| %>
+<% @histories.each do |resource_history| %>
   <tr>
     <td><%= resource_history.game_id %></td>
     <td><%= resource_history.identity_id %></td>
@@ -23,6 +25,8 @@
   </tr>
 <% end %>
 </table>
+
+<%= will_paginate %>
 
 <br />
 

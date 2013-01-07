@@ -18,14 +18,14 @@ class Resource::HistoriesController < ApplicationController
       identity = Identity.find_by_id_identifier_or_nickname(params[:identity_id], :find_deleted => staff?) # only staff can see deleted users
       raise NotFoundError.new('Page Not Found') if identity.nil?    
       if current_game.nil?
-        @resource_histories = identity.events
+        @histories = identity.events
       else
-        @resource_histories = identity.events.where(:game_id => current_game.id)
+        @histories = identity.events.where(:game_id => current_game.id)
       end
 
       if Rails.env.development?
         # eval the serialized attributes. otherwise, the quotation marks would be escaped in json output string
-        @resource_histories.each do |event|
+        @histories.each do |event|
           event.data = eval(event.data)
           event.localized_description = eval(event.localized_description)        
         end        
@@ -37,13 +37,13 @@ class Resource::HistoriesController < ApplicationController
     respond_to do |format|
       format.html do
         if @resource_histories.nil?
-          @resource_histories =  Resource::History.paginate(:order => "identity_id ASC", :page => params[:page], :per_page => 50)    
+          @histories =  Resource::History.paginate(:order => "identity_id ASC", :page => params[:page], :per_page => 50)    
           @paginate = true   
         end 
       end
       format.json do
         raise ForbiddenError.new('Access Forbidden')        if @asked_for_index
-        render json: @resource_histories 
+        render json: @histories 
       end
     end       
   end
