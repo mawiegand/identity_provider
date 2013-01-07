@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :game_id %><br />
-    <%= select(:resource_history, :game_id, Client.all.enum_for(:each).collect { |client| [ client.identifier, client.id ] } ) %>
+    <%= select(:resource_history, :game_id, Resource::Game.all.enum_for(:each).collect { |game| [ game.name, game.id ] } ) %>
   </div>
   <div class="field">
     <%= f.label :identity_id %><br />
