@@ -10,9 +10,8 @@
         <%="activated #{ time_ago_in_words @attributes[:activated]} ago." if @attributes[:activated] %><br />
         <%="Password Token: #{@attributes[:password_token]}" if @attributes[:password_token] %><br />
         <%="Banned until #{@attributes[:ban_ended_at]} for #{@attributes[:ban_reason]}" if @attributes[:banned] %><br />
-
   </div>
-
+        
   <div class="profile-button-bar">
     <% if signed_in? %>
       <%= link_to I18n.t('identities.show.link.edit'), {:action => "edit", :id => @attributes[:id]}, :class => 'button-on-white' if @options[:show_edit_link] %>
@@ -28,5 +27,21 @@
       <p><b>Received <%= @options[:messages_count]%> messages.</b> <%= link_to "Show", identity_messages_path(@attributes[:id]) %></p>
     <%end%>
     
+    <% unless @identity.events.empty? %>
+      <table>
+      <tr>
+        <th>History Events</th>
+        <th></th>
+        <th></th>
+      </tr>
+      <% @identity.events.each do |event| %>
+        <tr>
+          <td><%= event.localized_description %></td>          
+          <td><%= link_to 'Show', event %></td>
+          <td><%= link_to 'Edit', edit_resource_history_path(event) %></td>
+        </tr>
+      <% end %>
+      </table>
+    <% end %>
   </end>
 </end>
