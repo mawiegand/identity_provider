@@ -159,7 +159,7 @@ DEPENDENCIES
   rails (= 3.1.10)
   rb-readline
   ruby-prof
-  sass-rails (~> 3.1.5)
+  sass-rails (~> 3.1.4)
   sqlite3
   therubyracer
   thin
