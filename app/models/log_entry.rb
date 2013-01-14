@@ -162,7 +162,7 @@ class LogEntry < ActiveRecord::Base
   end  
   
   def multi_check(time_span)
-    multiple_entries = LogEntry.where(['created_at > ? AND event_type = "signup_success" AND ip = ? AND identity_id <> ?', self.created_at - time_span, self.ip, self.identity_id])
+    multiple_entries = LogEntry.where(["created_at > ? AND event_type = 'signup_success' AND ip = ? AND identity_id <> ?", self.created_at - time_span, self.ip, self.identity_id])
 
     return    if multiple_entries.count == 0
     
