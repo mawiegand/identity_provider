@@ -129,13 +129,14 @@ class LogEntry < ActiveRecord::Base
 
   
   def self.create_auth_token_success(username, identity, client_id, remote_ip = 'unknwon')
-    LogEntry.create(:identity_id    => identity.id,
-                    :role           => identity.role_string,
-                    :affected_table => 'identity',
-                    :affected_id    => identity.id,
-                    :event_type     => 'auth_token_success',
-                    :description    => "Authentication with client id #{client_id} for #{username} (user #{ identity.nickname }) did succeed.",
-                    :ip             => remote_ip);
+    entry = LogEntry.create(:identity_id    => identity.id,
+                            :role           => identity.role_string,
+                            :affected_table => 'identity',
+                            :affected_id    => identity.id,
+                            :event_type     => 'auth_token_success',
+                            :description    => "Authentication with client id #{client_id} for #{username} (user #{ identity.nickname }) did succeed.",
+                            :ip             => remote_ip);
+    entry.multi_check(1.days)                
   end  
   
   def self.create_auth_token_failure(username, as_identity, client_id, error_code, error_description, remote_ip = 'unknown')
