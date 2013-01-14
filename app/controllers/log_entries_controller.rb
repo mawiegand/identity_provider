@@ -40,12 +40,12 @@ class LogEntriesController < ApplicationController
     end
     
     if !params[:affected_id].nil? && params[:affected_id] != ""
-      where_string += " AND affected_id == ?"
+      where_string += " AND affected_id = ?"
       where_parameters  << params[:affected_id] 
     end
     
     if !params[:identity_id].nil? && params[:identity_id] != ""
-      where_string += " AND identity_id == ?"
+      where_string += " AND identity_id = ?"
       where_parameters  << params[:identity_id] 
     end
     
