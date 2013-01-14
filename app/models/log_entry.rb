@@ -176,7 +176,7 @@ class LogEntry < ActiveRecord::Base
                     :affected_id    => identity.id,
                     :event_type     => 'multi_detection_triggered',
                     :description    => (description)[0..250],
-                    :ip             => self.remote_ip);
+                    :ip             => self.ip);
 
   end
   
