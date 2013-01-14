@@ -168,7 +168,7 @@ class LogEntry < ActiveRecord::Base
       entry.identity_id
     end
     
-    description "Same ip logged in with users #{ identity_ids.join(', ') }."
+    description = "Same ip logged in with users #{ identity_ids.join(', ') }."
 
     LogEntry.create(:identity_id    => self.identity.id,
                     :role           => self.identity.role_string,
