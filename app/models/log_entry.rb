@@ -67,13 +67,15 @@ class LogEntry < ActiveRecord::Base
   end
 
   def self.create_signin_success(email, identity, remote_ip = 'unknwon')
-    LogEntry.create(:identity_id    => identity.id,
-                    :role           => identity.role_string,
-                    :affected_table => 'identity',
-                    :affected_id    => identity.id,
-                    :event_type     => 'signin_success',
-                    :description    => "Sign-in with #{email} (user #{ identity.nickname }) did succeed.",
-                    :ip             => remote_ip);
+    entry = LogEntry.create(:identity_id    => identity.id,
+                            :role           => identity.role_string,
+                            :affected_table => 'identity',
+                            :affected_id    => identity.id,
+                            :event_type     => 'signin_success',
+                            :description    => "Sign-in with #{email} (user #{ identity.nickname }) did succeed.",
+                            :ip             => remote_ip);
+                    
+    entry.multi_check(1.days)
   end 
   
 
@@ -157,6 +159,27 @@ class LogEntry < ActiveRecord::Base
     
     entry
   end  
+  
+  def multi_check(time_span)
+    multiple_entries = LogEntry.where(['created_at > ? AND event_type = "signup_success" AND ip = ? AND identity_id <> ?', self.created_at - time_span, self.ip, self.identity_id])
+
+    return    if multiple_entries.count == 0
+    
+    identity_ids = multiple_entries.map do |entry|
+      entry.identity_id
+    end
+    
+    description "Same ip logged in with users #{ identity_ids.join(', ') }."
+
+    LogEntry.create(:identity_id    => self.identity.id,
+                    :role           => self.identity.role_string,
+                    :affected_table => 'identity',
+                    :affected_id    => identity.id,
+                    :event_type     => 'multi_detection_triggered',
+                    :description    => (description)[0..250],
+                    :ip             => self.remote_ip);
+
+  end
   
 end
 
