@@ -30,7 +30,7 @@ class ClientsController < ApplicationController
     end
 
     logger.debug "ROLE: #{role}"        
-    raise ForbiddenError.new   "Access forbidden."   unless role == :default || staff? || admin? # only staff or the owner (same client) may access its data
+    raise ForbiddenError.new   "Access forbidden."   unless role == :owner || staff? || admin? # only staff or the owner (same client) may access its data
     
     respond_to do |format|
       format.json { 
