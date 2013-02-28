@@ -24,3 +24,5 @@
 .project
 
 /config/thin_local.yml
+
+/.idea
