@@ -33,6 +33,7 @@ end
 
 gem 'faker'
 gem 'jquery-rails'
+gem 'actionmailer-with-request', '~> 0.4.0'
 
 # Deploy with Capistrano
 gem 'capistrano', '~> 2.12.0'

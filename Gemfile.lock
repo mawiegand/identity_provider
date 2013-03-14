@@ -10,6 +10,8 @@ GEM
     actionmailer (3.1.10)
       actionpack (= 3.1.10)
       mail (~> 2.3.3)
+    actionmailer-with-request (0.4.0)
+      rails (>= 3)
     actionpack (3.1.10)
       activemodel (= 3.1.10)
       activesupport (= 3.1.10)
@@ -145,6 +147,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionmailer-with-request (~> 0.4.0)
   annotate!
   capistrano (~> 2.12.0)
   coffee-rails (~> 3.1.1)
