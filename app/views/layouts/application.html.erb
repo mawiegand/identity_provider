@@ -26,11 +26,12 @@
         <li><%= link_to I18n.translate("application.layout.waitinglist"), resource_waiting_lists_path %></li>
         <li><%= link_to I18n.translate("application.layout.gifts"), resource_signup_gifts_path %></li>
         <li><%= link_to I18n.translate("application.layout.signups"), resource_signups_path %></li>
+        <li><%= link_to I18n.translate("application.layout.properties"), resource_character_properties_path %></li>
         <li><%= link_to I18n.translate("application.layout.log"), log_entries_path %></li>
         <li><%= link_to I18n.translate("application.layout.index"), identities_path %></li>
       <% end %>
       <li><%= link_to I18n.translate("application.layout.profile"), current_identity %></li>
-        <li><%= link_to I18n.translate("application.layout.messages"), messages_path %></li>
+      <li><%= link_to I18n.translate("application.layout.messages"), messages_path %></li>
       <li><%= link_to I18n.translate("application.layout.signout"), signout_path %></li>
     <% else %>
       <li><%= link_to I18n.translate("application.layout.signin"), signin_path %></li>
