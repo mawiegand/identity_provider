@@ -38,11 +38,11 @@ namespace :deploy do
 
   desc "Start Thin"
   task :start do
-    run "cd #{current_path}; bundle exec thin -C config/thin_server.yml start"
+    run "cd #{current_path}; bundle exec thin -C config/thin_#{stage}.yml start"
   end 
   
   desc "Stop Thin"
   task :stop do
-    run "cd #{current_path}; bundle exec thin -C config/thin_server.yml stop"
+    run "cd #{current_path}; bundle exec thin -C config/thin_#{stage}.yml stop"
   end
 end
