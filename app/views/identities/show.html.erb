@@ -35,21 +35,27 @@
       <tr>
         <th>Game ID</th>
         <th>Events</th>
+      <% if signed_in? && staff? %>
         <th></th>
         <th></th>
         <th></th>
+      <% end %>
       </tr>
       <% @identity.events.each do |event| %>
         <tr>
           <td><%= event.game_id %></td>          
           <td><%= event.localized_description %></td>          
+        <% if signed_in? && staff? %>
           <td><%= link_to 'Show', event %></td>
           <td><%= link_to 'Edit', edit_resource_history_path(event) %></td>
           <td><%= link_to 'Destroy', event, confirm: 'Are you sure?', method: :delete %></td>
+        <% end %>
         </tr>
       <% end %>
       </table>
     <% end %>
-    <p><%= link_to 'New History Event', new_resource_history_path(:identity_id => @identity) %></p>
+    <% if signed_in? && staff? %>
+      <p><%= link_to 'New History Event', new_resource_history_path(:identity_id => @identity) %></p>
+    <% end %>
   </end>
 </end>
