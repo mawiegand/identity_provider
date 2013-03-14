@@ -26,3 +26,10 @@ production:
   port: 5432
   username: run-ip
 # password: bohdoeD3
+
+staging_test:      # use the local postgres db
+  adapter: postgresql
+  encoding: UTF8
+  database: identity_provider_staging_test
+  port: 5686
+  username: run-ip
