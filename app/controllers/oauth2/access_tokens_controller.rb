@@ -154,9 +154,18 @@ module Oauth2
       logger.debug "Grants the identity has for this client: #{grants_for_client.inspect}"
       logger.debug "Grants the identity requested:           #{requested_scopes.inspect}"
       if requested_scopes.any? { |rscope| grants_for_client.nil? || !grants_for_client.scope_authorized?(rscope) }
-        render_endpoint_error params[:client_id], :invalid_scope, "The requested scope is invalid, unknown, malformed, or "+
-              "exceeds the scope granted to the identity. In short: you're not allowed to access the resource. In case of an error, please contact the support staff."
-        return
+        
+        if grants_for_client && client.automatic_signup?
+          client.extend_grant(grants_for_client)
+        end
+        
+        grants_for_client.reload
+        
+        if requested_scopes.any? { |rscope| grants_for_client.nil? || !grants_for_client.scope_authorized?(rscope) }
+          render_endpoint_error params[:client_id], :invalid_scope, "The requested scope is invalid, unknown, malformed, or "+
+                "exceeds the scope granted to the identity. In short: you're not allowed to access the resource. In case of an error, please contact the support staff."
+          return
+        end
       end
         
       access_token = FiveDAccessToken.generate_access_token(identity.identifier, @scope)

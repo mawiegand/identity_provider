@@ -52,6 +52,13 @@ class Client < ActiveRecord::Base
     register_signup(identity, invitation, automatic, referer, request_url)    
     remove_from_waiting_list(identity)
   end
+  
+  def extend_grant(grant_for_this_client)
+    if (grant_for_this_client.client_id == self.id)
+      grant_for_this_client.scopes = self.scopes
+      grant_for_this_client.save
+    end
+  end
 
   def remove_from_waiting_list(identity)
     waiting_list_entry = self.waiting_list_entries.where(identity_id: identity.id).first
