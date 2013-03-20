@@ -1,0 +1,2 @@
+module InstallTracking::InstallsHelper
+end

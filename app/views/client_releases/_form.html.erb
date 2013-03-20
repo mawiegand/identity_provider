@@ -1,0 +1,45 @@
+<%= form_for(@client_release) do |f| %>
+  <% if @client_release.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@client_release.errors.count, "error") %> prohibited this client_release from being saved:</h2>
+
+      <ul>
+      <% @client_release.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :client_id %><br />
+    <%= f.number_field :client_id %>
+  </div>
+  <div class="field">
+    <%= f.label :version %><br />
+    <%= f.text_field :version %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :notes %><br />
+    <%= f.text_area :notes %>
+  </div>
+  <div class="field">
+    <%= f.label :rejected_at %><br />
+    <%= f.datetime_select :rejected_at %>
+  </div>
+  <div class="field">
+    <%= f.label :rejection_reason %><br />
+    <%= f.text_area :rejection_reason %>
+  </div>
+  <div class="field">
+    <%= f.label :rejecting_identity_id %><br />
+    <%= f.number_field :rejecting_identity_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

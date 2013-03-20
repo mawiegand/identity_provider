@@ -1,0 +1,41 @@
+<h1>Listing install_tracking_devices</h1>
+
+<table>
+  <tr>
+    <th>Platform</th>
+    <th>Hardware string</th>
+    <th>Hardware</th>
+    <th>Operating system</th>
+    <th>Device token</th>
+    <th>Suspicious</th>
+    <th>Note</th>
+    <th>Banned at</th>
+    <th>Ban reason</th>
+    <th>Banning identity</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @install_tracking_devices.each do |install_tracking_device| %>
+  <tr>
+    <td><%= install_tracking_device.platform_id %></td>
+    <td><%= install_tracking_device.hardware_string %></td>
+    <td><%= install_tracking_device.hardware_id %></td>
+    <td><%= install_tracking_device.operating_system %></td>
+    <td><%= install_tracking_device.device_token %></td>
+    <td><%= install_tracking_device.suspicious %></td>
+    <td><%= install_tracking_device.note %></td>
+    <td><%= install_tracking_device.banned_at %></td>
+    <td><%= install_tracking_device.ban_reason %></td>
+    <td><%= install_tracking_device.banning_identity_id %></td>
+    <td><%= link_to 'Show', install_tracking_device %></td>
+    <td><%= link_to 'Edit', edit_install_tracking_device_path(install_tracking_device) %></td>
+    <td><%= link_to 'Destroy', install_tracking_device, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Device', new_install_tracking_device_path %>

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  release_id: 1
+  device_id: 1
+  app_token: MyString
+
+two:
+  release_id: 1
+  device_id: 1
+  app_token: MyString

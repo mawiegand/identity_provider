@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Release:</b>
+  <%= @install_tracking_install.release_id %>
+</p>
+
+<p>
+  <b>Device:</b>
+  <%= @install_tracking_install.device_id %>
+</p>
+
+<p>
+  <b>App token:</b>
+  <%= @install_tracking_install.app_token %>
+</p>
+
+
+<%= link_to 'Edit', edit_install_tracking_install_path(@install_tracking_install) %> |
+<%= link_to 'Back', install_tracking_installs_path %>

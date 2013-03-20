@@ -1,0 +1,57 @@
+<%= form_for(@install_tracking_device) do |f| %>
+  <% if @install_tracking_device.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@install_tracking_device.errors.count, "error") %> prohibited this install_tracking_device from being saved:</h2>
+
+      <ul>
+      <% @install_tracking_device.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :platform_id %><br />
+    <%= f.number_field :platform_id %>
+  </div>
+  <div class="field">
+    <%= f.label :hardware_string %><br />
+    <%= f.text_field :hardware_string %>
+  </div>
+  <div class="field">
+    <%= f.label :hardware_id %><br />
+    <%= f.number_field :hardware_id %>
+  </div>
+  <div class="field">
+    <%= f.label :operating_system %><br />
+    <%= f.text_field :operating_system %>
+  </div>
+  <div class="field">
+    <%= f.label :device_token %><br />
+    <%= f.text_field :device_token %>
+  </div>
+  <div class="field">
+    <%= f.label :suspicious %><br />
+    <%= f.check_box :suspicious %>
+  </div>
+  <div class="field">
+    <%= f.label :note %><br />
+    <%= f.text_area :note %>
+  </div>
+  <div class="field">
+    <%= f.label :banned_at %><br />
+    <%= f.datetime_select :banned_at %>
+  </div>
+  <div class="field">
+    <%= f.label :ban_reason %><br />
+    <%= f.text_area :ban_reason %>
+  </div>
+  <div class="field">
+    <%= f.label :banning_identity_id %><br />
+    <%= f.number_field :banning_identity_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

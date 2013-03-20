@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Client:</b>
+  <%= @client_release.client_id %>
+</p>
+
+<p>
+  <b>Version:</b>
+  <%= @client_release.version %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @client_release.name %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%= @client_release.notes %>
+</p>
+
+<p>
+  <b>Rejected at:</b>
+  <%= @client_release.rejected_at %>
+</p>
+
+<p>
+  <b>Rejection reason:</b>
+  <%= @client_release.rejection_reason %>
+</p>
+
+<p>
+  <b>Rejecting identity:</b>
+  <%= @client_release.rejecting_identity_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_client_release_path(@client_release) %> |
+<%= link_to 'Back', client_releases_path %>

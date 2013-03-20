@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  platform_id: 1
+  hardware_string: MyString
+  hardware_id: 1
+  operating_system: MyString
+  device_token: MyString
+  suspicious: false
+  note: MyText
+  banned_at: 2013-03-20 15:56:50
+  ban_reason: MyText
+  banning_identity_id: 1
+
+two:
+  platform_id: 1
+  hardware_string: MyString
+  hardware_id: 1
+  operating_system: MyString
+  device_token: MyString
+  suspicious: false
+  note: MyText
+  banned_at: 2013-03-20 15:56:50
+  ban_reason: MyText
+  banning_identity_id: 1

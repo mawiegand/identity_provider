@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  client_id: 1
+  version: MyString
+  name: MyString
+  notes: MyText
+  rejected_at: 2013-03-20 16:04:46
+  rejection_reason: MyText
+  rejecting_identity_id: 1
+
+two:
+  client_id: 1
+  version: MyString
+  name: MyString
+  notes: MyText
+  rejected_at: 2013-03-20 16:04:46
+  rejection_reason: MyText
+  rejecting_identity_id: 1

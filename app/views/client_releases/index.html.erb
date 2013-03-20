@@ -1,0 +1,35 @@
+<h1>Listing client_releases</h1>
+
+<table>
+  <tr>
+    <th>Client</th>
+    <th>Version</th>
+    <th>Name</th>
+    <th>Notes</th>
+    <th>Rejected at</th>
+    <th>Rejection reason</th>
+    <th>Rejecting identity</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @client_releases.each do |client_release| %>
+  <tr>
+    <td><%= client_release.client_id %></td>
+    <td><%= client_release.version %></td>
+    <td><%= client_release.name %></td>
+    <td><%= client_release.notes %></td>
+    <td><%= client_release.rejected_at %></td>
+    <td><%= client_release.rejection_reason %></td>
+    <td><%= client_release.rejecting_identity_id %></td>
+    <td><%= link_to 'Show', client_release %></td>
+    <td><%= link_to 'Edit', edit_client_release_path(client_release) %></td>
+    <td><%= link_to 'Destroy', client_release, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Client release', new_client_release_path %>

@@ -1,0 +1,55 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Platform:</b>
+  <%= @install_tracking_device.platform_id %>
+</p>
+
+<p>
+  <b>Hardware string:</b>
+  <%= @install_tracking_device.hardware_string %>
+</p>
+
+<p>
+  <b>Hardware:</b>
+  <%= @install_tracking_device.hardware_id %>
+</p>
+
+<p>
+  <b>Operating system:</b>
+  <%= @install_tracking_device.operating_system %>
+</p>
+
+<p>
+  <b>Device token:</b>
+  <%= @install_tracking_device.device_token %>
+</p>
+
+<p>
+  <b>Suspicious:</b>
+  <%= @install_tracking_device.suspicious %>
+</p>
+
+<p>
+  <b>Note:</b>
+  <%= @install_tracking_device.note %>
+</p>
+
+<p>
+  <b>Banned at:</b>
+  <%= @install_tracking_device.banned_at %>
+</p>
+
+<p>
+  <b>Ban reason:</b>
+  <%= @install_tracking_device.ban_reason %>
+</p>
+
+<p>
+  <b>Banning identity:</b>
+  <%= @install_tracking_device.banning_identity_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_install_tracking_device_path(@install_tracking_device) %> |
+<%= link_to 'Back', install_tracking_devices_path %>

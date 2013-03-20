@@ -1,0 +1,27 @@
+<h1>Listing install_tracking_installs</h1>
+
+<table>
+  <tr>
+    <th>Release</th>
+    <th>Device</th>
+    <th>App token</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @install_tracking_installs.each do |install_tracking_install| %>
+  <tr>
+    <td><%= install_tracking_install.release_id %></td>
+    <td><%= install_tracking_install.device_id %></td>
+    <td><%= install_tracking_install.app_token %></td>
+    <td><%= link_to 'Show', install_tracking_install %></td>
+    <td><%= link_to 'Edit', edit_install_tracking_install_path(install_tracking_install) %></td>
+    <td><%= link_to 'Destroy', install_tracking_install, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Install', new_install_tracking_install_path %>
