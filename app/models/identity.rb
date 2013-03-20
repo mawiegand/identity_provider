@@ -65,6 +65,8 @@ class Identity < ActiveRecord::Base
   has_many  :sent_messages,         :class_name => "Message",                     :foreign_key => :sender_id,    :inverse_of => :sender
   has_many  :received_messages,     :class_name => "Message",                     :foreign_key => :recipient_id, :inverse_of => :recipient
   
+  has_many  :device_users,          :class_name => "InstallTracking::DeviceUser", :foreign_key => :identity_id,  :inverse_of => :identity
+  has_many  :devices,               :through    => :device_users,                                                :inverse_of => :identities
   
   attr_accessor :password
   

@@ -58,4 +58,14 @@
       <p><%= link_to 'New History Event', new_resource_history_path(:identity_id => @identity) %></p>
     <% end %>
   </end>
+  
+  <% if staff? %>
+    <% if !@devices.nil? && @devices.count > 0 %>
+      <h3>Devices</h3>
+      <% @devices.each do |device| %>
+        <p><%= device.hardware_string %> with <%= device.operating_system %> id <%= device.device_token %></p>
+      <% end %>
+    <% end %>
+  <% end %>
 </end>
+

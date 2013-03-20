@@ -67,7 +67,8 @@ class IdentitiesController < ApplicationController
           :show_delete_link             => [ :owner, :staff, :admin ].include?(role),
           :show_delete_immediately_link => [ :admin ].include?(role)
         }
-        @attributes = @identity.sanitized_hash(role)           # the easiest way to make sure, we don't display
+        @devices    = staff? ? @identity.devices : nil
+        @attributes = @identity.sanitized_hash(role)          # the easiest way to make sure, we don't display
                                                               # some attributes that should not be visible to
                                                               # the requesting user, is to only access the 
                                                               # sanitized hash in the view, that only contains
