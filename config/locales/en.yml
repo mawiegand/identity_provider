@@ -30,6 +30,7 @@ en:
       signout: Sign Out
       confirm: Do you really want to sign out?
       index: Profile List
+      install_tracking: Install Tracking
       clients: Clients
       client_names: Client Names
       messages: Messages
