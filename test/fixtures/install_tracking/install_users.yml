@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  identity_id: 1
+  install_id: 1
+  last_use_at: 2013-03-20 16:09:14
+  first_use_at: 2013-03-20 16:09:14
+  sign_in_count: 1
+  last_ip_address: MyString
+  last_latitude: MyString
+  last_longitude: MyString
+  last_postion_at: 2013-03-20 16:09:14
+
+two:
+  identity_id: 1
+  install_id: 1
+  last_use_at: 2013-03-20 16:09:14
+  first_use_at: 2013-03-20 16:09:14
+  sign_in_count: 1
+  last_ip_address: MyString
+  last_latitude: MyString
+  last_longitude: MyString
+  last_postion_at: 2013-03-20 16:09:14

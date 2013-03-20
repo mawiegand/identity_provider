@@ -1,0 +1,29 @@
+<h1>Listing install_tracking_device_users</h1>
+
+<table>
+  <tr>
+    <th>Identity</th>
+    <th>Device</th>
+    <th>First use at</th>
+    <th>Last use at</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @install_tracking_device_users.each do |install_tracking_device_user| %>
+  <tr>
+    <td><%= install_tracking_device_user.identity_id %></td>
+    <td><%= install_tracking_device_user.device_id %></td>
+    <td><%= install_tracking_device_user.first_use_at %></td>
+    <td><%= install_tracking_device_user.last_use_at %></td>
+    <td><%= link_to 'Show', install_tracking_device_user %></td>
+    <td><%= link_to 'Edit', edit_install_tracking_device_user_path(install_tracking_device_user) %></td>
+    <td><%= link_to 'Destroy', install_tracking_device_user, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Device user', new_install_tracking_device_user_path %>

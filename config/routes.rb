@@ -1,6 +1,10 @@
 IdentityProvider::Application.routes.draw do
 
 
+  namespace :install_tracking do resources :install_users end
+
+  namespace :install_tracking do resources :device_users end
+
   resources :client_releases
 
   namespace :install_tracking do resources :installs end

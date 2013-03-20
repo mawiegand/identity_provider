@@ -1,0 +1,39 @@
+<h1>Listing install_tracking_install_users</h1>
+
+<table>
+  <tr>
+    <th>Identity</th>
+    <th>Install</th>
+    <th>Last use at</th>
+    <th>First use at</th>
+    <th>Sign in count</th>
+    <th>Last ip address</th>
+    <th>Last latitude</th>
+    <th>Last longitude</th>
+    <th>Last postion at</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @install_tracking_install_users.each do |install_tracking_install_user| %>
+  <tr>
+    <td><%= install_tracking_install_user.identity_id %></td>
+    <td><%= install_tracking_install_user.install_id %></td>
+    <td><%= install_tracking_install_user.last_use_at %></td>
+    <td><%= install_tracking_install_user.first_use_at %></td>
+    <td><%= install_tracking_install_user.sign_in_count %></td>
+    <td><%= install_tracking_install_user.last_ip_address %></td>
+    <td><%= install_tracking_install_user.last_latitude %></td>
+    <td><%= install_tracking_install_user.last_longitude %></td>
+    <td><%= install_tracking_install_user.last_postion_at %></td>
+    <td><%= link_to 'Show', install_tracking_install_user %></td>
+    <td><%= link_to 'Edit', edit_install_tracking_install_user_path(install_tracking_install_user) %></td>
+    <td><%= link_to 'Destroy', install_tracking_install_user, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Install user', new_install_tracking_install_user_path %>

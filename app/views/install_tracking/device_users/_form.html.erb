@@ -1,0 +1,33 @@
+<%= form_for(@install_tracking_device_user) do |f| %>
+  <% if @install_tracking_device_user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@install_tracking_device_user.errors.count, "error") %> prohibited this install_tracking_device_user from being saved:</h2>
+
+      <ul>
+      <% @install_tracking_device_user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :identity_id %><br />
+    <%= f.number_field :identity_id %>
+  </div>
+  <div class="field">
+    <%= f.label :device_id %><br />
+    <%= f.number_field :device_id %>
+  </div>
+  <div class="field">
+    <%= f.label :first_use_at %><br />
+    <%= f.datetime_select :first_use_at %>
+  </div>
+  <div class="field">
+    <%= f.label :last_use_at %><br />
+    <%= f.datetime_select :last_use_at %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

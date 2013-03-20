@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Identity:</b>
+  <%= @install_tracking_device_user.identity_id %>
+</p>
+
+<p>
+  <b>Device:</b>
+  <%= @install_tracking_device_user.device_id %>
+</p>
+
+<p>
+  <b>First use at:</b>
+  <%= @install_tracking_device_user.first_use_at %>
+</p>
+
+<p>
+  <b>Last use at:</b>
+  <%= @install_tracking_device_user.last_use_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_install_tracking_device_user_path(@install_tracking_device_user) %> |
+<%= link_to 'Back', install_tracking_device_users_path %>

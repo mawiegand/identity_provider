@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  identity_id: 1
+  device_id: 1
+  first_use_at: 2013-03-20 16:06:45
+  last_use_at: 2013-03-20 16:06:45
+
+two:
+  identity_id: 1
+  device_id: 1
+  first_use_at: 2013-03-20 16:06:45
+  last_use_at: 2013-03-20 16:06:45

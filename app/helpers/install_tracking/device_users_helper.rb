@@ -1,0 +1,2 @@
+module InstallTracking::DeviceUsersHelper
+end
