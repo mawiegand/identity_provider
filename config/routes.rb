@@ -1,15 +1,7 @@
 IdentityProvider::Application.routes.draw do
 
 
-  namespace :install_tracking do resources :install_users end
 
-  namespace :install_tracking do resources :device_users end
-
-  resources :client_releases
-
-  namespace :install_tracking do resources :installs end
-
-  namespace :install_tracking do resources :devices end
 
   # all resources and paths are scoped in an optional path_prefix determining the
   # locale to use. Presently only available: en, de
@@ -29,6 +21,7 @@ IdentityProvider::Application.routes.draw do
       resources :granted_scopes
       resources :keys
       resources :client_names
+      resources :client_releases
       
       resources :redirects
       match '/redirect_to', :to => 'redirects#redirect'
@@ -42,6 +35,13 @@ IdentityProvider::Application.routes.draw do
       resources :messages
   
   
+      namespace :install_tracking do 
+        resources :install_users
+        resources :device_users
+        resources :installs
+        resources :devices 
+      end
+      
       namespace :resource do 
         resources :character_properties
         resources :results

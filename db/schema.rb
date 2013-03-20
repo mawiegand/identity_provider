@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130320150914) do
+ActiveRecord::Schema.define(:version => 20130320153436) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -73,9 +73,9 @@ ActiveRecord::Schema.define(:version => 20130320150914) do
     t.string   "firstname"
     t.string   "surname"
     t.string   "nickname"
-    t.boolean  "deleted",                :default => false
+    t.boolean  "deleted",                   :default => false
     t.datetime "activated"
-    t.string   "identifier",             :default => "a",   :null => false
+    t.string   "identifier",                :default => "a",   :null => false
     t.integer  "sign_up_with_client_id"
     t.string   "password_token"
     t.string   "locale"
@@ -83,8 +83,12 @@ ActiveRecord::Schema.define(:version => 20130320150914) do
     t.string   "ban_reason"
     t.datetime "ban_ended_at"
     t.string   "referer"
-    t.boolean  "generic_nickname",       :default => false, :null => false
-    t.boolean  "generic_email",          :default => false, :null => false
+    t.boolean  "generic_nickname",          :default => false, :null => false
+    t.boolean  "generic_email",             :default => false, :null => false
+    t.boolean  "generic_password",          :default => false, :null => false
+    t.string   "gc_player_id"
+    t.datetime "gc_rejected_at"
+    t.datetime "gc_player_id_connected_at"
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true
@@ -96,6 +100,7 @@ ActiveRecord::Schema.define(:version => 20130320150914) do
     t.datetime "last_use_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "confirmed_at"
   end
 
   create_table "install_tracking_devices", :force => true do |t|
@@ -125,6 +130,7 @@ ActiveRecord::Schema.define(:version => 20130320150914) do
     t.datetime "last_postion_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "confirmed_at"
   end
 
   create_table "install_tracking_installs", :force => true do |t|
