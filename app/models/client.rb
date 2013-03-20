@@ -4,6 +4,7 @@ class Client < ActiveRecord::Base
   has_many  :keys,                  :class_name => "Key",                         :foreign_key => :client_id,    :inverse_of => :client
   has_many  :waiting_list_entries,  :class_name => "Resource::WaitingList",       :foreign_key => :client_id,    :inverse_of => :client
   has_many  :names,                 :class_name => "ClientName",                  :foreign_key => :client_id,    :inverse_of => :client
+  has_many  :releases,              :class_name => "ClientRelease",               :foreign_key => :client_id,    :inverse_of => :client
 
   attr_readable :as => :default 
   attr_readable :signup_mode, :signin_mode, :signup_without_email,     :as => :owner 

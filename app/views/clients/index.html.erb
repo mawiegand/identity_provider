@@ -5,6 +5,7 @@
     <th>ID</th>
     <th>Identifier</th>
     <th>Name</th>
+    <th>Versions</th>
     <th>Identity</th>
     <th>Password</th>
     <th>Refresh token secret</th>
@@ -27,6 +28,9 @@
     <td><%= client.id %></td>
     <td><%= client.identifier %></td>
     <td><%= client.name %></td>
+    <td><% client.releases.each do |release|%>
+          <%= link_to "v%{release.version}", release %>
+        <% end %>
     <td><%= client.identity_id %></td>
     <td><%= client.password %></td>
     <td><%= client.refresh_token_secret %></td>
