@@ -1,4 +1,10 @@
 class ClientReleasesController < ApplicationController
+
+  before_filter :authenticate                  
+
+  before_filter :authorize_staff                                    
+  before_filter :deny_api  
+  
   # GET /client_releases
   # GET /client_releases.json
   def index

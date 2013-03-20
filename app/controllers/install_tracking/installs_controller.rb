@@ -1,4 +1,10 @@
 class InstallTracking::InstallsController < ApplicationController
+  
+  before_filter :authenticate                  
+
+  before_filter :authorize_staff                                    
+  before_filter :deny_api
+  
   # GET /install_tracking/installs
   # GET /install_tracking/installs.json
   def index

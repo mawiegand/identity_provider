@@ -1,4 +1,10 @@
 class InstallTracking::DeviceUsersController < ApplicationController
+  
+  before_filter :authenticate                  
+
+  before_filter :authorize_staff                                    
+  before_filter :deny_api
+  
   # GET /install_tracking/device_users
   # GET /install_tracking/device_users.json
   def index
