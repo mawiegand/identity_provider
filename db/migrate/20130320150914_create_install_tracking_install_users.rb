@@ -5,7 +5,7 @@ class CreateInstallTrackingInstallUsers < ActiveRecord::Migration
       t.integer :install_id
       t.datetime :last_use_at
       t.datetime :first_use_at
-      t.integer :sign_in_count
+      t.integer :sign_in_count, :default => 0, :null => false
       t.string :last_ip_address
       t.string :last_latitude
       t.string :last_longitude

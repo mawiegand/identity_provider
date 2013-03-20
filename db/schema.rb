@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121220171832) do
+ActiveRecord::Schema.define(:version => 20130320150914) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -20,6 +20,18 @@ ActiveRecord::Schema.define(:version => 20121220171832) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "client_id"
+  end
+
+  create_table "client_releases", :force => true do |t|
+    t.integer  "client_id"
+    t.string   "version"
+    t.string   "name"
+    t.text     "notes"
+    t.datetime "rejected_at"
+    t.text     "rejection_reason"
+    t.integer  "rejecting_identity_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "clients", :force => true do |t|
@@ -76,6 +88,52 @@ ActiveRecord::Schema.define(:version => 20121220171832) do
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true
+
+  create_table "install_tracking_device_users", :force => true do |t|
+    t.integer  "identity_id"
+    t.integer  "device_id"
+    t.datetime "first_use_at"
+    t.datetime "last_use_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "install_tracking_devices", :force => true do |t|
+    t.integer  "platform_id"
+    t.string   "hardware_string"
+    t.integer  "hardware_id"
+    t.string   "operating_system"
+    t.string   "device_token"
+    t.boolean  "suspicious"
+    t.text     "note"
+    t.datetime "banned_at"
+    t.text     "ban_reason"
+    t.integer  "banning_identity_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "install_tracking_install_users", :force => true do |t|
+    t.integer  "identity_id"
+    t.integer  "install_id"
+    t.datetime "last_use_at"
+    t.datetime "first_use_at"
+    t.integer  "sign_in_count",   :default => 0, :null => false
+    t.string   "last_ip_address"
+    t.string   "last_latitude"
+    t.string   "last_longitude"
+    t.datetime "last_postion_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "install_tracking_installs", :force => true do |t|
+    t.integer  "release_id"
+    t.integer  "device_id"
+    t.string   "app_token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "keys", :force => true do |t|
     t.integer  "client_id"
@@ -135,6 +193,27 @@ ActiveRecord::Schema.define(:version => 20121220171832) do
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "resource_device_users", :force => true do |t|
+    t.integer  "identity_id"
+    t.integer  "platform_id",      :default => 0, :null => false
+    t.integer  "hardware_id"
+    t.string   "gc_player_id"
+    t.string   "os"
+    t.string   "device_token"
+    t.datetime "first_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.integer  "sign_in_count",    :default => 0, :null => false
+    t.string   "last_ip_address"
+    t.string   "last_latitude"
+    t.string   "last_longitude"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "client_id"
+    t.string   "version"
+    t.string   "hardware_string"
+    t.string   "client_token"
   end
 
   create_table "resource_games", :force => true do |t|

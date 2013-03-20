@@ -6,7 +6,7 @@ class CreateInstallTrackingDevices < ActiveRecord::Migration
       t.integer :hardware_id
       t.string :operating_system
       t.string :device_token
-      t.boolean :suspicious
+      t.boolean :suspicious, :default => false, :null => false
       t.text :note
       t.datetime :banned_at
       t.text :ban_reason
