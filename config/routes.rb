@@ -1,6 +1,12 @@
 IdentityProvider::Application.routes.draw do
 
 
+  resources :client_releases
+
+  namespace :install_tracking do resources :installs end
+
+  namespace :install_tracking do resources :devices end
+
   # all resources and paths are scoped in an optional path_prefix determining the
   # locale to use. Presently only available: en, de
 
