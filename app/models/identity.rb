@@ -55,18 +55,22 @@ require 'base64'
 class Identity < ActiveRecord::Base
   
   has_many  :log_entries;
-  has_many  :grants,  :class_name => "GrantedScope", :foreign_key => :identity_id, :inverse_of => :identity
-  has_many  :waiting_list_entries,  :class_name => "Resource::WaitingList",       :foreign_key => :identity_id,  :inverse_of => :identity
+  has_many  :grants,                :class_name => "GrantedScope",                 :foreign_key => :identity_id,  :inverse_of => :identity
+  has_many  :waiting_list_entries,  :class_name => "Resource::WaitingList",        :foreign_key => :identity_id,  :inverse_of => :identity
   
-  has_many  :results,               :class_name => "Resource::Result",            :foreign_key => :identity_id,  :inverse_of => :identity
-  has_many  :events,                :class_name => "Resource::History",           :foreign_key => :identity_id,  :inverse_of => :identity
-  has_many  :character_properties,  :class_name => "Resource::CharacterProperty", :foreign_key => :identity_id,  :inverse_of => :identity
-  has_many  :signup_gifts,          :class_name => "Resource::SignupGift",        :foreign_key => :identity_id,  :inverse_of => :identity
-  has_many  :sent_messages,         :class_name => "Message",                     :foreign_key => :sender_id,    :inverse_of => :sender
-  has_many  :received_messages,     :class_name => "Message",                     :foreign_key => :recipient_id, :inverse_of => :recipient
+  has_many  :results,               :class_name => "Resource::Result",             :foreign_key => :identity_id,  :inverse_of => :identity
+  has_many  :events,                :class_name => "Resource::History",            :foreign_key => :identity_id,  :inverse_of => :identity
+  has_many  :character_properties,  :class_name => "Resource::CharacterProperty",  :foreign_key => :identity_id,  :inverse_of => :identity
+  has_many  :signup_gifts,          :class_name => "Resource::SignupGift",         :foreign_key => :identity_id,  :inverse_of => :identity
+  has_many  :sent_messages,         :class_name => "Message",                      :foreign_key => :sender_id,    :inverse_of => :sender
+  has_many  :received_messages,     :class_name => "Message",                      :foreign_key => :recipient_id, :inverse_of => :recipient
   
-  has_many  :device_users,          :class_name => "InstallTracking::DeviceUser", :foreign_key => :identity_id,  :inverse_of => :identity
-  has_many  :devices,               :through    => :device_users,                                                :inverse_of => :identities
+  has_many  :device_users,          :class_name => "InstallTracking::DeviceUser",  :foreign_key => :identity_id,  :inverse_of => :identity
+  has_many  :devices,               :through    => :device_users,                                                 :inverse_of => :identities
+  
+  has_many  :install_users,         :class_name => "InstallTracking::InstallUser", :foreign_key => :identity_id,  :inverse_of => :identity
+  has_many  :installs,              :through    => :install_users,                                                :inverse_of => :identities
+  
   
   attr_accessor :password
   
