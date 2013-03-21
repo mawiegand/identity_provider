@@ -20,23 +20,22 @@ module InstallTracking
   # update last use
   #
   # Example: 
-  #   InstallTracking.handle_install_usage(Identity.find(6), Client.find('4'), { "hardware_string" => "iPhone4,1", "operating_system" => "iOS 3.0", "version" => "1.2", "device_token" => "myDToken", "app_token" => "myAToken" })
-
-  
+  #   InstallTracking.handle_install_usage(Identity.find(6), Client.find('4'), { :hardware_string => "iPhone4,1", :operating_system => "iOS 3.0", "version" => "1.2", "device_token" => "myDToken", "app_token" => "myAToken" })  
   def self.handle_install_usage(identity, client, device_info)
     
     now = DateTime.now
+    device_info = device_info || {}
   
     # unique identifiers for device
-    device_hardware = device_info['hardware_string']  || "unknown"
-    device_os       = device_info['operating_system'] || "unknown"
-    device_token    = device_info['device_token'].blank? ? nil : device_info['device_token']
+    device_hardware = device_info[:hardware_string]  || "unknown"
+    device_os       = device_info[:operating_system] || "unknown"
+    device_token    = device_info[:device_token].blank? ? nil : device_info['device_token']
     
     # unique identifiers for release (together with client)
-    client_version  = device_info['version']          || "unknown"
+    client_version  = device_info[:version]          || "unknown"
     
     # unique identifiers for install (together with device and release)
-    app_token       = device_info['app_token']        || "missing"
+    app_token       = device_info[:app_token]        || "missing"
     
     
     # ########################################################################

@@ -188,6 +188,9 @@ module Oauth2
       logger.debug "Response Body #{ body.inspect }."
       LogEntry.create_auth_token_success(params[:username], identity, params[:client_id], request.remote_ip)
 
+      if !params[:device_information].nil?
+        InstallTracking.handle_install_usage(identity, client, params[:device_information])
+      end
 
       if (!request.post?) # JSONP
         render :status => :ok, :json => JSON.pretty_generate(include_root(body, :access_token)), :callback => params[:callback]
