@@ -39,4 +39,11 @@ class InstallTracking::Device < ActiveRecord::Base
     device
   end
   
+  
+  def first_user 
+    device_user = device_users.first_use_ascending.limit(1).first
+    device_user.nil? ? nil : device_user.identity
+  end
+  
+  
 end

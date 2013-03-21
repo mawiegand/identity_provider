@@ -4,9 +4,10 @@
   <tr>
     <th>Platform</th>
     <th>Hardware string</th>
-    <th>Hardware</th>
     <th>Operating system</th>
     <th>Device token</th>
+    <th>First User</th>
+    <th>No. Users</th>
     <th>Suspicious</th>
     <th>Note</th>
     <th>Banned at</th>
@@ -21,9 +22,14 @@
   <tr>
     <td><%= install_tracking_device.platform_id %></td>
     <td><%= install_tracking_device.hardware_string %></td>
-    <td><%= install_tracking_device.hardware_id %></td>
     <td><%= install_tracking_device.operating_system %></td>
     <td><%= install_tracking_device.device_token %></td>
+    <td><% first_user = install_tracking_device.first_user %>
+        <% if !first_user.nil? %>
+          <%= link_to "#{first_user.address_informal}", first_user %>
+        <% end %>
+    </td>
+    <td><%= install_tracking_device.device_users.count %></td>
     <td><%= install_tracking_device.suspicious %></td>
     <td><%= install_tracking_device.note %></td>
     <td><%= install_tracking_device.banned_at %></td>

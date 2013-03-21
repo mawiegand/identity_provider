@@ -1,55 +1,59 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Platform:</b>
-  <%= @install_tracking_device.platform_id %>
-</p>
 
-<p>
-  <b>Hardware string:</b>
-  <%= @install_tracking_device.hardware_string %>
-</p>
-
-<p>
-  <b>Hardware:</b>
-  <%= @install_tracking_device.hardware_id %>
-</p>
-
-<p>
-  <b>Operating system:</b>
-  <%= @install_tracking_device.operating_system %>
-</p>
-
-<p>
-  <b>Device token:</b>
-  <%= @install_tracking_device.device_token %>
-</p>
+<h2><%= @install_tracking_device.hardware_string %> <%= @install_tracking_device.operating_system %> of <%= link_to "#{@install_tracking_device.first_user.address_informal}", @install_tracking_device.first_user %><br>
+<small><%= @install_tracking_device.device_token %></small></h2>
 
 <p>
   <b>Suspicious:</b>
-  <%= @install_tracking_device.suspicious %>
+  <%= @install_tracking_device.suspicious || "No" %>
 </p>
 
+<% if !@install_tracking_device.note.blank? %>
 <p>
   <b>Note:</b>
   <%= @install_tracking_device.note %>
 </p>
+<% end %>
 
+<% if !@install_tracking_device.banned_at.nil? %>
 <p>
   <b>Banned at:</b>
   <%= @install_tracking_device.banned_at %>
-</p>
-
-<p>
-  <b>Ban reason:</b>
+  by <%= @install_tracking_device.banning_identity_id %> with reason:
   <%= @install_tracking_device.ban_reason %>
 </p>
+<% end %>
 
-<p>
-  <b>Banning identity:</b>
-  <%= @install_tracking_device.banning_identity_id %>
-</p>
 
+<% if staff? %>
+ 
+  <h3>Users</h3>
+  
+  <ul>
+ 
+     <% @install_tracking_device.device_users.first_use_ascending.each do |user| %>
+     
+       <li><b><%= link_to "#{user.identity.address_informal}", user.identity %></b>
+           used the device since <%= time_tag user.first_use_at %> til <%= time_ago_in_words user.last_use_at %> ago
+       </li>
+     <% end %>
+     
+  </ul>
+  
+  
+  <h3>Installs</h3>
+  
+  <ul>
+     <% @install_tracking_device.installs.each do |install| %>
+       <li><b><%= link_to "#{install.release.client.identifier} v#{install.release.version}", install.release.client %></b>
+           <%= link_to "install #{install.app_token}", install %>
+           first reported on <%= time_tag install.created_at %>
+       </li>
+     <% end %>
+  </ul>
+ 
+<% end %>
 
 <%= link_to 'Edit', edit_install_tracking_device_path(@install_tracking_device) %> |
 <%= link_to 'Back', install_tracking_devices_path %>
