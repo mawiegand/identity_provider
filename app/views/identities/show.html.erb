@@ -74,7 +74,7 @@
             
             <% other_users = device.device_users.find(:all, conditions: ['identity_id <> ?', @identity.id]) %>
             
-            <% if !other_users.nil? && other_users.empty? %>
+            <% if !other_users.empty? %>
               also used by: 
               <% other_users.each do |odu| %>
                 <%= link_to "#{odu.identity.address_informal}", odu.identity %>
