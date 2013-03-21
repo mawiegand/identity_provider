@@ -66,7 +66,7 @@
       <% @devices.each do |device| 
         device_user = device.device_users.find_by_identity_id(@identity.id)
         %>
-        <li><b><%= device.hardware_string %>, <%= device.operating_system %></b> (<%= device.device_token %>) 
+        <li><b><%= link_to "#{device.hardware_string}, #{device.operating_system}", device %></b> (<%=device.device_token%>)
           
             <% if !device_user.nil? %>
               used since <b><%= time_tag device_user.first_use_at %></b> til <b><%= time_ago_in_words device_user.last_use_at %> ago</b>
@@ -81,12 +81,31 @@
               <% end %>
             
             <% end %>
-                        
-            <ul>
-              <li>INSTALL 1</li>
-              <li>INSTALL 2</li>
-            </ul>
             
+            <ul>
+              <% device.installs.each do |install| %>
+                <% install_user = install.install_users.find_by_identity_id(@identity.id) 
+                   if !install_user.nil? %>
+                  <li><%= link_to "#{install.release.client.identifier} v#{install.release.version}", install.release %>, install:
+                      <%= link_to "#{install.app_token}", install %>, 
+                      <% if !install_user.nil? %>
+                        used <%= install_user.sign_in_count %>x since <%= time_tag install_user.first_use_at %> 
+                        til <%= time_ago_in_words install_user.last_use_at %> ago
+                      <% end %></br>
+                      
+                      
+                      <% other_users = install.install_users.find(:all, conditions: ['identity_id <> ?', @identity.id]) %>
+
+                      <% if !other_users.empty? %>
+                        also used by: 
+                        <% other_users.each do |odu| %>
+                          <%= link_to "#{odu.identity.address_informal}", odu.identity %>
+                        <% end %>
+                      <% end %>
+                  </li> 
+                <% end %>
+              <% end %>
+            </ul>
             
         </li> 
       <% end %>
