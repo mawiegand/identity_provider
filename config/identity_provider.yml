@@ -26,3 +26,10 @@ test:
 
 production:
   <<: *defaults
+
+staging_test:
+  <<: *defaults
+
+  portal_base_url: 'https://testround2.wack-a-doo.de'
+
+  cookie_name: 'ip_testround2_remember_token'

@@ -1,11 +1,16 @@
 require "bundler/capistrano"
 
+set :stages, %w(production testround2)
+set :default_stage, "production"
+
+require "capistrano/ext/multistage"
+
 `ssh-add`
 
 default_run_options[:pty] = true                  # problem with ubuntu
 set :ssh_options, :forward_agent => true          # ssh forwarding
-set :gateway, 'wackadoo.de:5775'
-#set :port, 5775
+
+set :port, 5775
 
 set :application, "identity provider"
 set :repository,  "git@github.com:wackadoo/identity_provider.git"
@@ -19,9 +24,6 @@ set :use_sudo, false
 set :deploy_to, "/var/www/identity_provider"
 set :deploy_via, :remote_cache
 
-role :web, "portal.wack-a-doo.de", "test1.wack-a-doo.de"   # Your HTTP server, Apache/etc
-role :app, "portal.wack-a-doo.de", "test1.wack-a-doo.de"   # This may be the same as your `Web` server
-role :db,  "portal.wack-a-doo.de", :primary => true        # This is where Rails migrations will run
 #role :db,  "your slave db-server here"
 
 # if you're still using the script/reaper helper you will need
