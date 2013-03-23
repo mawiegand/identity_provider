@@ -19,7 +19,7 @@
     <% end %>
     <% if signed_in? && staff? %>
       <% @identity.grants.each do |grant| %>
-      <%= link_to "Sign in to #{ grant.client.identifier }", { :action => "signin", :id => @attributes[:id], :client_id => grant.client.id }, :class => 'button-on-white' %>        
+      <%= link_to "Sign in to \"#{ grant.client.name }\"", { :action => "signin", :id => @attributes[:id], :client_id => grant.client.id }, :class => 'button-on-white' %>
       <% end %>
     <%end%><br />
     

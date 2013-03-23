@@ -147,8 +147,11 @@ nav ul li a:hover {
   text-shadow: rgba(255,255,255,.9) 1px 1px;
   
   padding: 4px 8px;
+  margin: 4px 0px;
   text-align: center;
   text-shadow: rgba(255,255,255,.9) 1px 1px;
+
+  display: inline-block;
 }
 
 
