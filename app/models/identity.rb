@@ -121,6 +121,17 @@ class Identity < ActiveRecord::Base
   before_save :set_encrypted_password, :set_unique_identifier
   after_create :send_validation_email
   
+  def self.find_by_nickname_case_insensitive(nickname, options = {})
+    options = { 
+      :find_deleted => false,    # by default: don't return deleted users
+    }.merge(options).delete_if { |key, value| value.nil? }  # merge 'over' default values
+    
+    identity = Identity.find(:first, :conditions => ["lower(nickname) = lower(?)", nickname])
+    
+    identity = nil if identity && identity.deleted && options[:find_deleted] == false    #don't return delted users if not explicitly being told so
+    
+    identity
+  end
   
   
   def self.find_by_id_identifier_or_nickname(user_identifier, options = {})
