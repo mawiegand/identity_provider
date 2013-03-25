@@ -43,17 +43,17 @@ namespace :deploy do
 
   desc "Reset DB"
   task :reset do
-    run "cd #{current_path}; bundle exec rake RAILS_ENV=\"production\" db:reset"
+    run "cd #{current_path}; bundle exec rake RAILS_ENV=\"#{stage}\" db:reset"
     restart
   end
 
   desc "Start Thin"
   task :start do
-    run "cd #{current_path}; bundle exec thin -C config/thin_server.yml start"
+    run "cd #{current_path}; bundle exec thin -C config/thin_#{stage}.yml start"
   end 
   
   desc "Stop Thin"
   task :stop do
-    run "cd #{current_path}; bundle exec thin -C config/thin_server.yml stop"
+    run "cd #{current_path}; bundle exec thin -C config/thin_#{stage}.yml stop"
   end
 end
