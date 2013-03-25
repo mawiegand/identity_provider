@@ -25,4 +25,10 @@ production:
   host: portal.wack-a-doo.de
   port: 5432
   username: run-ip
-# password: bohdoeD3
+
+round2:
+  adapter: postgresql
+  encoding: UTF8
+  database: identity_provider_round2
+  port: 5686
+  username: run-ip

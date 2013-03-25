@@ -26,3 +26,10 @@ test:
 
 production:
   <<: *defaults
+
+round2:
+  <<: *defaults
+
+  portal_base_url: 'https://backup-round2.wack-a-doo.de'
+
+  cookie_name: 'ip_round2_remember_token'
