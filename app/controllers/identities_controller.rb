@@ -272,6 +272,11 @@ class IdentitiesController < ApplicationController
     
     deny_access("You're not allowed to edit identity %s." % params[:id]) unless role == :owner || role == :game || staff?
     
+    if params[:identity].has_key?(:nickname)
+      identity = Identity.find_by_nickname_case_insensitive(params[:identity][:nickname], find_deleted: true)
+      raise ConflictError.new('Nickname already taken.')   if !identity.nil? && identity != @identity
+    end
+    
     if role == :game && params[:identity].has_key?(:nickname) && !(@identity.nickname.nil? || @identity.nickname.starts_with?('WackyUser'))
       params[:identity].delete(:nickname)
     end
