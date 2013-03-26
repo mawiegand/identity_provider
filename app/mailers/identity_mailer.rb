@@ -1,6 +1,11 @@
 class IdentityMailer < ActionMailer::Base
   default from: "team@5dlab.com"
   
+  
+  def all_players_notice_email(identity, subject)
+    @identity = identity    
+    mail :to => identity.email, :subject => subject 
+  end
 
   def manually_granted_access_email(identity, client)
     @identity = identity
