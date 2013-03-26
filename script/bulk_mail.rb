@@ -25,7 +25,7 @@ Identity.where("email LIKE '%pfox.eu'").each do |identity|
   end
   
   if count % 25 == 0
-    puts "\n--------------- #{count}\n"
+    puts "\n--------------- #{count}\n\n"
   end
   
 end
