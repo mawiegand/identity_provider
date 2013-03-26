@@ -5,7 +5,7 @@ class ClientsController < ApplicationController
  
   # GET /clients
   def index
-    @clients = Client.all
+    @clients = Client.order('id asc')
 
     respond_to do |format|
       format.html # index.html.erb
