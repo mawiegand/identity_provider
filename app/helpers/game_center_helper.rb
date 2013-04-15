@@ -1,0 +1,2 @@
+module GameCenterHelper
+end

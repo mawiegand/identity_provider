@@ -12,9 +12,12 @@ IdentityProvider::Application.routes.draw do
       
       resource  :dashboard,             :controller => "Dashboard", :only => [:show, :create]
       
-      resources :identities,  :only => [:new, :create, :show, :index, :edit, :destroy, :update] do
+      resources :identities,    :only => [:new, :create, :show, :index, :edit, :destroy, :update] do
         resources :messages 
       end
+      
+      resources :game_center, :only => [:show, :create]
+      
       resources :sessions,    :only => [:new, :create, :destroy]
       resources :log_entries, :only => [:index]
       resources :clients

@@ -75,15 +75,15 @@ class Identity < ActiveRecord::Base
   attr_accessor :password
   
   attr_accessible :nickname, :firstname, :surname, :password, :password_confirmation, :as => :owner
-  attr_accessible *accessible_attributes(:owner), :email, :as => :creator # fields accesible during creation
-  attr_accessible :nickname, :firstname, :surname, :activated, :deleted, :staff, :banned, :ban_reason, :ban_ended_at, :as => :staff
+  attr_accessible *accessible_attributes(:owner), :email, :gc_player_id, :as => :creator # fields accesible during creation
+  attr_accessible :nickname, :firstname, :surname, :activated, :deleted, :staff, :banned, :ban_reason, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :as => :staff
   attr_accessible *accessible_attributes(:staff), :email, :admin, :password, :password_confirmation, :as => :admin
   attr_accessible :nickname, :password, :password_confirmation, :as => :game
     
   attr_readable :identifier, :nickname, :id, :admin, :staff,               :as => :default 
   attr_readable *readable_attributes(:default), :created_at,  :as => :user
-  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :activated, :updated_at, :deleted, :banned, :ban_ended_at, :generic_email, :generic_nickname,     :as => :owner
-  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt, :password_token, :ban_reason, :as => :staff
+  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :activated, :updated_at, :deleted,                         :ban_reason, :banned, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at,   :as => :owner
+  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt, :password_token, :ban_reason, :banned, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at,   :as => :staff
   attr_readable *readable_attributes(:staff),   :as => :admin
   
   @email_regex      = /(?:[a-z0-9!#$\%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$\%&'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i
@@ -271,6 +271,34 @@ class Identity < ActiveRecord::Base
     return I18n.translate('general.address.mr') if gender? == :male
     return I18n.translate('general.address.mrs') if gender? == :unknwon
     return I18n.translate('general.address.mrmrs') 
+  end
+  
+  # connects the identity to the given game center player id
+  def connect_to_game_center(new_gc_player_id)
+    self.gc_player_id   = new_gc_player_id
+    self.gc_rejected_at = nil
+    self.gc_player_id_connected_at = DateTime.now
+    return self
+  end
+  
+  # remove game_center connection
+  def disconnect_from_game_center
+    self.gc_player_id   = nil
+    self.gc_rejected_at = DateTime.now
+    self.gc_player_id_connected_at = nil
+    return self
+  end
+  
+  def reject_game_center
+    self.gc_rejected_at = DateTime.now
+  end
+  
+  def rejected_game_center?
+    !self.gc_rejected_at.nil?
+  end
+  
+  def connected_to_game_center?
+    !self.gc_player_id.nil?
   end
   
   # generates a validation code for this identitie's email address.
