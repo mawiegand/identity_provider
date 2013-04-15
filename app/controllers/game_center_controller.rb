@@ -24,7 +24,7 @@ class GameCenterController < ApplicationController
     raise ConflictError.new   ("id already taken")      if !Identity.find_by_gc_player_id(params[:id]).nil?
     raise ForbiddenError.new  ("identity is already connected to another gc_player_id")   if !current_identity.gc_player_id.blank?
     
-    if !identity.connect_to_game_center(params[:id]).save
+    if !current_identity.connect_to_game_center(params[:id]).save
       raise BadRequestError.new ("could not connect identity to given game_center_id")
     end
     
