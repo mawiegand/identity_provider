@@ -204,6 +204,10 @@ class Identity < ActiveRecord::Base
     !name.nil? && name.index(@nickname_regex) != nil    # does not start with digit, no whitespaces
   end
   
+  def self.free_gc_player_id?(pid)
+    !pid.nil? && find_by_gc_player_id(pid).nil?
+  end
+  
   # returns a string representation of the identities role
   def role_string
     return role.to_s

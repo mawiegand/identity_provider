@@ -108,12 +108,17 @@ module Oauth2
       end
       
       # check username and password
-      if params[:username].blank? || params[:password].blank?
+      if (params[:username].blank? || params[:password].blank?) && params[:gc_player_id].blank?
         render_endpoint_error params[:client_id], :invalid_request, "The request is missing the username and / or password."
         return 
       end
       
-      identity = Identity.authenticate(params[:username], params[:password])
+      identity = if !(params[:gc_player_id]).blank?
+        Identity.find_by_gc_player_id(params[:gc_player_id])                      # no authentication for game-center....
+      else
+        Identity.authenticate(params[:username], params[:password])
+      end
+      
       if !identity
         render_endpoint_error params[:client_id], :invalid_grant, I18n.translate('error.oauth.wrongCredentials') 
         return 

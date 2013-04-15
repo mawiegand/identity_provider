@@ -146,7 +146,6 @@ class IdentitiesController < ApplicationController
           else
             nil
           end
-  
           
           identity = Identity.new
           identity.nickname = disambiguated_name
@@ -157,7 +156,12 @@ class IdentitiesController < ApplicationController
           identity.password_confirmation = params[:password_confirmation]
           identity.generic_nickname = params[:nickname].blank?
           identity.generic_email    = params[:email].blank?
+          identity.generic_password = !params[:generic_password].blank? && params[:generic_password] == true
           identity.sign_up_with_client_id = client.id
+
+          if !params[:gc_player_id].blank? && Identity.free_gc_player_id?(params[:gc_player_id]) 
+            identity.connect_to_game_center(params[:gc_player_id])
+          end
           
           raise BadRequestError.new(I18n.translate "error.identityInvalid") unless identity.valid?
                     
