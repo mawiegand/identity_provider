@@ -1,12 +1,13 @@
 class GameCenterController < ApplicationController
   
-  before_filter :authenticate  
+  before_filter :authenticate, :except => [ :show ] 
   before_filter :deny_backend, :except => [ :show ]                      
   
   # look-up an existing identity by the given gc_player_id and either return 200 - ok  or 404 - not found.
   # does not include any data about the identity in order to not give away any information that could
   # be used in fraud attempts
   def show
+    raise ForbiddenError.new ("Access Forbidden.")      if !api_request? && !staff?
     raise BadRequestError.new ("missing gc_player_id")  if params[:id].blank?
     @identity = Identity.find_by_gc_player_id(params[:id]) 
     raise NotFoundError.new ("Not Found.")    if @identity.nil?  # emit a not found error
