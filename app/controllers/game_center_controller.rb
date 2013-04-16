@@ -31,7 +31,7 @@ class GameCenterController < ApplicationController
     
     respond_to do |format|
       format.json {
-        render :status => :created, :json => {}, :location => identity  
+        render :status => :created, :json => {}, :location => current_identity  
       }
       format.html {
         redirect_to current_identity
