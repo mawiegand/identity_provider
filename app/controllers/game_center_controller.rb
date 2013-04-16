@@ -19,7 +19,7 @@ class GameCenterController < ApplicationController
   end
   
   # connects a gc_player_id to an existing identity
-  def create
+  def update
     raise ForbiddenError.new  ("must be signed-in")     if current_identity.nil?
     raise BadRequestError.new ("missing gc_player_id")  if params[:id].blank?
     raise ConflictError.new   ("id already taken")      if !Identity.find_by_gc_player_id(params[:id]).nil?

@@ -16,7 +16,7 @@ IdentityProvider::Application.routes.draw do
         resources :messages 
       end
       
-      resources :game_center, :only => [:show, :create]
+      resources :game_center, :only => [:show, :update]
       
       resources :sessions,    :only => [:new, :create, :destroy]
       resources :log_entries, :only => [:index]
