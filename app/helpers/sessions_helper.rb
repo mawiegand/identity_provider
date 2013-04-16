@@ -21,6 +21,10 @@ module SessionsHelper
   def deny_api
     deny_access if api_request?
   end
+  
+  def deny_website
+    deny_access if website_request?
+  end
 
   
   # Checks whether the present visitor has authenticated himself properly

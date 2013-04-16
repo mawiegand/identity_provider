@@ -1,7 +1,7 @@
 class GameCenterController < ApplicationController
   
   before_filter :authenticate, :except => [ :show ] 
-  before_filter :deny_backend, :except => [ :show ]                      
+  before_filter :deny_website, :except => [ :show ]                      
   
   # look-up an existing identity by the given gc_player_id and either return 200 - ok  or 404 - not found.
   # does not include any data about the identity in order to not give away any information that could
