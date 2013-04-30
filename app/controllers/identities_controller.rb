@@ -6,9 +6,9 @@ require 'active_support/secure_random'
 # the system.
 class IdentitiesController < ApplicationController
 
-  before_filter :authenticate,                 :except   => [:new, :show, :create, :update, :validation, :send_password_token, :send_password]   # these pages can be seen without logging-in
-  before_filter :authorize_staff,              :only     => [:index]                              # only staff can access these pages
-  before_filter :authenticate,                 :only     => [:update]                          
+  before_filter :authenticate,                     :except   => [:new, :show, :create, :update, :validation, :send_password_token, :send_password]   # these pages can be seen without logging-in
+  before_filter :authorize_staff,                  :only     => [:index]                              # only staff can access these pages
+  before_filter :authenticate_game_backend_or_api, :only     => [:update]                          
   
   # Returns a representation of a single identity-resource by either rendering 
   # a html page or sending a JSON-representation. 

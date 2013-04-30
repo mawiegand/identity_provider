@@ -43,6 +43,15 @@ module SessionsHelper
     authenticate if website_request?        # only html requests are authenticated using this method. 
   end
     
+  def authenticate_game_backend_or_api
+    if website_request?
+      authenticate
+    elsif api_request?
+      deny_access  if !game_signed_in? && !signed_in?      
+    else
+      deny_access
+    end
+  end  
   
   def game_signed_in?
     !current_game.nil?
