@@ -156,7 +156,7 @@ class IdentitiesController < ApplicationController
           identity.password_confirmation = params[:password_confirmation]
           identity.generic_nickname = params[:nickname].blank?
           identity.generic_email    = params[:email].blank?
-          identity.generic_password = !params[:generic_password].blank? && params[:generic_password] == true
+          identity.generic_password = !params[:generic_password].blank? && !params[:generic_password].to_i.zero?
           identity.sign_up_with_client_id = client.id
 
           if !params[:gc_player_id].blank? && Identity.free_gc_player_id?(params[:gc_player_id]) 
