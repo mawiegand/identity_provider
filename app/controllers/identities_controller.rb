@@ -285,7 +285,18 @@ class IdentitiesController < ApplicationController
       params[:identity].delete(:nickname)
     end
     
-    @identity.assign_attributes params[:identity].delete_if { |k,v| v.nil? }, :as => role
+    # assign everything, but handle email specifically
+    @identity.assign_attributes params[:identity].delete_if { |k,v| v.nil? }.except(:email), :as => role      
+    
+    if params[:identity].has_key?(:email)
+      # staff & admin may change every email, owner and game only generic emails (set email once and change never again)
+      raise ForbiddenError.new('Write access to email forbidden.')  if !staff? && !((role == :game || role == :owner) && @identity.generic_email?)
+      
+      identity = Identity.find(:first, :conditions => ["lower(email) = lower(?) AND (deleted IS NULL OR NOT deleted)", params[:identity][:email]])  
+      raise ConflictError.new('Email already taken.')      if !identity.nil? && identity != @identity
+      
+      @identity.email = params[:identity][:email]
+    end
         
     if @identity.save
       respond_to do |format|
