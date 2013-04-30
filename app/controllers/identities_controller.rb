@@ -296,6 +296,15 @@ class IdentitiesController < ApplicationController
       raise ConflictError.new('Email already taken.')      if !identity.nil? && identity != @identity
       
       @identity.email = params[:identity][:email]
+      @identity.generic_email = false
+    end
+    
+    if params[:identity].has_key?(:password)
+      @identity.generic_password = false
+    end
+    
+    if params[:identity].has_key?(:nickname) 
+      @identity.generic_nickname = false
     end
         
     if @identity.save
