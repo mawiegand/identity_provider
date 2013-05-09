@@ -72,7 +72,7 @@ class Identity < ActiveRecord::Base
   has_many  :installs,              :through    => :install_users,                                                :inverse_of => :identities
   
   has_many  :sign_ins,              :class_name => "LogEntry",                     :foreign_key => :identity_id,  :conditions => {:event_type => 'signin_success'}, :order => 'created_at DESC'
-  has_many  :auth_successes,        :class_name => "LogEntry",                     :foreign_key => :identity_id,  :conditions => "event_type ='signin_success' OR event_type = 'auth_token_succes'", :order => 'created_at DESC'
+  has_many  :auth_successes,        :class_name => "LogEntry",                     :foreign_key => :identity_id,  :conditions => "event_type ='signin_success' OR event_type = 'auth_token_success'", :order => 'created_at DESC'
     
   attr_accessor :password
   
