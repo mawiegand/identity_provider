@@ -72,7 +72,8 @@ class Identity < ActiveRecord::Base
   has_many  :installs,              :through    => :install_users,                                                :inverse_of => :identities
   
   has_many  :sign_ins,              :class_name => "LogEntry",                     :foreign_key => :identity_id,  :conditions => {:event_type => 'signin_success'}, :order => 'created_at DESC'
-  
+  has_many  :auth_successes,        :class_name => "LogEntry",                     :foreign_key => :identity_id,  :conditions => "event_type ='signin_success' OR event_type = 'auth_token_succes'", :order => 'created_at DESC'
+    
   attr_accessor :password
   
   attr_accessible :nickname, :firstname, :surname, :password, :password_confirmation, :as => :owner
@@ -232,11 +233,13 @@ class Identity < ActiveRecord::Base
     sign_ins.nil? || sign_ins.empty? ? nil : sign_ins.first
   end
   
-  
+  def last_succesful_auth
+    auth_successes.empty? ? nil : auth_successes.first
+  end
 
   
   def lifetime
-    last_sign_in.nil? ? 0 : (last_sign_in.created_at - created_at) 
+    last_succesful_auth.nil? ? 0.0 : (last_succesful_auth.created_at - created_at) 
   end
   
   # this is just a stub and most be replaced by an appropriate
