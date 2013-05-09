@@ -71,6 +71,7 @@ class Identity < ActiveRecord::Base
   has_many  :install_users,         :class_name => "InstallTracking::InstallUser", :foreign_key => :identity_id,  :inverse_of => :identity
   has_many  :installs,              :through    => :install_users,                                                :inverse_of => :identities
   
+  has_many  :sign_ins,              :class_name => "LogEntry",                     :foreign_key => :identity_id,  :conditions => {:event_type => 'signin_success'}, :order => 'created_at DESC'
   
   attr_accessor :password
   
@@ -217,6 +218,17 @@ class Identity < ActiveRecord::Base
     return :admin if admin
     return :staff if staff
     return :user
+  end
+  
+  def last_sign_in
+    sign_ins.nil? || sign_ins.empty? ? nil : sign_ins.first
+  end
+  
+  
+
+  
+  def lifetime
+    last_sign_in.nil? ? 0 : (last_sign_in.created_at - created_at) 
   end
   
   # this is just a stub and most be replaced by an appropriate
