@@ -209,6 +209,14 @@ class Identity < ActiveRecord::Base
     !pid.nil? && find_by_gc_player_id(pid).nil?
   end
   
+  def self.average_lifetime
+    total = 0.0
+    Identity.all.each do |identity|
+      total += identity.lifetime
+    end
+    total / (Identity.count || 1.0)
+  end
+  
   # returns a string representation of the identities role
   def role_string
     return role.to_s

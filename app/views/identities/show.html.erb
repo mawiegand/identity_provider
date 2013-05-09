@@ -8,7 +8,7 @@
         <%="#{@attributes[:email]}, " unless @attributes[:email].blank? %> <%= staff? ? "#{@attributes[:identifier]}" : "" %><br />
         <%="joined #{ time_ago_in_words @attributes[:created_at]} ago." if @attributes[:created_at] %>        
         <%="activated #{ time_ago_in_words @attributes[:activated]} ago." if @attributes[:activated] %>
-        <%="Lived for #{ time_span_in_natural_language @options[:lifetime]}." unless @options[:lifetime].blank? %>    <br/>    
+        <%="Lived for #{ time_span_in_natural_language @options[:lifetime]}." unless @options[:lifetime] < 1.0 %>    <br/>    
         <%="Password Token: #{@attributes[:password_token]}" if @attributes[:password_token] %><br />
         <%="Banned until #{@attributes[:ban_ended_at]} for #{@attributes[:ban_reason]}" if @attributes[:banned] %><br />
   </div>

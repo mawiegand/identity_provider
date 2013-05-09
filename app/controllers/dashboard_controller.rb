@@ -27,6 +27,7 @@ class DashboardController < ApplicationController
       signups_last_week:   Identity.where(['created_at > ?', Time.now - 1.weeks]).count,
       signups_last_month:  Identity.where(['created_at > ?', Time.now - 1.months]).count,
       on_waiting_lists:    Resource::WaitingList.count,
+      average_life_time:   Identity.average_lifetime,
 
       due_activations:     Identity.where(['activated IS NULL AND created_at < ?', Time.now - 3.days]).count,
     }
