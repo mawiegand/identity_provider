@@ -20,7 +20,7 @@
     <%= @user_stats[:signups_last_day]  %> /
     <%= @user_stats[:signups_last_week] %> /
     <%= @user_stats[:signups_last_month]%> (last 1 hour / 24 hours / week / month) <br/>
-  <b>Average Life Time:</b> <%= time_span_in_natural_language( @user_stats[:average_life_time] ) %><br/>
+  <b>Average Life Time:</b> <%= time_span_in_natural_language( @user_stats[:average_life_time] ) if @user_stats[:average_life_time] %><br/>
   <b>Due activations:</b> <%= @user_stats[:due_activations]%> <br/>
   <b>On waiting lists:</b> <%= @user_stats[:on_waiting_lists] %><br/>
   <p><b>Latest User</b>: signed up <b><%= time_ago_in_words @latest_identity.created_at %></b> ago<br/>
