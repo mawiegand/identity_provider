@@ -66,7 +66,7 @@ class IdentitiesController < ApplicationController
           :show_edit_link               => [ :owner, :staff, :admin ].include?(role),
           :show_delete_link             => [ :owner, :staff, :admin ].include?(role),
           :show_delete_immediately_link => [ :admin ].include?(role),
-          :lifetime                     => ([ :admin, :staff? ].include?(role) ? @identity.lifetime : nil),
+          :lifetime                     => ([ :owner, :admin, :staff ].include?(role) ? @identity.lifetime : nil),
         }
         @devices    = staff? ? @identity.devices : nil
         @attributes = @identity.sanitized_hash(role)          # the easiest way to make sure, we don't display
