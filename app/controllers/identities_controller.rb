@@ -121,7 +121,7 @@ class IdentitiesController < ApplicationController
         saved = false
         
         begin
-          base_name = if !params[:nickname].blank? 
+          base_name = if !params[:nickname].blank? && !(params[:nickname] =~ /^[^\d\s]+[^\s]*$/i).nil?
             params[:nickname]
           else
             params[:nickname_base ].blank? ? "User" : params[:nickname_base]

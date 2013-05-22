@@ -98,8 +98,8 @@ class Identity < ActiveRecord::Base
                     :uniqueness => { :case_sensitive => false }
                     
   validates :nickname,  :length       => { :maximum => 20 },
+                        :uniqueness   => { :case_sensitive => false, :allow_blank => true },
                         :format       => { :with => @nickname_regex, :allow_blank => true },
-                        :uniqueness   => { :case_sensitive => false, :allow_blank => true }
                     
   validates :password,  :presence     => true,
                         :confirmation => true,
