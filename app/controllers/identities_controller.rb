@@ -124,7 +124,7 @@ class IdentitiesController < ApplicationController
           base_name = if !params[:nickname].blank? && !(params[:nickname] =~ /^[^\d\s]+[^\s]*$/i).nil?
             params[:nickname]
           else
-            params[:nickname_base ].blank? ? "User" : params[:nickname_base]
+            !params[:nickname_base ].blank? && !(params[:nickname_base] =~ /^[^\d\s]+[^\s]*$/i).nil? ? params[:nickname_base] : "WackyUser"
           end
           
           disambiguated_name = base_name
