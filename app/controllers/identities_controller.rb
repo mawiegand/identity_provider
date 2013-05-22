@@ -143,7 +143,7 @@ class IdentitiesController < ApplicationController
           email = if !params[:email].blank?
             params[:email]
           elsif client.signup_without_email?
-            "#{disambiguated_name}@5dlab.com"
+            "generic#{Identity.maximum(:id).to_i + 1}@5dlab.com"
           else
             nil
           end
