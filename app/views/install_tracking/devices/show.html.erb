@@ -58,7 +58,7 @@
   <ul>
      <% @install_tracking_device.tracking_events.descending.each do |event| %>
        <li><b><%= link_to event.event_name, event %>: </b>
-           <%= event.event_args %> @<%= event.created_at %> | <% event.ip %>
+           <%= event.event_args %> @<%= event.created_at %> | <%= event.ip %>
        </li>
      <% end %>
   </ul>

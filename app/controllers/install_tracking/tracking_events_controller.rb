@@ -45,7 +45,7 @@ class InstallTracking::TrackingEventsController < ApplicationController
   # POST /install_tracking/tracking_events.json
   def create
     @install_tracking_tracking_event = InstallTracking::TrackingEvent.new(params[:install_tracking_tracking_event])
-    @install_tracking_tracking_event.ip = request.env['REMOTE_ADDR']
+    @install_tracking_tracking_event.ip = request.remote_ip
     
     respond_to do |format|
       if @install_tracking_tracking_event.save
