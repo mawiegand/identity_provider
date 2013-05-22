@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  device_token: MyString
+  event_name: MyString
+  event_args: MyString
+  ip: MyString
+
+two:
+  device_token: MyString
+  event_name: MyString
+  event_args: MyString
+  ip: MyString

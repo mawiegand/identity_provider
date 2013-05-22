@@ -1,0 +1,2 @@
+module InstallTracking::TrackingEventsHelper
+end

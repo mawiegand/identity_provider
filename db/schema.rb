@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130320153436) do
+ActiveRecord::Schema.define(:version => 20130522121821) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -68,14 +68,14 @@ ActiveRecord::Schema.define(:version => 20130320153436) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "encrypted_password"
-    t.boolean  "admin",                     :limit => 255
-    t.boolean  "staff",                     :limit => 255
+    t.boolean  "admin"
+    t.boolean  "staff"
     t.string   "firstname"
     t.string   "surname"
     t.string   "nickname"
-    t.boolean  "deleted",                                  :default => false
+    t.boolean  "deleted",                   :default => false
     t.datetime "activated"
-    t.string   "identifier",                               :default => "a",   :null => false
+    t.string   "identifier",                :default => "a",   :null => false
     t.integer  "sign_up_with_client_id"
     t.string   "password_token"
     t.string   "locale"
@@ -83,9 +83,9 @@ ActiveRecord::Schema.define(:version => 20130320153436) do
     t.string   "ban_reason"
     t.datetime "ban_ended_at"
     t.string   "referer"
-    t.boolean  "generic_nickname",                         :default => false, :null => false
-    t.boolean  "generic_email",                            :default => false, :null => false
-    t.boolean  "generic_password",                         :default => false, :null => false
+    t.boolean  "generic_nickname",          :default => false, :null => false
+    t.boolean  "generic_email",             :default => false, :null => false
+    t.boolean  "generic_password",          :default => false, :null => false
     t.string   "gc_player_id"
     t.datetime "gc_rejected_at"
     t.datetime "gc_player_id_connected_at"
@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(:version => 20130320153436) do
     t.integer  "hardware_id"
     t.string   "operating_system"
     t.string   "device_token"
-    t.boolean  "suspicious",          :default => false, :null => false
+    t.boolean  "suspicious"
     t.text     "note"
     t.datetime "banned_at"
     t.text     "ban_reason"
@@ -137,6 +137,15 @@ ActiveRecord::Schema.define(:version => 20130320153436) do
     t.integer  "release_id"
     t.integer  "device_id"
     t.string   "app_token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "install_tracking_tracking_events", :force => true do |t|
+    t.string   "device_token"
+    t.string   "event_name"
+    t.string   "event_args"
+    t.string   "ip"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -199,6 +208,27 @@ ActiveRecord::Schema.define(:version => 20130320153436) do
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "resource_device_users", :force => true do |t|
+    t.integer  "identity_id"
+    t.integer  "platform_id",      :default => 0, :null => false
+    t.integer  "hardware_id"
+    t.string   "gc_player_id"
+    t.string   "os"
+    t.string   "device_token"
+    t.datetime "first_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.integer  "sign_in_count",    :default => 0, :null => false
+    t.string   "last_ip_address"
+    t.string   "last_latitude"
+    t.string   "last_longitude"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "client_id"
+    t.string   "version"
+    t.string   "hardware_string"
+    t.string   "client_token"
   end
 
   create_table "resource_games", :force => true do |t|

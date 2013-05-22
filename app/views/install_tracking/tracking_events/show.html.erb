@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Device token:</b>
+  <%= @install_tracking_tracking_event.device_token %>
+</p>
+
+<p>
+  <b>Event name:</b>
+  <%= @install_tracking_tracking_event.event_name %>
+</p>
+
+<p>
+  <b>Event args:</b>
+  <%= @install_tracking_tracking_event.event_args %>
+</p>
+
+<p>
+  <b>Ip:</b>
+  <%= @install_tracking_tracking_event.ip %>
+</p>
+
+
+<%= link_to 'Edit', edit_install_tracking_tracking_event_path(@install_tracking_tracking_event) %> |
+<%= link_to 'Back', install_tracking_tracking_events_path %>

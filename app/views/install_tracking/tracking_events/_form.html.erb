@@ -1,0 +1,33 @@
+<%= form_for(@install_tracking_tracking_event) do |f| %>
+  <% if @install_tracking_tracking_event.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@install_tracking_tracking_event.errors.count, "error") %> prohibited this install_tracking_tracking_event from being saved:</h2>
+
+      <ul>
+      <% @install_tracking_tracking_event.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :device_token %><br />
+    <%= f.text_field :device_token %>
+  </div>
+  <div class="field">
+    <%= f.label :event_name %><br />
+    <%= f.text_field :event_name %>
+  </div>
+  <div class="field">
+    <%= f.label :event_args %><br />
+    <%= f.text_field :event_args %>
+  </div>
+  <div class="field">
+    <%= f.label :ip %><br />
+    <%= f.text_field :ip %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

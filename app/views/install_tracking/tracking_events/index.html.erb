@@ -1,0 +1,29 @@
+<h1>Listing install_tracking_tracking_events</h1>
+
+<table>
+  <tr>
+    <th>Device token</th>
+    <th>Event name</th>
+    <th>Event args</th>
+    <th>Ip</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @install_tracking_tracking_events.each do |install_tracking_tracking_event| %>
+  <tr>
+    <td><%= install_tracking_tracking_event.device_token %></td>
+    <td><%= install_tracking_tracking_event.event_name %></td>
+    <td><%= install_tracking_tracking_event.event_args %></td>
+    <td><%= install_tracking_tracking_event.ip %></td>
+    <td><%= link_to 'Show', install_tracking_tracking_event %></td>
+    <td><%= link_to 'Edit', edit_install_tracking_tracking_event_path(install_tracking_tracking_event) %></td>
+    <td><%= link_to 'Destroy', install_tracking_tracking_event, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Tracking event', new_install_tracking_tracking_event_path %>
