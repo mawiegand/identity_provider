@@ -8,6 +8,9 @@ class InstallTracking::Install < ActiveRecord::Base
 
   scope      :token,     lambda { |token| where(['app_token = ?', token]) }
 
+  scope      :descending, order('created_at DESC')
+
+
   # find device       or create it
   # find device user  or create it
   # update last use

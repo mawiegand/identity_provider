@@ -8,7 +8,7 @@ class InstallTracking::DevicesController < ApplicationController
   # GET /install_tracking/devices
   # GET /install_tracking/devices.json
   def index
-    @install_tracking_devices = InstallTracking::Device.all
+    @install_tracking_devices = InstallTracking::Device.descending.paginate(:page => params[:page], :per_page => 60)
 
     respond_to do |format|
       format.html # index.html.erb

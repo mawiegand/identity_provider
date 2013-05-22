@@ -6,7 +6,7 @@ class InstallTracking::TrackingEventsController < ApplicationController
   # GET /install_tracking/tracking_events
   # GET /install_tracking/tracking_events.json
   def index
-    @install_tracking_tracking_events = InstallTracking::TrackingEvent.descending
+    @install_tracking_tracking_events = InstallTracking::TrackingEvent.descending.paginate(:page => params[:page], :per_page => 50)
 
     respond_to do |format|
       format.html # index.html.erb

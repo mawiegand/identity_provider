@@ -3,6 +3,9 @@
     <%= link_to "All Install Users", install_tracking_install_users_path %>
 </h1>
 
+<%= will_paginate @install_tracking_devices %>
+
+
 <table>
   <tr>
     <th>Platform</th>
@@ -46,5 +49,7 @@
 </table>
 
 <br />
+
+<%= will_paginate @install_tracking_devices %>
 
 <%= link_to 'New Device', new_install_tracking_device_path %>

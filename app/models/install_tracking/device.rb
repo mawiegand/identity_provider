@@ -9,6 +9,9 @@ class InstallTracking::Device < ActiveRecord::Base
   scope     :device_token,     lambda { |string| where(['device_token = ?',     string]) }
   scope     :no_device_token,  where('device_token IS NULL')
 
+  scope     :descending, order('created_at DESC')
+  
+
   def self.find_by_hardware_string_os_and_device_token(hw_string, os, token)
     devices = if token.blank?
       self.no_device_token.hardware(hw_string).operating_system(os)
