@@ -1,0 +1,33 @@
+<%= form_for(@install_tracking_push_notification_token) do |f| %>
+  <% if @install_tracking_push_notification_token.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@install_tracking_push_notification_token.errors.count, "error") %> prohibited this install_tracking_push_notification_token from being saved:</h2>
+
+      <ul>
+      <% @install_tracking_push_notification_token.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :push_notification_token %><br />
+    <%= f.text_field :push_notification_token %>
+  </div>
+  <div class="field">
+    <%= f.label :device_token %><br />
+    <%= f.text_field :device_token %>
+  </div>
+  <div class="field">
+    <%= f.label :identifier %><br />
+    <%= f.text_field :identifier %>
+  </div>
+  <div class="field">
+    <%= f.label :ip %><br />
+    <%= f.text_field :ip %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

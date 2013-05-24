@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  push_notification_token: MyString
+  device_token: MyString
+  identifier: MyString
+  ip: MyString
+
+two:
+  push_notification_token: MyString
+  device_token: MyString
+  identifier: MyString
+  ip: MyString

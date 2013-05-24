@@ -1,0 +1,29 @@
+<h1>Listing install_tracking_push_notification_tokens</h1>
+
+<table>
+  <tr>
+    <th>Push notification token</th>
+    <th>Device token</th>
+    <th>Identifier</th>
+    <th>Ip</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @install_tracking_push_notification_tokens.each do |install_tracking_push_notification_token| %>
+  <tr>
+    <td><%= install_tracking_push_notification_token.push_notification_token %></td>
+    <td><%= install_tracking_push_notification_token.device_token %></td>
+    <td><%= install_tracking_push_notification_token.identifier %></td>
+    <td><%= install_tracking_push_notification_token.ip %></td>
+    <td><%= link_to 'Show', install_tracking_push_notification_token %></td>
+    <td><%= link_to 'Edit', edit_install_tracking_push_notification_token_path(install_tracking_push_notification_token) %></td>
+    <td><%= link_to 'Destroy', install_tracking_push_notification_token, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Push notification token', new_install_tracking_push_notification_token_path %>

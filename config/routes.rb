@@ -1,9 +1,5 @@
 IdentityProvider::Application.routes.draw do
 
-
-
-
-
   # all resources and paths are scoped in an optional path_prefix determining the
   # locale to use. Presently only available: en, de
 
@@ -45,6 +41,7 @@ IdentityProvider::Application.routes.draw do
         resources :installs
         resources :devices 
         resources :tracking_events
+        resources :push_notification_tokens
       end
       
       namespace :resource do 

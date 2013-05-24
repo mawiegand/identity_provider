@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Push notification token:</b>
+  <%= @install_tracking_push_notification_token.push_notification_token %>
+</p>
+
+<p>
+  <b>Device token:</b>
+  <%= @install_tracking_push_notification_token.device_token %>
+</p>
+
+<p>
+  <b>Identifier:</b>
+  <%= @install_tracking_push_notification_token.identifier %>
+</p>
+
+<p>
+  <b>Ip:</b>
+  <%= @install_tracking_push_notification_token.ip %>
+</p>
+
+
+<%= link_to 'Edit', edit_install_tracking_push_notification_token_path(@install_tracking_push_notification_token) %> |
+<%= link_to 'Back', install_tracking_push_notification_tokens_path %>
