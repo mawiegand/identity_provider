@@ -45,6 +45,7 @@ class InstallTracking::PushNotificationTokensController < ApplicationController
   # POST /install_tracking/push_notification_tokens.json
   def create
     @install_tracking_push_notification_token = InstallTracking::PushNotificationToken.new(params[:install_tracking_push_notification_token])
+    @install_tracking_push_notification_token.ip = request.remote_ip
 
     respond_to do |format|
       if @install_tracking_push_notification_token.save
