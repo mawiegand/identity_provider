@@ -1,6 +1,6 @@
 class Resource::ResultsController < ApplicationController
   
-  before_filter :authenticate_game_or_backend,    :only   => [ :index, :create ]
+  before_filter :authenticate_game_or_backend,    :only   => [ :create ]
   before_filter :authenticate,                    :except => [ :index, :create ]
 
   before_filter :authorize_staff,                 :except => [ :index, :create ]                         
@@ -10,6 +10,7 @@ class Resource::ResultsController < ApplicationController
   # GET /resource/results
   # GET /resource/results.json
   def index
+    authenticate if website_request?        # only html requests are authenticated using this method. 
     
     if params.has_key?(:identity_id)
       # first: filter out bad requests (malformed addresses, black-listed ressources)
@@ -24,7 +25,9 @@ class Resource::ResultsController < ApplicationController
       else
         @resource_results = identity.results.where(:game_id => current_game.id)
       end
-    else 
+    elsif !params[:game_id].blank?
+      @resource_results = identity.results.where(:game_id => params[:game_id])
+    else
       @asked_for_index = true
     end
 
