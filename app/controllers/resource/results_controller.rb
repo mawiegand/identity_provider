@@ -26,7 +26,7 @@ class Resource::ResultsController < ApplicationController
         @resource_results = identity.results.where(:game_id => current_game.id)
       end
     elsif !params[:game_id].blank?
-      @resource_results = identity.results.where(:game_id => params[:game_id])
+      @resource_results = Reseource::Result.where(:game_id => params[:game_id])
     else
       @asked_for_index = true
     end
