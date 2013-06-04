@@ -1,6 +1,9 @@
 <h1>Listing resource_results</h1>
 
+
+<% if @paginate %>
 <%= will_paginate @resource_results %>
+<% end %>
 
 <table>
   <tr>
@@ -38,7 +41,9 @@
 <% end %>
 </table>
 
+<% if @paginate %>
 <%= will_paginate @resource_results %>
+<% end %>
 
 <br />
 

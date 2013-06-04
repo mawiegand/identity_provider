@@ -25,8 +25,8 @@ class Resource::ResultsController < ApplicationController
       else
         @resource_results = identity.results.where(:game_id => current_game.id)
       end
-    elsif !params[:game_id].blank?
-      @resource_results = Reseource::Result.where(:game_id => params[:game_id])
+    elsif !params[:game_id].blank? && !params[:round_number].blank?
+      @resource_results = Resource::Result.game(params[:game_id]).round(params[:round_number]).top20
     else
       @asked_for_index = true
     end
