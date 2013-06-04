@@ -4,6 +4,6 @@ class ClientRelease < ActiveRecord::Base
 
   has_many   :installs, :class_name => "InstallTracking::Install", :foreign_key => :release_id, :inverse_of => :release
 
-  scope      :version,   lambda { |string| where(['version = ?', string]) } 
+  scope      :version,  lambda { |string| where(['version = ?', string]) } 
   
 end
