@@ -143,7 +143,7 @@ class IdentitiesController < ApplicationController
           email = if !params[:email].blank?
             params[:email]
           elsif client.signup_without_email?
-            "generic#{Identity.maximum(:id).to_i + 1}@5dlab.com"
+            "generic_#{(0...8).map{ ('a'..'z').to_a[rand(26)] }.join}_#{Identity.maximum(:id).to_i + 1}@5dlab.com"
           else
             nil
           end
@@ -164,8 +164,11 @@ class IdentitiesController < ApplicationController
             identity.connect_to_game_center(params[:gc_player_id])
           end
           
-          raise BadRequestError.new(I18n.translate "error.identityInvalid") unless identity.valid?
-                    
+          if !identity.valid?
+            logger.error "ERROR DURING SIGNUP: identity is invalid #{ identity.nickname }, #{ identity.email }, #{ identity.password}==#{ identity.password_confirmation } with params #{ params.inspect }."
+            raise BadRequestError.new(I18n.translate "error.identityInvalid")
+          end
+                  
           saved = identity.save          
         end while !identity.errors.messages[:nickname].nil?    # did save fail due to duplicate nickname? 
         
