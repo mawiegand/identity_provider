@@ -165,7 +165,7 @@ class IdentitiesController < ApplicationController
           end
           
           if !identity.valid?
-            logger.error "ERROR DURING SIGNUP: identity is invalid #{ identity.nickname }, #{ identity.email }, #{ identity.password}==#{ identity.password_confirmation } with params #{ params.inspect }."
+            logger.error "ERROR DURING SIGNUP: identity is invalid #{ identity.nickname }, #{ identity.identifier }, #{ identity.email }, #{ identity.password}==#{ identity.password_confirmation } with params #{ params.inspect }."
             raise BadRequestError.new(I18n.translate "error.identityInvalid")
           end
                   
