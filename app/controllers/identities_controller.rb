@@ -131,7 +131,7 @@ class IdentitiesController < ApplicationController
           
           # OPTIMIZE: the following is a very simple algorithm and should be replaced
           # at some point in time.
-          while !(Identity.find_by_nickname(disambiguated_name)).nil?
+          while !Identity.find(:first, :conditions => [ "lower(nickname) = ?", disambiguated_name ]).nil?
             if i == 0 
               disambiguated_name = "#{ base_name }#{(Identity.count || 0)}"
             else
