@@ -130,7 +130,7 @@ module Oauth2
           ident = InstallTracking::Device.find_last_user_on_device_with_token(di[:old_token])
         end
         
-        if ident && !ident.partable?
+        if ident && !ident.portable?
           ident.password              = params[:password]
           ident.password_confirmation = params[:password_confirmation]
           ident.generic_password      = true
