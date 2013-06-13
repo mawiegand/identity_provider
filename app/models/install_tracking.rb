@@ -30,6 +30,7 @@ module InstallTracking
     device_hardware = device_info[:hardware_string]  || "unknown"
     device_os       = device_info[:operating_system] || "unknown"
     device_token    = device_info[:device_token].blank? ? nil : device_info['device_token']
+    old_token       = device_info[:old_token].blank? ? nil : device_info['old_token']
     
     # unique identifiers for release (together with client)
     client_version  = device_info[:version]          || "unknown"
@@ -66,7 +67,8 @@ module InstallTracking
       device = InstallTracking::Device.create({
         :hardware_string  => device_hardware,
         :operating_system => device_os,
-        :device_token     => device_token
+        :device_token     => device_token,
+        :old_token        => old_token,
       })  
     end
     

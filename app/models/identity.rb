@@ -151,6 +151,7 @@ class Identity < ActiveRecord::Base
     
     return identity
   end
+
   
   # checks a potentialPassword (plain-text) against the "stored"
   # password of the identity. This is done by salting and hashing
@@ -326,6 +327,10 @@ class Identity < ActiveRecord::Base
   
   def connected_to_game_center?
     !self.gc_player_id.nil?
+  end
+  
+  def portable?
+    connected_to_game_center? || !self.generic_password?
   end
   
   # generates a validation code for this identitie's email address.

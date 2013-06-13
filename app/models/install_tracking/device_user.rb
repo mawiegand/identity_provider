@@ -4,5 +4,6 @@ class InstallTracking::DeviceUser < ActiveRecord::Base
   belongs_to  :device,    :class_name => "InstallTracking::Device", :foreign_key => :device_id,    :inverse_of => :device_users
   
   scope :first_use_ascending, order('first_use_at ASC')
+  scope :last_use_descending, order('last_use_at DESC')
   
 end

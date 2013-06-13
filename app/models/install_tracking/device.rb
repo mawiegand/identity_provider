@@ -42,10 +42,24 @@ class InstallTracking::Device < ActiveRecord::Base
   end
   
   
+  def self.find_last_user_on_device_with_token(device_token)
+    last_user = nil;
+    
+    InstallTracking::Device.device_token(device_token).descending.each do |device|
+      last_user = last_user || device.last_user
+    end
+  end
+  
+  
   def first_user 
     device_user = device_users.first_use_ascending.limit(1).first
     device_user.nil? ? nil : device_user.identity
   end
+  
+  def last_user
+    device_user = device_users.last_use_descending.limit(1).first
+    device_user.nil? ? nil : device_user.identity
+  end    
   
   # returns all tracking events that belong to this particular device
   def tracking_events

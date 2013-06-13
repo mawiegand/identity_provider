@@ -108,12 +108,35 @@ module Oauth2
       end
       
       # check username and password
-      if (params[:username].blank? || params[:password].blank?) && params[:gc_player_id].blank?
+      if (params[:username].blank? || params[:password].blank?) && params[:gc_player_id].blank? && params[:restore_device_token].blank?
         render_endpoint_error params[:client_id], :invalid_request, "The request is missing the username and / or password."
         return 
       end
       
-      identity = if !(params[:gc_player_id]).blank?
+      
+      # 3 methods for authentication:
+      # a) generic users may be authenticated just by sending the device token  (we trust them)
+      # b) game-center connected users may be authenticated just by sending the game center id  (we trust the installed app)
+      # c) portable users are authenticated by sending username or email AND password
+      
+      identity = if !(params[:restore_with_device_token]).blank?
+        # lookup with device token
+        ident = InstallTracking::Device.find_last_user_on_device_with_token(params[:restore_with_device_token]) 
+        
+        # if not found,lookup with new device token
+        if !ident && !params[:old_token].blank?
+          ident = InstallTracking::Device.find_last_user_on_device_with_token(params[:old_token])
+        end
+        
+        if ident && !ident.partable?
+          ident.password              = params[:password]
+          ident.password_confirmation = params[:password_confirmation]
+          ident.generic_password      = true
+          ident.save
+        end
+        
+        ident.portable? nil : ident 
+      elsif !(params[:gc_player_id]).blank?
         Identity.find_by_gc_player_id(params[:gc_player_id])                      # no authentication for game-center....
       else
         Identity.authenticate(params[:username], params[:password])
