@@ -48,6 +48,8 @@ class InstallTracking::Device < ActiveRecord::Base
     InstallTracking::Device.device_token(device_token).descending.each do |device|
       last_user = last_user || device.last_user
     end
+    
+    last_user
   end
   
   
