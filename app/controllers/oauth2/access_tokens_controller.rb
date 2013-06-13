@@ -108,7 +108,7 @@ module Oauth2
       end
       
       # check username and password
-      if (params[:username].blank? || params[:password].blank?) && params[:gc_player_id].blank? && params[:restore_device_token].blank?
+      if (params[:username].blank? || params[:password].blank?) && params[:gc_player_id].blank? && params[:restore_with_device_token].blank?
         render_endpoint_error params[:client_id], :invalid_request, "The request is missing the username and / or password."
         return 
       end
