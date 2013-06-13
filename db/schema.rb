@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130613144933) do
+ActiveRecord::Schema.define(:version => 20130613172945) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -158,6 +158,7 @@ ActiveRecord::Schema.define(:version => 20130613144933) do
     t.string   "ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "old_token"
   end
 
   create_table "keys", :force => true do |t|
