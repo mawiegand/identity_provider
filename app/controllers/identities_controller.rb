@@ -48,9 +48,9 @@ class IdentitiesController < ApplicationController
     raise NotFoundError.new('Page Not Found') if @identity.nil?
     
     # third: determine the role of the current user. 
-    role = current_identity ? current_identity.role : :default
+    role = current_identity ? current_identity.role : (current_game ? :game : :default)
     role = :owner if !admin? && current_identity && current_identity.id == @identity.id # here :owner beats :staff
-        
+
     # fourth: collect and sanitize values then render output (either html or JSON)
     respond_to do |format|
       format.json { 
