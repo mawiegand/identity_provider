@@ -92,6 +92,7 @@ de:
         firstname: Vorname 
         surname: Nachname 
         email: Email
+        insider_since: Insider seit
         password: Passwort
         password_confirmation: Passwortbestätigung
         submit_button: Absenden

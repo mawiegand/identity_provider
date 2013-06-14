@@ -42,15 +42,22 @@
     <%= f.text_field :surname %>
   </div>
   <% end %>
-  
+
   <% if @accessible_attributes.include?(:email)%>
-  <div class="field">
-    <%= f.label I18n.t 'identities.edit.form.email' %><br/>
-    <%= f.text_field :email %>
-  </div>
+    <div class="field">
+      <%= f.label I18n.t 'identities.edit.form.email' %><br/>
+      <%= f.text_field :email %>
+    </div>
   <% end %>
-  
-  
+
+  <% if @accessible_attributes.include?(:insider_since)%>
+    <div class="field">
+      <%= f.label I18n.t 'identities.edit.form.insider_since' %><br/>
+      <%= f.datetime_select :insider_since %>
+    </div>
+  <% end %>
+
+
   <% if @accessible_attributes.include?(:banned)%>
   <div class="field">
     <%= f.label I18n.t 'identities.edit.form.banned' %><br/>
