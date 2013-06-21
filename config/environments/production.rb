@@ -61,7 +61,7 @@ IdentityProvider::Application.configure do
   
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address        => "smtp.5dlab.com",
+    :address        => "mail.5dlab.com",
     :port           => 587,
     :domain         => "5dlab.com",
     :authentication => :plain,
