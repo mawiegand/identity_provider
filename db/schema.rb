@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130614141538) do
+ActiveRecord::Schema.define(:version => 20130702123756) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -110,7 +110,7 @@ ActiveRecord::Schema.define(:version => 20130614141538) do
     t.integer  "hardware_id"
     t.string   "operating_system"
     t.string   "device_token"
-    t.boolean  "suspicious",          :default => false, :null => false
+    t.boolean  "suspicious"
     t.text     "note"
     t.datetime "banned_at"
     t.text     "ban_reason"
@@ -118,6 +118,9 @@ ActiveRecord::Schema.define(:version => 20130614141538) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "old_token"
+    t.string   "vendor_token"
+    t.string   "advertiser_token"
+    t.string   "hardware_token"
   end
 
   create_table "install_tracking_install_users", :force => true do |t|
@@ -220,6 +223,27 @@ ActiveRecord::Schema.define(:version => 20130614141538) do
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "resource_device_users", :force => true do |t|
+    t.integer  "identity_id"
+    t.integer  "platform_id",      :default => 0, :null => false
+    t.integer  "hardware_id"
+    t.string   "gc_player_id"
+    t.string   "os"
+    t.string   "device_token"
+    t.datetime "first_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.integer  "sign_in_count",    :default => 0, :null => false
+    t.string   "last_ip_address"
+    t.string   "last_latitude"
+    t.string   "last_longitude"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "client_id"
+    t.string   "version"
+    t.string   "hardware_string"
+    t.string   "client_token"
   end
 
   create_table "resource_games", :force => true do |t|
