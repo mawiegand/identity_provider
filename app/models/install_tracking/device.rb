@@ -7,11 +7,16 @@ class InstallTracking::Device < ActiveRecord::Base
   scope     :hardware,         lambda { |string| where(['hardware_string = ?',  string]) }
   scope     :operating_system, lambda { |string| where(['operating_system = ?', string]) }
   scope     :device_token,     lambda { |string| where(['device_token = ?',     string]) }
+
+  scope     :vendor_token,     lambda { |string| where(['vendor_token = ?',     string]) }
+  scope     :advertiser_token, lambda { |string| where(['advertiser_token = ?', string]) }
+  scope     :hardware_token,   lambda { |string| where(['hardware_token = ?',   string]) }
+  scope     :app_token,        lambda { |string| where(['app_token = ?',        string]) }
+
   scope     :no_device_token,  where('device_token IS NULL')
 
   scope     :descending, order('created_at DESC')
   
-
   def self.find_by_hardware_string_os_and_device_token(hw_string, os, token)
     devices = if token.blank?
       self.no_device_token.hardware(hw_string).operating_system(os)
@@ -32,6 +37,9 @@ class InstallTracking::Device < ActiveRecord::Base
         :hardware_string  => hash['hardware_string'],
         :operating_system => hash['operating_system'],
         :device_token     => hash['device_token'],
+        :vendor_token     => hash['vendor_token'],
+        :advertiser_token => hash['advertiser_token'],
+        :hardware_token   => hash['hardware_token'],
       })
       device.save
     else
@@ -50,6 +58,52 @@ class InstallTracking::Device < ActiveRecord::Base
     end
     
     last_user
+  end
+  
+  
+  
+  def self.find_last_user_on_device_with_corresponding_device_information(device_information)
+    device_information = device_information || {}
+  
+    device_token     = device_information[:device_token]
+    old_token        = device_information[:old_token]
+    vendor_token     = device_information[:vendor_token]
+    advertiser_token = device_information[:advertiser_token]
+    hardware_token   = device_information[:hardware_token]
+    
+    last_user = nil;
+    
+    unless device_token.nil?
+      InstallTracking::Device.device_token(device_token).descending.each do |device|
+        return device.last_user   unless device.last_user.nil?
+      end
+    end
+    
+    unless old_token.nil?
+      InstallTracking::Device.device_token(old_token).descending.each do |device|
+        return device.last_user   unless device.last_user.nil?
+      end
+    end
+    
+    unless vendor_token.nil?
+      InstallTracking::Device.vendor_token(vendor_token).descending.each do |device|
+        return device.last_user   unless device.last_user.nil?
+      end
+    end
+    
+    unless advertiser_token.nil?
+      InstallTracking::Device.advertiser_token(advertiser_token).descending.each do |device|
+        return device.last_user   unless device.last_user.nil?
+      end
+    end
+    
+    unless hardware_token.nil?
+      InstallTracking::Device.hardware_token(hardware_token).descending.each do |device|
+        return device.last_user   unless device.last_user.nil?
+      end
+    end
+
+    return nil;
   end
   
   

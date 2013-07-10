@@ -123,13 +123,8 @@ module Oauth2
         # lookup with device token
         di = params[:device_information] || {}
                 
-        ident = InstallTracking::Device.find_last_user_on_device_with_token(di[:device_token]) 
-        
-        # if not found,lookup with new device token
-        if !ident && !di[:old_token].blank?
-          ident = InstallTracking::Device.find_last_user_on_device_with_token(di[:old_token])
-        end
-        
+        ident = InstallTracking::Device.find_last_user_on_device_with_corresponding_device_information(di) 
+                
         if ident && !ident.portable?
           ident.password              = params[:password]
           ident.password_confirmation = params[:password_confirmation]

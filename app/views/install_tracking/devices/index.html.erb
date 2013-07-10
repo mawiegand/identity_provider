@@ -12,6 +12,7 @@
     <th>Hardware string</th>
     <th>Operating system</th>
     <th>Device token</th>
+    <th>Other tokens</th>
     <th>First User</th>
     <th>No. Users</th>
     <th>Suspicious</th>
@@ -30,6 +31,9 @@
     <td><%= install_tracking_device.hardware_string %></td>
     <td><%= install_tracking_device.operating_system %></td>
     <td><%= install_tracking_device.device_token %></td>
+    <td>Ve: <%= install_tracking_device.vendor_token %><br/>
+        Ad: <%= install_tracking_device.advertiser_token %><br/>
+        HW: <%= install_tracking_device.hardware_token %></td>
     <td><% first_user = install_tracking_device.first_user %>
         <% if !first_user.nil? %>
           <%= link_to "#{first_user.address_informal}", first_user %>
