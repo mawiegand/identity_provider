@@ -16,6 +16,7 @@ gem 'gravatar_image_tag'
 gem 'will_paginate'
 gem 'ruby-prof'
 gem 'thin'
+gem 'httparty'
 
 gem 'rb-readline' 
 
