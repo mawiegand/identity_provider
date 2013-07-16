@@ -9,7 +9,7 @@ class Shop::CallbackController < ApplicationController
     # redirect callbacks for offerID 761 (special offer) to production game server
     if !params[:offerID].nil? && params[:offerID] == '761'
 
-      response = HTTParty.post('https://test1.wack-a-doo.de/game_server/shop/special_offers_transactions',
+      response = HTTParty.post('https://gs02.wack-a-doo.de/game_server/shop/special_offers_transactions',
                              :body => request.request_parameters,
                              :headers => { 'Accept' => 'application/json'})
 
