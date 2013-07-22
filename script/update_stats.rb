@@ -8,7 +8,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'envi
 puts "Start updating stats"
 
 Identity.all.each do |identity|
-  latest_sign_in = identity.sign_ins.latest.first
+  latest_sign_in = identity.auth_successes.latest.first
   
   if latest_sign_in.nil?
     identity.age_in_hours = 0
