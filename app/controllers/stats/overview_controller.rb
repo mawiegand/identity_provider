@@ -13,7 +13,7 @@ class Stats::OverviewController < ApplicationController
 
     @retention   = [ 1.0 ]
     
-    for i in 1..60
+    for i in 1..30
       living = Identity.where(['age_days >= ?', i]).count
       @retention << (living/total_users)
     end

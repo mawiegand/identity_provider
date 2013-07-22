@@ -5,7 +5,7 @@
 <p><b>Average Age in Days:</b> <%= @average_age %></p>
 
 
-<div class="retention_chart" style="width: 1220px; height: 200px; background-color: rgba(255,255,255,0.5); border: 1px solid white;">
+<div class="retention_chart" style="width: 1240px; height: 200px; background-color: rgba(255,255,255,0.5); border: 1px solid white;">
 <%entries = @retention.count.to_f 
   i = -1;
   @retention.each do |percentage| %>
