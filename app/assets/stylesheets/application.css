@@ -214,3 +214,17 @@ div.flash {
   color: #a00;
 }
 
+.bar-caption {
+  visibility: hidden;
+}
+
+.retention_chart-bar-cell:hover .bar-caption {
+  visibility: visible;
+}
+
+
+
+
+
+
+
