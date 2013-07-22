@@ -54,6 +54,10 @@ IdentityProvider::Application.routes.draw do
         resources :signup_gifts
       end
       
+      namespace :stats do
+        resource :overview, :controller => :overview
+      end
+      
       namespace :oauth2 do
         match :access_token, :to => 'access_tokens#create'
         match :redirect_test_start, :to => 'access_tokens#redirect_test_start'

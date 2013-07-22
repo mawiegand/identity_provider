@@ -1,0 +1,22 @@
+<div class="stats_overview">
+
+<h1><%= @title %></h1>
+
+<p><b>Average Age in Days:</b> <%= @average_age %></p>
+
+
+<div class="retention_chart" style="width: 1220px; height: 200px; background-color: rgba(255,255,255,0.5); border: 1px solid black;">
+<%entries = @retention.count.to_f 
+  i = -1;
+  @retention.each do |percentage| %>
+    <div class="retention_chart-bar" style="width: <%= 100.0/entries %>%; height: 100%; float: left;">
+      <div class="retention_chart-bar" style="background-color: #AAF; width: 100%; height: <%= percentage * 100.0 %>%;">
+      
+      </div>
+    </div>
+<% end %>
+</div>
+
+
+</div>
+

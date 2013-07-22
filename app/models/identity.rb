@@ -119,8 +119,7 @@ class Identity < ActiveRecord::Base
   
   
   default_scope :order => 'identities.email ASC'
-                       
-                       
+                                              
   before_save :set_encrypted_password, :set_unique_identifier
   after_create :send_validation_email
   

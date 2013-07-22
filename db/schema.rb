@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130702123756) do
+ActiveRecord::Schema.define(:version => 20130722220932) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -90,6 +90,8 @@ ActiveRecord::Schema.define(:version => 20130702123756) do
     t.datetime "gc_rejected_at"
     t.datetime "gc_player_id_connected_at"
     t.datetime "insider_since"
+    t.integer  "age_in_hours",              :default => 0,     :null => false
+    t.integer  "age_days",                  :default => 0,     :null => false
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true
