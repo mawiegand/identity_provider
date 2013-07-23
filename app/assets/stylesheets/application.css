@@ -215,7 +215,7 @@ div.flash {
 }
 
 .bar-caption {
-  visibility: hidden;
+  visibility: visible;
 }
 
 .retention_chart-bar-cell:hover .bar-caption {
