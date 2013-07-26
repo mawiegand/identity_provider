@@ -63,7 +63,7 @@ class InstallTracking::Device < ActiveRecord::Base
     device = self.find_by_hardware_string_os_and_device_token(hash['hardware_string'], hash['operating_system'], hash['device_token'])
     
     if device.nil?
-      device = InstallTracking::Device.build({
+      device = InstallTracking::Device.new({
         :hardware_string      => hash['hardware_string'],
         :operating_system     => hash['operating_system'],
         :device_token         => hash['device_token'],
