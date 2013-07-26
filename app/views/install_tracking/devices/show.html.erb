@@ -4,6 +4,13 @@
 <h2><%= @install_tracking_device.hardware_string %> <%= @install_tracking_device.operating_system %> of <%= link_to "#{@install_tracking_device.first_user.address_informal}", @install_tracking_device.first_user %><br>
 <small><%= @install_tracking_device.device_token %></small></h2>
 
+<p><b>Device Token:</b> <%= @install_tracking_device.device_token %><br/>
+   <b>Vendor Token:</b> <%= @install_tracking_device.vendor_token %><br/>
+   <b>Advertiser Token:</b> <%= @install_tracking_device.advertiser_token %><br/>
+   <b>Hardware Token:</b> <%= @install_tracking_device.hardware_token %></p>
+<p><b>Old Token:</b> <%= @install_tracking_device.old_token %></p>
+
+
 <p>
   <b>Suspicious:</b>
   <%= @install_tracking_device.suspicious || "No" %>
