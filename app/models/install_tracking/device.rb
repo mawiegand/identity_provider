@@ -152,7 +152,7 @@ class InstallTracking::Device < ActiveRecord::Base
   
   # returns all tracking events that belong to this particular device
   def tracking_events
-    InstallTracking::TrackingEvent.where(['device_token = ? OR device_token = ?', self.device_token, self.hardware_token || "NONE"]);
+    InstallTracking::TrackingEvent.where(['device_token = ? OR old_token = ?', self.device_token, self.device_token]);
   end
   
 end
