@@ -46,9 +46,9 @@ class InstallTracking::Device < ActiveRecord::Base
       device = devices.first
       
       unless device.nil?
-        device.vendor_token     = hash['vendor_token'],
-        device.advertiser_token = hash['advertiser_token'],
-        device.hardware_token   = hash['hardware_token'],
+        device.vendor_token     = hash['vendor_token']
+        device.advertiser_token = hash['advertiser_token']
+        device.hardware_token   = hash['hardware_token']
       
         device.save
       end
@@ -74,9 +74,9 @@ class InstallTracking::Device < ActiveRecord::Base
       device.old_token        = hash['old_token']   unless hash['old_token'].blank? 
       device.save
     else
-      device.vendor_token     = hash['vendor_token'],
-      device.advertiser_token = hash['advertiser_token'],
-      device.hardware_token   = hash['hardware_token'],
+      device.vendor_token     = hash['vendor_token']
+      device.advertiser_token = hash['advertiser_token']
+      device.hardware_token   = hash['hardware_token']
       device.old_token        = hash['old_token']   unless hash['old_token'].blank? 
     
       device.save
