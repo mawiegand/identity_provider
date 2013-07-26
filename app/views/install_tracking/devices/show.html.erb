@@ -63,13 +63,7 @@
   <h3>Events</h3>
   
   <table>
-     <% @install_tracking_device.tracking_events.descending.each do |event| %>
-       <tr><td><b><%= link_to event.event_name, event %></b></td>
-           <td><%= event.created_at %></td>
-           <td><%= event.ip %></td>
-           <td><%= event.event_args %></td> 
-       </tr>
-     <% end %>
+
   </table>
  
  
