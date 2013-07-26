@@ -112,25 +112,25 @@ class InstallTracking::Device < ActiveRecord::Base
       end
     end
     
-    unless vendor_token.nil?
+    unless vendor_token.nil? || vendor_token.blank?
       InstallTracking::Device.vendor_token(vendor_token).descending.each do |device|
         return device.last_user   unless device.last_user.nil?
       end
     end
     
-    unless advertiser_token.nil?
+    unless advertiser_token.nil? || advertiser_token.blank?
       InstallTracking::Device.advertiser_token(advertiser_token).descending.each do |device|
         return device.last_user   unless device.last_user.nil?
       end
     end
     
-    unless hardware_token.nil?
+    unless hardware_token.nil?  || hardware_token.blank?
       InstallTracking::Device.hardware_token(hardware_token).descending.each do |device|
         return device.last_user   unless device.last_user.nil?
       end
     end
     
-    unless old_token.nil?
+    unless old_token.nil? || old_token.blank?
       InstallTracking::Device.device_token(old_token).descending.each do |device|
         return device.last_user   unless device.last_user.nil?
       end
