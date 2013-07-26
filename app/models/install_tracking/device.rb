@@ -60,10 +60,9 @@ class InstallTracking::Device < ActiveRecord::Base
   
     
   def self.create_or_update(hash)
-    devices = self.find_by_hardware_string_os_and_device_token(hash['hardware_string'], hash['operating_system'], hash['device_token'])
-    device = nil
+    device = self.find_by_hardware_string_os_and_device_token(hash['hardware_string'], hash['operating_system'], hash['device_token'])
     
-    if devices.nil? || devices.empty?
+    if device.nil?
       device = InstallTracking::Device.create({
         :hardware_string      => hash['hardware_string'],
         :operating_system     => hash['operating_system'],
@@ -73,15 +72,11 @@ class InstallTracking::Device < ActiveRecord::Base
         :hardware_token       => hash['hardware_token'],
       })
     else
-      device = devices.first
-      
-      unless device.nil?
-        device.vendor_token     = hash['vendor_token'],
-        device.advertiser_token = hash['advertiser_token'],
-        device.hardware_token   = hash['hardware_token'],
-      
-        device.save
-      end
+      device.vendor_token     = hash['vendor_token'],
+      device.advertiser_token = hash['advertiser_token'],
+      device.hardware_token   = hash['hardware_token'],
+    
+      device.save
     end
     
     device
