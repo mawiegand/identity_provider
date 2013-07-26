@@ -62,15 +62,7 @@ module InstallTracking
     #
     # ########################################################################
         
-    device = InstallTracking::Device.find_by_hardware_string_os_and_device_token(device_hardware, device_os, device_token)
-    if device.nil?
-      device = InstallTracking::Device.create({
-        :hardware_string  => device_hardware,
-        :operating_system => device_os,
-        :device_token     => device_token,
-        :old_token        => old_token,
-      })  
-    end
+    device = InstallTracking::Device.create_or_update(device_info)
     
     if device.nil?
       logger.error    "ERROR: failed to create new device #{ device_hardware } os #{ device_os } token #{ device_token }."

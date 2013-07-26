@@ -26,24 +26,62 @@ class InstallTracking::Device < ActiveRecord::Base
     
     devices.nil? || devices.empty? ? nil : devices.first
   end
-  
-    
-  def self.create_or_update(identity, hash)
+
+
+  def self.create_or_update_with_identity(identity, hash)
     devices = self.find_by_identity_hardware_string_os_and_device_token(identity, hash['hardware_string'], hash['operating_system'], hash['device_token'])
     device = nil
     
     if devices.nil? || devices.empty?
       device = identity.devices.build({
-        :hardware_string  => hash['hardware_string'],
-        :operating_system => hash['operating_system'],
-        :device_token     => hash['device_token'],
-        :vendor_token     => hash['vendor_token'],
-        :advertiser_token => hash['advertiser_token'],
-        :hardware_token   => hash['hardware_token'],
+        :hardware_string      => hash['hardware_string'],
+        :operating_system     => hash['operating_system'],
+        :device_token         => hash['device_token'],
+        :vendor_token         => hash['vendor_token'],
+        :advertiser_token     => hash['advertiser_token'],
+        :hardware_token       => hash['hardware_token'],
       })
       device.save
     else
       device = devices.first
+      
+      unless device.nil?
+        device.vendor_token     = hash['vendor_token'],
+        device.advertiser_token = hash['advertiser_token'],
+        device.hardware_token   = hash['hardware_token'],
+      
+        device.save
+      end
+    end
+    
+    device
+  end
+
+  
+    
+  def self.create_or_update(hash)
+    devices = self.find_by_hardware_string_os_and_device_token(identity, hash['hardware_string'], hash['operating_system'], hash['device_token'])
+    device = nil
+    
+    if devices.nil? || devices.empty?
+      device = InstallTracking::Device.create({
+        :hardware_string      => hash['hardware_string'],
+        :operating_system     => hash['operating_system'],
+        :device_token         => hash['device_token'],
+        :vendor_token         => hash['vendor_token'],
+        :advertiser_token     => hash['advertiser_token'],
+        :hardware_token       => hash['hardware_token'],
+      })
+    else
+      device = devices.first
+      
+      unless device.nil?
+        device.vendor_token     = hash['vendor_token'],
+        device.advertiser_token = hash['advertiser_token'],
+        device.hardware_token   = hash['hardware_token'],
+      
+        device.save
+      end
     end
     
     device
