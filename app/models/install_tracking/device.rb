@@ -60,7 +60,7 @@ class InstallTracking::Device < ActiveRecord::Base
   
     
   def self.create_or_update(hash)
-    devices = self.find_by_hardware_string_os_and_device_token(identity, hash['hardware_string'], hash['operating_system'], hash['device_token'])
+    devices = self.find_by_hardware_string_os_and_device_token(hash['hardware_string'], hash['operating_system'], hash['device_token'])
     device = nil
     
     if devices.nil? || devices.empty?
