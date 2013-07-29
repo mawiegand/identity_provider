@@ -25,7 +25,7 @@ class FacebookController < ApplicationController
     raise ConflictError.new   ("id already taken")                                        if !Identity.find_by_fb_player_id(params[:id]).nil?
     raise ForbiddenError.new  ("identity is already connected to another fb_player_id")   if !current_identity.fb_player_id.blank?
     
-    if !current_identity.connect_to_facebook_center(params[:id]).save
+    if !current_identity.connect_to_facebook(params[:id]).save
       raise BadRequestError.new ("could not connect identity to given facebook_id")
     end
     
