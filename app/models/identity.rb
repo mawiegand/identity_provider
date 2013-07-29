@@ -350,6 +350,35 @@ class Identity < ActiveRecord::Base
     connected_to_game_center? || !self.generic_password?
   end
   
+  
+  # connects the identity to the given facebook player id
+  def connect_to_facebook(new_fb_player_id)
+    self.fb_player_id   = new_fb_player_id
+    self.fb_rejected_at = nil
+    self.fb_player_id_connected_at = DateTime.now
+    return self
+  end
+  
+  # remove game_center connection
+  def disconnect_from_facebook
+    self.fb_player_id   = nil
+    self.fb_rejected_at = DateTime.now
+    self.fb_player_id_connected_at = nil
+    return self
+  end
+  
+  def reject_facebook
+    self.fb_rejected_at = DateTime.now
+  end
+  
+  def rejected_faceobook?
+    !self.fb_rejected_at.nil?
+  end
+  
+  def connected_to_facebook?
+    !self.fb_player_id.nil?
+  end
+  
   # generates a validation code for this identitie's email address.
   # The implementation relies on the identitie's salt to never change.
   # Since the identity's random-generated salt can not be deduced from 

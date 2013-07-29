@@ -14,6 +14,7 @@ IdentityProvider::Application.routes.draw do
       end
       
       resources :game_center, :only => [:show, :update]
+      resources :facebook,    :only => [:show, :update]
       
       resources :sessions,    :only => [:new, :create, :destroy]
       resources :log_entries, :only => [:index]
