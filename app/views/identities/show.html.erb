@@ -11,6 +11,9 @@
         <%="Lived for #{ time_span_in_natural_language @options[:lifetime]}." if !@options[:lifetime].nil? && @options[:lifetime] >= 1.0 %><br/>
         <%="Insider since #{time_ago_in_words @attributes[:insider_since]}" if @attributes[:insider_since] %><br />
         <%="Password Token: #{@attributes[:password_token]}" if @attributes[:password_token] %><br />
+        <%="GameCenter ID: #{@attributes[:gc_player_id]}" if @attributes[:gc_player_id] %><br />
+        <%="Facebook ID: #{@attributes[:fb_player_id]}" if @attributes[:fb_player_id] %><br />
+
         <%="Banned until #{@attributes[:ban_ended_at]} for #{@attributes[:ban_reason]}" if @attributes[:banned] %><br />
   </div>
         

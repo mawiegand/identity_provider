@@ -106,6 +106,10 @@ en:
         activated: activated
         banned: banned
         ban_reason: bann reason
+        fb_player_id: Facebook ID
+        gc_player_id: GameCenter ID
+        fb_rejected: Has rejected Facebook?
+        gc_rejected: Has rejected GameCenter?
         
         
     delete:

@@ -302,6 +302,12 @@ class IdentitiesController < ApplicationController
       @identity.gc_rejected_at = nil
     end
     
+    if params[:identity][:insider] && params[:identity][:insider].to_i == 1 && @identity.insider_since.nil?
+      params[:identity][:insider_since] = DateTime.now
+    elsif !params[:identity][:insider].nil? && params[:identity][:insider].to_i == 0 && Identity.accessible_attributes(role).include?(:insider_since)
+      @identity.insider_since = nil
+    end
+    
     # assign everything, but handle email specifically
     @identity.assign_attributes params[:identity].delete_if { |k,v| v.nil? }.except(:email), :as => role      
     
