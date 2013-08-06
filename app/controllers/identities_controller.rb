@@ -411,9 +411,12 @@ class IdentitiesController < ApplicationController
     raise ForbiddenError.new "Access forbidden. Client id not found." if accessing_client.nil?
     raise ForbiddenError.new "Access forbidden. Wrong credentials."   if params[:client_password].nil? || params[:client_password] != accessing_client.password
 
-    identity = Identity.find_by_email(params[:identifier])
-    identity = Identity.find_by_nickname(params[:identifier]) if identity.nil?
-    
+    #identity = Identity.find_by_email(params[:identifier])
+    #identity = Identity.find_by_nickname(params[:identifier]) if identity.nil?
+
+    identity = Identity.where('lower(email) = ?', params[:identifier].downcase).first
+    identity = Identity.where('lower(nickname) = ?', params[:identifier].downcase).first if identity.nil?
+
     if identity.nil?
       raise NotFoundError.new "Mail not found"
     elsif identity.generic_email?
