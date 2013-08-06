@@ -14,6 +14,7 @@ IdentityProvider::Application.routes.draw do
       end
       
       resources :game_center, :only => [:show, :update]
+      resources :facebook,    :only => [:show, :update]
       
       resources :sessions,    :only => [:new, :create, :destroy]
       resources :log_entries, :only => [:index]
@@ -52,6 +53,10 @@ IdentityProvider::Application.routes.draw do
         resources :signups
         resources :waiting_lists
         resources :signup_gifts
+      end
+      
+      namespace :stats do
+        resource :overview, :controller => :overview
       end
       
       namespace :oauth2 do

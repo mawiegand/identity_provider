@@ -1,0 +1,28 @@
+<div class="stats_overview">
+
+<h1><%= @title %></h1>
+
+<p><b>Average Age in Days:</b> <%= @average_age %></p>
+<p><b>Churn Rate During Month 1 / 2 / 3:</b> 
+  <%= (@churn_month1 * 100.0).round %>% / 
+  <%= (@churn_month2 * 100.0).round %>% /
+  <%= (@churn_month3 * 100.0).round %>% </p>
+
+
+<div class="retention_chart" style="width: 1240px; height: 200px; background-color: rgba(255,255,255,0.5); border: 1px solid white;">
+<%entries = @retention.count.to_f 
+  i = -1;
+  @retention.each do |percentage| %>
+    <div class="retention_chart-bar-frame" style="width: <%= 100.0/entries %>%; height: 100%; float: left;">
+      <div class="retention_chart-bar-spacer" style="width: 100%; height: <%= ((1.0-percentage) * 100.0).round %>%;">
+      </div>
+      <div class="retention_chart-bar-cell" style="background-color: #AAF; width: 100%; height: <%= (percentage * 100.0).round %>%; border: 1px solid white; margin: -1px;">
+        <div class="bar-caption" style="margin-top: -18px; text-align: center;"><%= (percentage*100).round %>%</div>
+      </div>
+    </div>
+<% end %>
+</div>
+
+
+</div>
+

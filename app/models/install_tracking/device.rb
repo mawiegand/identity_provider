@@ -26,24 +26,60 @@ class InstallTracking::Device < ActiveRecord::Base
     
     devices.nil? || devices.empty? ? nil : devices.first
   end
-  
-    
-  def self.create_or_update(identity, hash)
+
+
+  def self.create_or_update_with_identity(identity, hash)
     devices = self.find_by_identity_hardware_string_os_and_device_token(identity, hash['hardware_string'], hash['operating_system'], hash['device_token'])
     device = nil
     
     if devices.nil? || devices.empty?
       device = identity.devices.build({
-        :hardware_string  => hash['hardware_string'],
-        :operating_system => hash['operating_system'],
-        :device_token     => hash['device_token'],
-        :vendor_token     => hash['vendor_token'],
-        :advertiser_token => hash['advertiser_token'],
-        :hardware_token   => hash['hardware_token'],
+        :hardware_string      => hash['hardware_string'],
+        :operating_system     => hash['operating_system'],
+        :device_token         => hash['device_token'],
+        :vendor_token         => hash['vendor_token'],
+        :advertiser_token     => hash['advertiser_token'],
+        :hardware_token       => hash['hardware_token'],
       })
       device.save
     else
       device = devices.first
+      
+      unless device.nil?
+        device.vendor_token     = hash['vendor_token']
+        device.advertiser_token = hash['advertiser_token']
+        device.hardware_token   = hash['hardware_token']
+      
+        device.save
+      end
+    end
+    
+    device
+  end
+
+  
+    
+  def self.create_or_update(hash)
+    device = self.find_by_hardware_string_os_and_device_token(hash['hardware_string'], hash['operating_system'], hash['device_token'])
+    
+    if device.nil?
+      device = InstallTracking::Device.new({
+        :hardware_string      => hash['hardware_string'],
+        :operating_system     => hash['operating_system'],
+        :device_token         => hash['device_token'],
+        :vendor_token         => hash['vendor_token'],
+        :advertiser_token     => hash['advertiser_token'],
+        :hardware_token       => hash['hardware_token'],
+      })
+      device.old_token        = hash['old_token']   unless hash['old_token'].blank? 
+      device.save
+    else
+      device.vendor_token     = hash['vendor_token']
+      device.advertiser_token = hash['advertiser_token']
+      device.hardware_token   = hash['hardware_token']
+      device.old_token        = hash['old_token']   unless hash['old_token'].blank? 
+    
+      device.save
     end
     
     device
@@ -79,26 +115,26 @@ class InstallTracking::Device < ActiveRecord::Base
       end
     end
     
-    unless old_token.nil?
-      InstallTracking::Device.device_token(old_token).descending.each do |device|
-        return device.last_user   unless device.last_user.nil?
-      end
-    end
-    
-    unless vendor_token.nil?
+    unless vendor_token.nil? || vendor_token.blank?
       InstallTracking::Device.vendor_token(vendor_token).descending.each do |device|
         return device.last_user   unless device.last_user.nil?
       end
     end
     
-    unless advertiser_token.nil?
+    unless advertiser_token.nil? || advertiser_token.blank?
       InstallTracking::Device.advertiser_token(advertiser_token).descending.each do |device|
         return device.last_user   unless device.last_user.nil?
       end
     end
     
-    unless hardware_token.nil?
+    unless hardware_token.nil?  || hardware_token.blank?
       InstallTracking::Device.hardware_token(hardware_token).descending.each do |device|
+        return device.last_user   unless device.last_user.nil?
+      end
+    end
+    
+    unless old_token.nil? || old_token.blank?
+      InstallTracking::Device.device_token(old_token).descending.each do |device|
         return device.last_user   unless device.last_user.nil?
       end
     end
@@ -119,7 +155,7 @@ class InstallTracking::Device < ActiveRecord::Base
   
   # returns all tracking events that belong to this particular device
   def tracking_events
-    InstallTracking::TrackingEvent.where(device_token: self.device_token)
+    InstallTracking::TrackingEvent.where(['device_token = ? OR old_token = ? OR device_token = ?', self.device_token || "NONE", self.device_token || "NONE", self.hardware_token || "NONE"]);
   end
   
 end

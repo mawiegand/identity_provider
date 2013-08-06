@@ -35,6 +35,8 @@ class LogEntry < ActiveRecord::Base
   
   default_scope :order => 'log_entries.created_at DESC'   # most recent entry comes first
   
+  scope :latest, order('created_at DESC').limit(1)
+  
     # Logging  
   def self.create_signout(identity, remote_ip = 'unknown')
     LogEntry.create(:identity_id    => identity.id,

@@ -77,16 +77,16 @@ class Identity < ActiveRecord::Base
   attr_accessor :password
   
   attr_accessible :nickname, :firstname, :surname, :password, :password_confirmation, :as => :owner
-  attr_accessible *accessible_attributes(:owner), :email, :gc_player_id, :as => :creator # fields accesible during creation
-  attr_accessible :nickname, :firstname, :surname, :activated, :deleted, :staff, :insider_since, :banned, :ban_reason, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :as => :staff
+  attr_accessible *accessible_attributes(:owner), :email, :gc_player_id, :fb_player_id, :as => :creator # fields accesible during creation
+  attr_accessible :nickname, :firstname, :surname, :activated, :deleted, :staff, :insider_since, :banned, :ban_reason, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :fb_player_id, :fb_rejected_at, :fb_player_id_connected_at, :as => :staff
   attr_accessible *accessible_attributes(:staff), :email, :admin, :password, :password_confirmation, :as => :admin
   attr_accessible :nickname, :password, :password_confirmation, :as => :game
 
   attr_readable :identifier, :nickname, :id, :insider_since, :admin, :staff,               :as => :default
   attr_readable *readable_attributes(:default), :created_at,                               :as => :user
   attr_readable *readable_attributes(:default), :insider_since, :created_at,               :as => :game
-  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :activated, :updated_at, :deleted,                         :ban_reason, :banned, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at,   :as => :owner
-  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt, :password_token, :ban_reason, :banned, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at,   :as => :staff
+  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :activated, :updated_at, :deleted,                         :ban_reason, :banned, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :fb_player_id, :fb_rejected_at, :fb_player_id_connected_at,   :as => :owner
+  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt, :password_token, :ban_reason, :banned, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :fb_player_id, :fb_rejected_at, :fb_player_id_connected_at,   :as => :staff
   attr_readable *readable_attributes(:staff),   :as => :admin
   
   @email_regex      = /(?:[a-z0-9!#$\%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$\%&'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i
@@ -119,9 +119,12 @@ class Identity < ActiveRecord::Base
   
   
   default_scope :order => 'identities.email ASC'
-                       
-                       
+                                              
   before_save :set_encrypted_password, :set_unique_identifier
+  
+  before_save :update_facebook_on_manual_edit
+  before_save :update_gamecenter_on_manual_edit
+  
   after_create :send_validation_email
   
   def self.find_by_nickname_case_insensitive(nickname, options = {})
@@ -153,6 +156,19 @@ class Identity < ActiveRecord::Base
     return identity
   end
 
+
+  def gc_rejected?
+    !gc_rejected_at.nil?
+  end
+  
+  def fb_rejected?
+    !fb_rejected_at.nil?
+  end
+  
+  def insider?
+    !insider_since.nil?
+  end
+  
   
   # checks a potentialPassword (plain-text) against the "stored"
   # password of the identity. This is done by salting and hashing
@@ -334,6 +350,35 @@ class Identity < ActiveRecord::Base
     connected_to_game_center? || !self.generic_password?
   end
   
+  
+  # connects the identity to the given facebook player id
+  def connect_to_facebook(new_fb_player_id)
+    self.fb_player_id   = new_fb_player_id
+    self.fb_rejected_at = nil
+    self.fb_player_id_connected_at = DateTime.now
+    return self
+  end
+  
+  # remove game_center connection
+  def disconnect_from_facebook
+    self.fb_player_id   = nil
+    self.fb_rejected_at = DateTime.now
+    self.fb_player_id_connected_at = nil
+    return self
+  end
+  
+  def reject_facebook
+    self.fb_rejected_at = DateTime.now
+  end
+  
+  def rejected_faceobook?
+    !self.fb_rejected_at.nil?
+  end
+  
+  def connected_to_facebook?
+    !self.fb_player_id.nil?
+  end
+  
   # generates a validation code for this identitie's email address.
   # The implementation relies on the identitie's salt to never change.
   # Since the identity's random-generated salt can not be deduced from 
@@ -394,6 +439,26 @@ class Identity < ActiveRecord::Base
     def encrypt(string)
       Digest::SHA2.hexdigest(string)
     end  
+    
+    def update_facebook_on_manual_edit
+      if fb_player_id_changed?
+        if fb_player_id.blank?     && !fb_player_id_connected_at.nil?
+          self.fb_player_id_connected_at = nil
+        elsif !fb_player_id.blank? &&  fb_player_id_connected_at.nil?
+          self.fb_player_id_connected_at = DateTime.now
+        end
+      end
+    end
+    
+    def update_gamecenter_on_manual_edit
+      if gc_player_id_changed?
+        if gc_player_id.blank?     && !gc_player_id_connected_at.nil?
+          self.gc_player_id_connected_at = nil
+        elsif !gc_player_id.blank? &&  gc_player_id_connected_at.nil?
+          self.gc_player_id_connected_at = DateTime.now
+        end
+      end
+    end
     
 end
 

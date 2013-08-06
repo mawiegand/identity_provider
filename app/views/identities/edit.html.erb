@@ -53,7 +53,7 @@
   <% if @accessible_attributes.include?(:insider_since)%>
     <div class="field">
       <%= f.label I18n.t 'identities.edit.form.insider_since' %><br/>
-      <%= f.datetime_select :insider_since %>
+      <%= f.check_box :insider? %>
     </div>
   <% end %>
 
@@ -83,6 +83,36 @@
     <%= f.password_field :password_confirmation %>
   </div>
   <% end %>
+  
+  
+  <% if @accessible_attributes.include?(:gc_player_id)%>
+  <div class="field">
+    <%= f.label I18n.t 'identities.edit.form.gc_player_id' %><br/>
+    <%= f.text_field :gc_player_id %>
+  </div>
+  <% end %>
+  
+  <% if @accessible_attributes.include?(:gc_rejected_at)%>
+    <div class="field">
+      <%= f.label I18n.t 'identities.edit.form.gc_rejected' %><br/>
+      <%= f.check_box :gc_rejected? %>
+    </div>
+  <% end %>
+  
+  <% if @accessible_attributes.include?(:fb_player_id)%>
+  <div class="field">
+    <%= f.label I18n.t 'identities.edit.form.fb_player_id' %><br/>
+    <%= f.text_field :fb_player_id %>
+  </div>
+  <% end %>
+  
+  <% if @accessible_attributes.include?(:fb_rejected_at)%>
+    <div class="field">
+      <%= f.label I18n.t 'identities.edit.form.fb_rejected' %><br/>
+      <%= f.check_box :fb_rejected? %>
+    </div>
+  <% end %>
+  
   
   <div class="actions">
     <%= f.submit I18n.t('identities.edit.form.submit_button'), :class => 'button-on-white' %>
