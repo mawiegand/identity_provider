@@ -48,7 +48,7 @@ class Stats::MoneyTransaction < ActiveRecord::Base
     def initialize_computed_attributes
         identity = Identity.find_by_identifier(self.partner_user_id)
         if !identity.nil?
-          self.recurring   = Identity.payments.count > 0
+          self.recurring   = identity.payments.count > 0
           self.identity_id = identity.id  
         end
     end
