@@ -22,17 +22,16 @@ end %>
 <table>
   <tr>
     <th>X</th>
+    <th>T</th>
     <th>Identity</th>
     <th>Updatetstamp</th>
     <th>Title</th>
     <th>Method</th>
     <th>Country</th>
     <th>Offer</th>
-    <th>Offer category</th>
     <th>Details</th>
     <th>Net</th>
-    <th>Chargeback</th>
-    <th>Transaction state</th>
+    <th>State</th>
     <th></th>
     <th></th>
     <th></th>
@@ -41,8 +40,9 @@ end %>
 <% @stats_money_transactions.each do |stats_money_transaction| %>
   <tr>
     <td><b><%= stats_money_transaction.recurring ? "n-th" : "1st" %></b></td>
+    <td style="text-align:center;"><%= stats_money_transaction.chargeback > 0.5 ? "O" : ( stats_money_transaction.earnings < 0.0 ? "CB" : stats_money_transaction.transaction_payed? ? "N" : "I" ) %></td>
     
-    <td><%= 
+    <td><b><%= 
       if stats_money_transaction.identity.nil? 
         "unknown"
       else
@@ -52,22 +52,20 @@ end %>
           strings = "#{strings} (#{identity.email})"
         end
         link_to strings, identity    
-      end %>
+      end %></b>
     </td>
     
     <td><%= stats_money_transaction.updatetstamp %></td>
     <td><%= stats_money_transaction.title_id %></td>
     <td><%= stats_money_transaction.method %></td>
     <td><%= stats_money_transaction.country %></td>
-    <td><%= stats_money_transaction.offer_id %></td>
-    <td><%= stats_money_transaction.offer_category %></td>
+    <td><%= stats_money_transaction.offer_id %> | <%= stats_money_transaction.offer_category %></td>
     <td>
       Gross: <%= number_to_currency stats_money_transaction.gross, unit: stats_money_transaction.gross_currency, format: "%u %n" %>
       Tax: <%= number_to_percentage stats_money_transaction.vat.to_f * 100, precision: 1 %>
       Fee: <%= number_to_currency stats_money_transaction.fee, unit: "EUR", format: "%u %n" %>
-    <td><%= number_to_currency stats_money_transaction.earnings, unit: "EUR", format: "%u %n" %></td>
+    <td style="text-align:right;"><b><%= number_to_currency stats_money_transaction.earnings, unit: "EUR", format: "%n %u" %></b></td>
     </td>
-    <td><%= stats_money_transaction.chargeback %></td>
     <td><%= stats_money_transaction.transaction_state %></td>
 
     <td><%= link_to 'Show', stats_money_transaction %></td>
