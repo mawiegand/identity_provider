@@ -28,6 +28,8 @@ class Stats::MoneyTransactionsController < ApplicationController
     @total_net_earnings  = Stats::MoneyTransaction.total_net_earnings
     @total_chargebacks   = Stats::MoneyTransaction.total_chargebacks
     @total_sandbox       = Stats::MoneyTransaction.total_sandbox
+    
+    @recurring           = Stats::MoneyTransaction.fraction_recurring
 
     respond_to do |format|
       format.html # index.html.erb

@@ -37,7 +37,7 @@ class Stats::MoneyTransaction < ActiveRecord::Base
   
   scope :offer,          lambda { |id|   where(offer_id: id) }
   scope :since_date,     lambda { |date| where('updatetstamp >= ?', date) }
-  scope :completed,      where("transaction_state LIKE 'completed'")
+  scope :completed,      where("transaction_state LIKE 'completed' OR (transaction_state LIKE 'invalid' AND payment_state LIKE 'Completed' AND updatetstamp < '2012-12-31')")
   scope :not_charged_back, where('chargeback < 0.5')
   scope :charged_back,     where('chargeback > 0.5')
   scope :sandbox,        where(['sandbox = ?', true])
@@ -46,6 +46,8 @@ class Stats::MoneyTransaction < ActiveRecord::Base
   scope :payment_booking,        where('earnings >= 0.0')
   scope :charge_back_booking,    where('earnings <  0.0')
   
+  scope :recurring,              where(['recurring = ?', true])
+  
   before_create :initialize_computed_attributes
   
   # total gross excluding charged-back transactions, 
@@ -53,7 +55,11 @@ class Stats::MoneyTransaction < ActiveRecord::Base
   def self.total_gross
     Stats::MoneyTransaction.non_sandbox.completed.payment_booking.not_charged_back.sum(:gross)
   end
-  
+
+  def self.fraction_recurring
+    Stats::MoneyTransaction.non_sandbox.completed.payment_booking.not_charged_back.recurring.count / Stats::MoneyTransaction.non_sandbox.completed.payment_booking.not_charged_back.count
+  end
+
   # total earning not considering costs for charge backs
   def self.total_earnings
     Stats::MoneyTransaction.non_sandbox.completed.payment_booking.not_charged_back.sum(:earnings)
