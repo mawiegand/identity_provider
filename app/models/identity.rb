@@ -73,6 +73,9 @@ class Identity < ActiveRecord::Base
   
   has_many  :sign_ins,              :class_name => "LogEntry",                     :foreign_key => :identity_id,  :conditions => {:event_type => 'signin_success'}, :order => 'created_at DESC'
   has_many  :auth_successes,        :class_name => "LogEntry",                     :foreign_key => :identity_id,  :conditions => "event_type ='signin_success' OR event_type = 'auth_token_success'", :order => 'created_at DESC'
+
+  has_many  :payments,              :class_name => "Stats::MoneyTransaction",      :foreign_key => :identity_id,  :inverse_of => :identity
+
     
   attr_accessor :password
   

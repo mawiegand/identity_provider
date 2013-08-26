@@ -1,0 +1,2 @@
+module Stats::MoneyTransactionsHelper
+end

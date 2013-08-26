@@ -1,0 +1,133 @@
+<h1>Listing stats_money_transactions</h1>
+
+<p>Last Update: <%= @last_update %>&nbsp;&nbsp;&nbsp;<%= link_to 'Update from Bytro API', stats_money_transactions_path + '?update=true' %>  
+</p>
+
+<%= if (@paginate) 
+  will_paginate @stats_money_transactions 
+end %>
+
+<table>
+  <tr>
+    <th>Identity</th>
+    <th>Uid</th>
+    <th>Tstamp</th>
+    <th>Updatetstamp</th>
+    <th>User</th>
+    <th>Invoice</th>
+    <th>Title</th>
+    <th>Method</th>
+    <th>Carrier</th>
+    <th>Country</th>
+    <th>Offer</th>
+    <th>Offer category</th>
+    <th>Gross</th>
+    <th>Gross currency</th>
+    <th>Exchange rate</th>
+    <th>Vat</th>
+    <th>Tax</th>
+    <th>Net</th>
+    <th>Fee</th>
+    <th>Ebp</th>
+    <th>Referrer</th>
+    <th>Referrer share</th>
+    <th>Earnings</th>
+    <th>Chargeback</th>
+    <th>Campaign</th>
+    <th>Transaction payed</th>
+    <th>Transaction state</th>
+    <th>Comment</th>
+    <th>Scale factor</th>
+    <th>User mail</th>
+    <th>Payment transaction uid</th>
+    <th>Payment state</th>
+    <th>Payment state reason</th>
+    <th>Payer</th>
+    <th>Payer first name</th>
+    <th>Payer last name</th>
+    <th>Payer mail</th>
+    <th>Payer zip</th>
+    <th>Payer city</th>
+    <th>Payer street</th>
+    <th>Payer country</th>
+    <th>Payer state</th>
+    <th>Hash</th>
+    <th>Seed</th>
+    <th>Partner user</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+    <th>Sent mail alert</th>
+    <th>Sent special offer alert</th>
+    <th>Recurring</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @stats_money_transactions.each do |stats_money_transaction| %>
+  <tr>
+    <td><%= stats_money_transaction.identity_id %></td>
+    <td><%= stats_money_transaction.uid %></td>
+    <td><%= stats_money_transaction.tstamp %></td>
+    <td><%= stats_money_transaction.updatetstamp %></td>
+    <td><%= stats_money_transaction.user_id %></td>
+    <td><%= stats_money_transaction.invoice_id %></td>
+    <td><%= stats_money_transaction.title_id %></td>
+    <td><%= stats_money_transaction.method %></td>
+    <td><%= stats_money_transaction.carrier %></td>
+    <td><%= stats_money_transaction.country %></td>
+    <td><%= stats_money_transaction.offer_id %></td>
+    <td><%= stats_money_transaction.offer_category %></td>
+    <td><%= stats_money_transaction.gross %></td>
+    <td><%= stats_money_transaction.gross_currency %></td>
+    <td><%= stats_money_transaction.exchange_rate %></td>
+    <td><%= stats_money_transaction.vat %></td>
+    <td><%= stats_money_transaction.tax %></td>
+    <td><%= stats_money_transaction.net %></td>
+    <td><%= stats_money_transaction.fee %></td>
+    <td><%= stats_money_transaction.ebp %></td>
+    <td><%= stats_money_transaction.referrer_id %></td>
+    <td><%= stats_money_transaction.referrer_share %></td>
+    <td><%= stats_money_transaction.earnings %></td>
+    <td><%= stats_money_transaction.chargeback %></td>
+    <td><%= stats_money_transaction.campaign_id %></td>
+    <td><%= stats_money_transaction.transaction_payed %></td>
+    <td><%= stats_money_transaction.transaction_state %></td>
+    <td><%= stats_money_transaction.comment %></td>
+    <td><%= stats_money_transaction.scale_factor %></td>
+    <td><%= stats_money_transaction.user_mail %></td>
+    <td><%= stats_money_transaction.payment_transaction_uid %></td>
+    <td><%= stats_money_transaction.payment_state %></td>
+    <td><%= stats_money_transaction.payment_state_reason %></td>
+    <td><%= stats_money_transaction.payer_id %></td>
+    <td><%= stats_money_transaction.payer_first_name %></td>
+    <td><%= stats_money_transaction.payer_last_name %></td>
+    <td><%= stats_money_transaction.payer_mail %></td>
+    <td><%= stats_money_transaction.payer_zip %></td>
+    <td><%= stats_money_transaction.payer_city %></td>
+    <td><%= stats_money_transaction.payer_street %></td>
+    <td><%= stats_money_transaction.payer_country %></td>
+    <td><%= stats_money_transaction.payer_state %></td>
+    <td><%= stats_money_transaction.hash %></td>
+    <td><%= stats_money_transaction.seed %></td>
+    <td><%= stats_money_transaction.partner_user_id %></td>
+    <td><%= stats_money_transaction.created_at %></td>
+    <td><%= stats_money_transaction.updated_at %></td>
+    <td><%= stats_money_transaction.sent_mail_alert %></td>
+    <td><%= stats_money_transaction.sent_special_offer_alert %></td>
+    <td><%= stats_money_transaction.recurring %></td>
+    <td><%= link_to 'Show', stats_money_transaction %></td>
+    <td><%= link_to 'Edit', edit_stats_money_transaction_path(stats_money_transaction) %></td>
+    <td><%= link_to 'Destroy', stats_money_transaction, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= if (@paginate) 
+  will_paginate @stats_money_transactions 
+end %>
+
+
+<br />
+
+<%= link_to 'New Money transaction', new_stats_money_transaction_path %>
