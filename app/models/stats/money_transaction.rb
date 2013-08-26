@@ -38,10 +38,39 @@ class Stats::MoneyTransaction < ActiveRecord::Base
   scope :offer,          lambda { |id|   where(offer_id: id) }
   scope :since_date,     lambda { |date| where('updatetstamp >= ?', date) }
   scope :completed,      where("transaction_state LIKE 'completed'")
-  scope :no_charge_back, where('chargeback < 0.5')
-  scope :charge_back,    where('chargeback > 0.5')
+  scope :not_charged_back, where('chargeback < 0.5')
+  scope :charged_back,     where('chargeback > 0.5')
+  scope :sandbox,        where(['sandbox = ?', true])
+  scope :non_sandbox,    where(['sandbox = ?', false])
+  
+  scope :payment_booking,        where('earnings >= 0.0')
+  scope :charge_back_booking,    where('earnings <  0.0')
   
   before_create :initialize_computed_attributes
+  
+  # total gross excluding charged-back transactions, 
+  # not considering costs for charge backs
+  def self.total_gross
+    Stats::MoneyTransaction.non_sandbox.completed.payment_booking.not_charged_back.sum(:gross)
+  end
+  
+  # total earning not considering costs for charge backs
+  def self.total_earnings
+    Stats::MoneyTransaction.non_sandbox.completed.payment_booking.not_charged_back.sum(:earnings)
+  end
+
+  # total net earnings, deducing costs for charge backs
+  def self.total_net_earnings
+    Stats::MoneyTransaction.non_sandbox.completed.sum(:earnings)
+  end
+  
+  def self.total_chargebacks
+    Stats::MoneyTransaction.non_sandbox.completed.charge_back_booking.sum(:earnings)
+  end
+  
+  def self.total_sandbox
+    Stats::MoneyTransaction.sandbox.completed.sum(:gross)
+  end
   
   private 
   

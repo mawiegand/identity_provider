@@ -22,6 +22,12 @@ class Stats::MoneyTransactionsController < ApplicationController
     last_transaction = Stats::MoneyTransaction.order('uid desc').first
     
     @last_update = last_transaction.nil? ? '-' : last_transaction.updated_at
+    
+    @total_gross         = Stats::MoneyTransaction.total_gross 
+    @total_earnings      = Stats::MoneyTransaction.total_earnings
+    @total_net_earnings  = Stats::MoneyTransaction.total_net_earnings
+    @total_chargebacks   = Stats::MoneyTransaction.total_chargebacks
+    @total_sandbox       = Stats::MoneyTransaction.total_sandbox
 
     respond_to do |format|
       format.html # index.html.erb

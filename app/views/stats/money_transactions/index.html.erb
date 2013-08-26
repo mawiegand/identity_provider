@@ -1,5 +1,16 @@
 <h1>Listing stats_money_transactions</h1>
 
+<p>
+  <b>Gross:</b>        <%= number_to_currency @total_gross, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %>&nbsp;&nbsp;
+  <b>Earnings:</b>     <%= number_to_currency @total_earnings, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %>&nbsp;&nbsp;
+  <b>Net Earnings:</b> <%= number_to_currency @total_net_earnings, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %>&nbsp;&nbsp;
+  <b>Yield:</b>        <%= number_to_percentage @total_net_earnings / @total_gross * 100, precision: 0 %>&nbsp;&nbsp; |&nbsp;&nbsp;
+  <b>Chargebacks:</b>  <%= number_to_currency @total_chargebacks, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %>&nbsp;&nbsp;
+  <b>Sandbox:</b>      <%= number_to_currency @total_sandbox, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %><br/>
+  <small>Net Earnings already include costs from charge backs. Yield is net_earnings / gross. Sandbox-bookings are <b>not</b> considered for gross and earnings.</small>
+</p>
+
+
 <p>Last Update: <%= @last_update %>&nbsp;&nbsp;&nbsp;<%= link_to 'Update from Bytro API', stats_money_transactions_path + '?update=true' %>  
 </p>
 
