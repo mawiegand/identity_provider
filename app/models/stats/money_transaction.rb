@@ -57,7 +57,7 @@ class Stats::MoneyTransaction < ActiveRecord::Base
   end
 
   def self.fraction_recurring
-    Stats::MoneyTransaction.non_sandbox.completed.payment_booking.not_charged_back.recurring.count / Stats::MoneyTransaction.non_sandbox.completed.payment_booking.not_charged_back.count
+    Stats::MoneyTransaction.non_sandbox.completed.payment_booking.not_charged_back.recurring.count.to_f / Stats::MoneyTransaction.non_sandbox.completed.payment_booking.not_charged_back.count
   end
 
   # total earning not considering costs for charge backs
