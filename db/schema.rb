@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130826164637) do
+ActiveRecord::Schema.define(:version => 20130831145551) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -95,6 +95,11 @@ ActiveRecord::Schema.define(:version => 20130826164637) do
     t.string   "fb_player_id"
     t.datetime "fb_rejected_at"
     t.datetime "fb_player_id_connected_at"
+    t.integer  "num_payments",              :default => 0,     :null => false
+    t.integer  "num_chargebacks",           :default => 0,     :null => false
+    t.decimal  "earnings",                  :default => 0.0,   :null => false
+    t.decimal  "chargeback_costs",          :default => 0.0,   :null => false
+    t.datetime "first_payment"
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true

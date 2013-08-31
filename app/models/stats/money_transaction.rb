@@ -47,6 +47,7 @@ class Stats::MoneyTransaction < ActiveRecord::Base
   scope :charge_back_booking,    where('earnings <  0.0')
   
   scope :recurring,              where(['recurring = ?', true])
+  scope :sorted_by_date,         order('updatetstamp ASC')
   
   before_create :initialize_computed_attributes
   
