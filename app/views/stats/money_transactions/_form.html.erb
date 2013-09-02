@@ -1,0 +1,217 @@
+<%= form_for(@stats_money_transaction) do |f| %>
+  <% if @stats_money_transaction.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@stats_money_transaction.errors.count, "error") %> prohibited this stats_money_transaction from being saved:</h2>
+
+      <ul>
+      <% @stats_money_transaction.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :identity_id %><br />
+    <%= f.number_field :identity_id %>
+  </div>
+  <div class="field">
+    <%= f.label :uid %><br />
+    <%= f.number_field :uid %>
+  </div>
+  <div class="field">
+    <%= f.label :tstamp %><br />
+    <%= f.number_field :tstamp %>
+  </div>
+  <div class="field">
+    <%= f.label :updatetstamp %><br />
+    <%= f.text_field :updatetstamp %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.number_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :invoice_id %><br />
+    <%= f.text_field :invoice_id %>
+  </div>
+  <div class="field">
+    <%= f.label :title_id %><br />
+    <%= f.text_field :title_id %>
+  </div>
+  <div class="field">
+    <%= f.label :method %><br />
+    <%= f.text_field :method %>
+  </div>
+  <div class="field">
+    <%= f.label :carrier %><br />
+    <%= f.text_field :carrier %>
+  </div>
+  <div class="field">
+    <%= f.label :country %><br />
+    <%= f.text_field :country %>
+  </div>
+  <div class="field">
+    <%= f.label :offer_id %><br />
+    <%= f.number_field :offer_id %>
+  </div>
+  <div class="field">
+    <%= f.label :offer_category %><br />
+    <%= f.text_field :offer_category %>
+  </div>
+  <div class="field">
+    <%= f.label :gross %><br />
+    <%= f.text_field :gross %>
+  </div>
+  <div class="field">
+    <%= f.label :gross_currency %><br />
+    <%= f.text_field :gross_currency %>
+  </div>
+  <div class="field">
+    <%= f.label :exchange_rate %><br />
+    <%= f.text_field :exchange_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :vat %><br />
+    <%= f.text_field :vat %>
+  </div>
+  <div class="field">
+    <%= f.label :tax %><br />
+    <%= f.text_field :tax %>
+  </div>
+  <div class="field">
+    <%= f.label :net %><br />
+    <%= f.text_field :net %>
+  </div>
+  <div class="field">
+    <%= f.label :fee %><br />
+    <%= f.text_field :fee %>
+  </div>
+  <div class="field">
+    <%= f.label :ebp %><br />
+    <%= f.text_field :ebp %>
+  </div>
+  <div class="field">
+    <%= f.label :referrer_id %><br />
+    <%= f.text_field :referrer_id %>
+  </div>
+  <div class="field">
+    <%= f.label :referrer_share %><br />
+    <%= f.text_field :referrer_share %>
+  </div>
+  <div class="field">
+    <%= f.label :earnings %><br />
+    <%= f.text_field :earnings %>
+  </div>
+  <div class="field">
+    <%= f.label :chargeback %><br />
+    <%= f.text_field :chargeback %>
+  </div>
+  <div class="field">
+    <%= f.label :campaign_id %><br />
+    <%= f.text_field :campaign_id %>
+  </div>
+  <div class="field">
+    <%= f.label :transaction_payed %><br />
+    <%= f.check_box :transaction_payed %>
+  </div>
+  <div class="field">
+    <%= f.label :transaction_state %><br />
+    <%= f.text_field :transaction_state %>
+  </div>
+  <div class="field">
+    <%= f.label :comment %><br />
+    <%= f.text_field :comment %>
+  </div>
+  <div class="field">
+    <%= f.label :scale_factor %><br />
+    <%= f.text_field :scale_factor %>
+  </div>
+  <div class="field">
+    <%= f.label :user_mail %><br />
+    <%= f.text_field :user_mail %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_transaction_uid %><br />
+    <%= f.text_field :payment_transaction_uid %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_state %><br />
+    <%= f.text_field :payment_state %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_state_reason %><br />
+    <%= f.text_field :payment_state_reason %>
+  </div>
+  <div class="field">
+    <%= f.label :payer_id %><br />
+    <%= f.text_field :payer_id %>
+  </div>
+  <div class="field">
+    <%= f.label :payer_first_name %><br />
+    <%= f.text_field :payer_first_name %>
+  </div>
+  <div class="field">
+    <%= f.label :payer_last_name %><br />
+    <%= f.text_field :payer_last_name %>
+  </div>
+  <div class="field">
+    <%= f.label :payer_mail %><br />
+    <%= f.text_field :payer_mail %>
+  </div>
+  <div class="field">
+    <%= f.label :payer_zip %><br />
+    <%= f.text_field :payer_zip %>
+  </div>
+  <div class="field">
+    <%= f.label :payer_city %><br />
+    <%= f.text_field :payer_city %>
+  </div>
+  <div class="field">
+    <%= f.label :payer_street %><br />
+    <%= f.text_field :payer_street %>
+  </div>
+  <div class="field">
+    <%= f.label :payer_country %><br />
+    <%= f.text_field :payer_country %>
+  </div>
+  <div class="field">
+    <%= f.label :payer_state %><br />
+    <%= f.text_field :payer_state %>
+  </div>
+  <div class="field">
+    <%= f.label :hash %><br />
+    <%= f.text_field :hash %>
+  </div>
+  <div class="field">
+    <%= f.label :seed %><br />
+    <%= f.text_field :seed %>
+  </div>
+  <div class="field">
+    <%= f.label :partner_user_id %><br />
+    <%= f.text_field :partner_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :created_at %><br />
+    <%= f.datetime_select :created_at %>
+  </div>
+  <div class="field">
+    <%= f.label :updated_at %><br />
+    <%= f.datetime_select :updated_at %>
+  </div>
+  <div class="field">
+    <%= f.label :sent_mail_alert %><br />
+    <%= f.check_box :sent_mail_alert %>
+  </div>
+  <div class="field">
+    <%= f.label :sent_special_offer_alert %><br />
+    <%= f.check_box :sent_special_offer_alert %>
+  </div>
+  <div class="field">
+    <%= f.label :recurring %><br />
+    <%= f.check_box :recurring %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

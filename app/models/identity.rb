@@ -73,6 +73,9 @@ class Identity < ActiveRecord::Base
   
   has_many  :sign_ins,              :class_name => "LogEntry",                     :foreign_key => :identity_id,  :conditions => {:event_type => 'signin_success'}, :order => 'created_at DESC'
   has_many  :auth_successes,        :class_name => "LogEntry",                     :foreign_key => :identity_id,  :conditions => "event_type ='signin_success' OR event_type = 'auth_token_success'", :order => 'created_at DESC'
+
+  has_many  :payments,              :class_name => "Stats::MoneyTransaction",      :foreign_key => :identity_id,  :inverse_of => :identity
+
     
   attr_accessor :password
   
@@ -86,7 +89,7 @@ class Identity < ActiveRecord::Base
   attr_readable *readable_attributes(:default), :created_at,                               :as => :user
   attr_readable *readable_attributes(:default), :insider_since, :created_at,               :as => :game
   attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :activated, :updated_at, :deleted,                         :ban_reason, :banned, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :fb_player_id, :fb_rejected_at, :fb_player_id_connected_at,   :as => :owner
-  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt, :password_token, :ban_reason, :banned, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :fb_player_id, :fb_rejected_at, :fb_player_id_connected_at,   :as => :staff
+  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt, :password_token, :ban_reason, :banned, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :fb_player_id, :fb_rejected_at, :fb_player_id_connected_at, :num_payments, :first_payment, :earnings, :num_chargebacks,   :as => :staff
   attr_readable *readable_attributes(:staff),   :as => :admin
   
   @email_regex      = /(?:[a-z0-9!#$\%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$\%&'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i
@@ -403,6 +406,48 @@ class Identity < ActiveRecord::Base
   def send_validation_email
     IdentityMailer.validation_email(self).deliver unless self.generic_email?   # send email validation email
     true
+  end
+  
+  def update_num_payments
+    self.num_payments = self.payments.non_sandbox.completed.payment_booking.not_charged_back.count
+  end
+  
+  def update_earnings
+    self.earnings = self.payments.non_sandbox.completed.payment_booking.not_charged_back.sum(:earnings)
+  end
+  
+  def update_num_chargebacks
+    self.num_chargebacks = self.payments.non_sandbox.completed.charge_back_booking.count
+  end
+  
+  def update_chargeback_costs
+    self.chargeback_costs = self.payments.non_sandbox.completed.payment_booking.charged_back.sum(:earnings) - self.payments.non_sandbox.completed.charge_back_booking.sum(:earnings)
+  end
+
+  def update_first_payment
+    first_payment = self.payments.sorted_by_date.limit(1).first
+    if first_payment.nil?
+      self.first_payment = nil
+    else 
+      self.first_payment = first_payment.updatetstamp
+    end
+  end
+  
+  def update_all_stats
+    if self.payments.count > 0
+      update_num_payments
+      update_earnings
+      update_num_chargebacks
+      update_chargeback_costs
+      update_first_payment
+    end
+  end
+  
+  def self.update_stats_of_all_identities
+    Identity.all.each do |identity|
+      identity.update_all_stats
+      identity.save
+    end
   end
   
   private

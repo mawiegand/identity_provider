@@ -1,0 +1,105 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  identity_id: 1
+  uid: 1
+  tstamp: 1
+  updatetstamp: MyString
+  user_id: 1
+  invoice_id: MyString
+  title_id: MyString
+  method: MyString
+  carrier: MyString
+  country: MyString
+  offer_id: 1
+  offer_category: MyString
+  gross: 9.99
+  gross_currency: MyString
+  exchange_rate: 9.99
+  vat: 9.99
+  tax: 9.99
+  net: 9.99
+  fee: 9.99
+  ebp: 9.99
+  referrer_id: MyString
+  referrer_share: 9.99
+  earnings: 9.99
+  chargeback: 9.99
+  campaign_id: MyString
+  transaction_payed: false
+  transaction_state: MyString
+  comment: MyString
+  scale_factor: MyString
+  user_mail: MyString
+  payment_transaction_uid: MyString
+  payment_state: MyString
+  payment_state_reason: MyString
+  payer_id: MyString
+  payer_first_name: MyString
+  payer_last_name: MyString
+  payer_mail: MyString
+  payer_zip: MyString
+  payer_city: MyString
+  payer_street: MyString
+  payer_country: MyString
+  payer_state: MyString
+  hash: MyString
+  seed: MyString
+  partner_user_id: MyString
+  created_at: 2013-08-26 18:07:53
+  updated_at: 2013-08-26 18:07:53
+  sent_mail_alert: false
+  sent_special_offer_alert: false
+  recurring: false
+
+two:
+  identity_id: 1
+  uid: 1
+  tstamp: 1
+  updatetstamp: MyString
+  user_id: 1
+  invoice_id: MyString
+  title_id: MyString
+  method: MyString
+  carrier: MyString
+  country: MyString
+  offer_id: 1
+  offer_category: MyString
+  gross: 9.99
+  gross_currency: MyString
+  exchange_rate: 9.99
+  vat: 9.99
+  tax: 9.99
+  net: 9.99
+  fee: 9.99
+  ebp: 9.99
+  referrer_id: MyString
+  referrer_share: 9.99
+  earnings: 9.99
+  chargeback: 9.99
+  campaign_id: MyString
+  transaction_payed: false
+  transaction_state: MyString
+  comment: MyString
+  scale_factor: MyString
+  user_mail: MyString
+  payment_transaction_uid: MyString
+  payment_state: MyString
+  payment_state_reason: MyString
+  payer_id: MyString
+  payer_first_name: MyString
+  payer_last_name: MyString
+  payer_mail: MyString
+  payer_zip: MyString
+  payer_city: MyString
+  payer_street: MyString
+  payer_country: MyString
+  payer_state: MyString
+  hash: MyString
+  seed: MyString
+  partner_user_id: MyString
+  created_at: 2013-08-26 18:07:53
+  updated_at: 2013-08-26 18:07:53
+  sent_mail_alert: false
+  sent_special_offer_alert: false
+  recurring: false

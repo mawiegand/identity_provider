@@ -1,0 +1,103 @@
+<h1>Listing stats_money_transactions</h1>
+
+<p>
+  <b>Gross:</b>        <%= number_to_currency @total_gross, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %>&nbsp;&nbsp;
+  <b>Earnings:</b>     <%= number_to_currency @total_earnings, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %>&nbsp;&nbsp;
+  <b>Net Earnings:</b> <%= number_to_currency @total_net_earnings, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %>&nbsp;&nbsp;
+  <b>Yield:</b>        <%= number_to_percentage @total_net_earnings / @total_gross * 100, precision: 0 %>&nbsp;&nbsp; |&nbsp;&nbsp;
+  <b>Chargebacks:</b>  <%= number_to_currency @total_chargebacks, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %>&nbsp;&nbsp;
+  <b>Sandbox:</b>      <%= number_to_currency @total_sandbox, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %>&nbsp;&nbsp; |&nbsp;&nbsp;
+  <b>Recurring:</b>    <%= number_to_percentage @recurring * 100, precision: 0 %> <br/>
+  <small>Net Earnings already include costs from charge backs. Yield is net_earnings / gross. Sandbox-bookings are <b>not</b> considered for gross and earnings.</small>
+</p>
+
+
+<p>Last Update: <%= @last_update %>&nbsp;&nbsp;&nbsp;<%= link_to 'Update from Bytro API', stats_money_transactions_path + '?update=true' %>  
+</p>
+
+<%= if (@paginate) 
+  will_paginate @stats_money_transactions 
+end %>
+
+<table>
+  <tr>
+    <th>X</th>
+    <th>T</th>
+    <th>Identity</th>
+    <th>Updatetstamp</th>
+    <th>Title</th>
+    <th>Method</th>
+    <th>Country</th>
+    <th>Offer</th>
+    <th>Details</th>
+    <th>Net</th>
+    <th>State</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @stats_money_transactions.each do |stats_money_transaction| %>
+  <tr>
+    <td><b><%= stats_money_transaction.recurring ? "n-th" : "1st" %></b></td>
+    <td style="text-align:center;"><%= stats_money_transaction.chargeback > 0.5 ? "O" : ( stats_money_transaction.earnings < 0.0 ? "CB" : stats_money_transaction.transaction_payed? ? "N" : "I" ) %></td>
+    
+    <td><b><%= 
+      if stats_money_transaction.identity.nil? 
+        "unknown"
+      else
+        identity = stats_money_transaction.identity 
+        strings  = identity.nickname
+        if !identity.generic_email?
+          strings = "#{strings} (#{identity.email})"
+        end
+        link_to strings, identity    
+      end %></b>
+    </td>
+    
+    <td><%= stats_money_transaction.updatetstamp %></td>
+    <td><%= stats_money_transaction.title_id %></td>
+    <td><%= stats_money_transaction.method %></td>
+    <td><%= stats_money_transaction.country %></td>
+    <td><%= stats_money_transaction.offer_id %> | <%= stats_money_transaction.offer_category %></td>
+    <td>
+      Gross: <%= number_to_currency stats_money_transaction.gross, unit: stats_money_transaction.gross_currency, format: "%u %n" %>
+      Tax: <%= number_to_percentage stats_money_transaction.vat.to_f * 100, precision: 1 %>
+      Fee: <%= number_to_currency stats_money_transaction.fee, unit: "EUR", format: "%u %n" %>
+    <td style="text-align:right;"><b><%= number_to_currency stats_money_transaction.earnings, unit: "EUR", format: "%n %u" %></b></td>
+    </td>
+    <td><%= stats_money_transaction.transaction_state %></td>
+
+    <td><%= link_to 'Show', stats_money_transaction %></td>
+    <td><%= link_to 'Edit', edit_stats_money_transaction_path(stats_money_transaction) %></td>
+    <td><%= link_to 'Destroy', stats_money_transaction, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+  <tr>
+    <td colspan="15" style="border-bottom:1px solid black;"><small>
+    
+      <b>Invoice:</b> <%= stats_money_transaction.invoice_id %> |
+      
+      <b>Payment:</b> <%= stats_money_transaction.payment_transaction_uid %>
+      
+      State: <%= stats_money_transaction.payment_state %>
+             <%= stats_money_transaction.payment_state_reason %> |
+                 
+      <b>Payer:</b> <%= stats_money_transaction.payer_id %>
+      
+      Name: <%= stats_money_transaction.payer_first_name %>
+            <%= stats_money_transaction.payer_last_name %>
+      Mail: <%= stats_money_transaction.user_mail %> 
+      
+    </small></td>
+  </tr>
+<% end %>
+</table>
+
+<%= if (@paginate) 
+  will_paginate @stats_money_transactions 
+end %>
+
+
+<br />
+
+<%= link_to 'New Money transaction', new_stats_money_transaction_path %>
