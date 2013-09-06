@@ -1,0 +1,35 @@
+<h1>Listing game_scheduled_server_downtimes</h1>
+
+<table>
+  <tr>
+    <th>Server</th>
+    <th>Start scheduled at</th>
+    <th>End scheduled at</th>
+    <th>Ended at</th>
+    <th>Type</th>
+    <th>Description</th>
+    <th>Localized description</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @game_scheduled_server_downtimes.each do |game_scheduled_server_downtime| %>
+  <tr>
+    <td><%= game_scheduled_server_downtime.server_id %></td>
+    <td><%= game_scheduled_server_downtime.start_scheduled_at %></td>
+    <td><%= game_scheduled_server_downtime.end_scheduled_at %></td>
+    <td><%= game_scheduled_server_downtime.ended_at %></td>
+    <td><%= game_scheduled_server_downtime.type_id %></td>
+    <td><%= game_scheduled_server_downtime.description %></td>
+    <td><%= game_scheduled_server_downtime.localized_description %></td>
+    <td><%= link_to 'Show', game_scheduled_server_downtime %></td>
+    <td><%= link_to 'Edit', edit_game_scheduled_server_downtime_path(game_scheduled_server_downtime) %></td>
+    <td><%= link_to 'Destroy', game_scheduled_server_downtime, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Scheduled server downtime', new_game_scheduled_server_downtime_path %>

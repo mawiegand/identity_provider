@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Server:</b>
+  <%= @game_scheduled_server_downtime.server_id %>
+</p>
+
+<p>
+  <b>Start scheduled at:</b>
+  <%= @game_scheduled_server_downtime.start_scheduled_at %>
+</p>
+
+<p>
+  <b>End scheduled at:</b>
+  <%= @game_scheduled_server_downtime.end_scheduled_at %>
+</p>
+
+<p>
+  <b>Ended at:</b>
+  <%= @game_scheduled_server_downtime.ended_at %>
+</p>
+
+<p>
+  <b>Type:</b>
+  <%= @game_scheduled_server_downtime.type_id %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @game_scheduled_server_downtime.description %>
+</p>
+
+<p>
+  <b>Localized description:</b>
+  <%= @game_scheduled_server_downtime.localized_description %>
+</p>
+
+
+<%= link_to 'Edit', edit_game_scheduled_server_downtime_path(@game_scheduled_server_downtime) %> |
+<%= link_to 'Back', game_scheduled_server_downtimes_path %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130831145551) do
+ActiveRecord::Schema.define(:version => 20130906210234) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -51,6 +51,82 @@ ActiveRecord::Schema.define(:version => 20130831145551) do
     t.boolean  "automatic_signup",         :default => false, :null => false
     t.string   "direct_backend_login_url"
     t.boolean  "signup_without_email",     :default => false, :null => false
+  end
+
+  create_table "game_game_instances", :force => true do |t|
+    t.integer  "game_id"
+    t.string   "scope"
+    t.integer  "number"
+    t.string   "name"
+    t.text     "localized_name"
+    t.text     "description"
+    t.text     "localized_description"
+    t.datetime "available_since"
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.boolean  "signin_enabled",                   :default => true,  :null => false
+    t.boolean  "signup_enabled",                   :default => true,  :null => false
+    t.boolean  "insider_only",                     :default => false, :null => false
+    t.boolean  "testing",                          :default => false, :null => false
+    t.decimal  "speed_factor",                     :default => 1.0,   :null => false
+    t.integer  "estimated_duration_min"
+    t.integer  "estimated_duration_max"
+    t.boolean  "multi_language",                   :default => true,  :null => false
+    t.text     "language_codes"
+    t.integer  "max_players"
+    t.boolean  "present_players",                  :default => false, :null => false
+    t.boolean  "hidden",                           :default => true,  :null => false
+    t.boolean  "hidden_for_non_insiders",          :default => false, :null => false
+    t.text     "restriction_country_codes"
+    t.text     "restriction_language_codes"
+    t.decimal  "restriction_latitude"
+    t.decimal  "restriction_longitude"
+    t.decimal  "restriction_latitude_max"
+    t.decimal  "restriction_longitude_max"
+    t.decimal  "restriction_distance_to_position"
+    t.string   "restriction_postal_code"
+    t.string   "server_types"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "game_scheduled_game_downtimes", :force => true do |t|
+    t.integer  "game_instance_id"
+    t.datetime "start_scheduled_at"
+    t.datetime "end_scheduled_at"
+    t.datetime "ended_at"
+    t.integer  "type_id"
+    t.text     "description"
+    t.text     "localized_description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "game_scheduled_server_downtimes", :force => true do |t|
+    t.integer  "server_id"
+    t.datetime "start_scheduled_at"
+    t.datetime "end_scheduled_at"
+    t.datetime "ended_at"
+    t.integer  "type_id"
+    t.text     "description"
+    t.text     "localized_description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "game_servers", :force => true do |t|
+    t.integer  "game_instance_id"
+    t.string   "type_string"
+    t.string   "hostname"
+    t.integer  "port"
+    t.string   "protocol"
+    t.string   "namespace"
+    t.string   "ip"
+    t.boolean  "online",           :default => true, :null => false
+    t.datetime "available_since"
+    t.datetime "ended_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "granted_scopes", :force => true do |t|

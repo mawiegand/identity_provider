@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  game_id: 1
+  start_scheduled_at: 2013-09-06 23:02:34
+  end_scheduled_at: 2013-09-06 23:02:34
+  ended_at: 2013-09-06 23:02:34
+  type_id: 1
+  description: MyText
+  localized_description: MyText
+
+two:
+  game_id: 1
+  start_scheduled_at: 2013-09-06 23:02:34
+  end_scheduled_at: 2013-09-06 23:02:34
+  ended_at: 2013-09-06 23:02:34
+  type_id: 1
+  description: MyText
+  localized_description: MyText

@@ -1,0 +1,45 @@
+<%= form_for(@game_scheduled_game_downtime) do |f| %>
+  <% if @game_scheduled_game_downtime.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@game_scheduled_game_downtime.errors.count, "error") %> prohibited this game_scheduled_game_downtime from being saved:</h2>
+
+      <ul>
+      <% @game_scheduled_game_downtime.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :game_id %><br />
+    <%= f.number_field :game_id %>
+  </div>
+  <div class="field">
+    <%= f.label :start_scheduled_at %><br />
+    <%= f.datetime_select :start_scheduled_at %>
+  </div>
+  <div class="field">
+    <%= f.label :end_scheduled_at %><br />
+    <%= f.datetime_select :end_scheduled_at %>
+  </div>
+  <div class="field">
+    <%= f.label :ended_at %><br />
+    <%= f.datetime_select :ended_at %>
+  </div>
+  <div class="field">
+    <%= f.label :type_id %><br />
+    <%= f.number_field :type_id %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :localized_description %><br />
+    <%= f.text_area :localized_description %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -56,6 +56,14 @@ IdentityProvider::Application.routes.draw do
         resources :signup_gifts
       end
       
+      namespace :game do 
+        resources :scheduled_game_downtimes 
+        resources :scheduled_server_downtimes
+        resources :game_instances
+        resources :servers
+        resources :game_instances 
+      end
+      
       namespace :stats do
         resource :overview, :controller => :overview
         resources :money_transactions

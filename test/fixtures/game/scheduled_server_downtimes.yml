@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  server_id: 1
+  start_scheduled_at: 2013-09-06 23:01:41
+  end_scheduled_at: 2013-09-06 23:01:41
+  ended_at: 2013-09-06 23:01:41
+  type_id: 1
+  description: MyText
+  localized_description: MyText
+
+two:
+  server_id: 1
+  start_scheduled_at: 2013-09-06 23:01:41
+  end_scheduled_at: 2013-09-06 23:01:41
+  ended_at: 2013-09-06 23:01:41
+  type_id: 1
+  description: MyText
+  localized_description: MyText

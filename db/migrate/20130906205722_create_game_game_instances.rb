@@ -11,19 +11,19 @@ class CreateGameGameInstances < ActiveRecord::Migration
       t.datetime :available_since
       t.datetime :started_at
       t.datetime :ended_at
-      t.boolean :signin_enabled
-      t.boolean :signup_enabled
-      t.boolean :insider_only
-      t.boolean :testing
-      t.decimal :speed_factor
+      t.boolean :signin_enabled,          default: true,  null: false
+      t.boolean :signup_enabled,          default: true,  null: false
+      t.boolean :insider_only,            default: false, null: false
+      t.boolean :testing,                 default: false, null: false
+      t.decimal :speed_factor,            default: 1.0,   null: false
       t.integer :estimated_duration_min
       t.integer :estimated_duration_max
-      t.boolean :multi_language
+      t.boolean :multi_language,          default: true,  null: false
       t.text :language_codes
       t.integer :max_players
-      t.boolean :present_players
-      t.boolean :hidden
-      t.boolean :hidden_for_non_insiders
+      t.boolean :present_players,         default: 0,     null: false
+      t.boolean :hidden,                  default: true,  null: false
+      t.boolean :hidden_for_non_insiders, default: false, null: false
       t.text :restriction_country_codes
       t.text :restriction_language_codes
       t.decimal :restriction_latitude
