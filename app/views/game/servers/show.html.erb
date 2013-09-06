@@ -1,0 +1,55 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Game instance:</b>
+  <%= @game_server.game_instance_id %>
+</p>
+
+<p>
+  <b>Type string:</b>
+  <%= @game_server.type_string %>
+</p>
+
+<p>
+  <b>Hostname:</b>
+  <%= @game_server.hostname %>
+</p>
+
+<p>
+  <b>Port:</b>
+  <%= @game_server.port %>
+</p>
+
+<p>
+  <b>Protocol:</b>
+  <%= @game_server.protocol %>
+</p>
+
+<p>
+  <b>Namespace:</b>
+  <%= @game_server.namespace %>
+</p>
+
+<p>
+  <b>Ip:</b>
+  <%= @game_server.ip %>
+</p>
+
+<p>
+  <b>Online:</b>
+  <%= @game_server.online %>
+</p>
+
+<p>
+  <b>Available since:</b>
+  <%= @game_server.available_since %>
+</p>
+
+<p>
+  <b>Ended at:</b>
+  <%= @game_server.ended_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_game_server_path(@game_server) %> |
+<%= link_to 'Back', game_servers_path %>

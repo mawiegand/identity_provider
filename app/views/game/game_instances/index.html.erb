@@ -1,0 +1,85 @@
+<h1>Listing game_game_instances</h1>
+
+<table>
+  <tr>
+    <th>Game</th>
+    <th>Scope</th>
+    <th>Number</th>
+    <th>Name</th>
+    <th>Localized name</th>
+    <th>Description</th>
+    <th>Localized description</th>
+    <th>Available since</th>
+    <th>Started at</th>
+    <th>Ended at</th>
+    <th>Signin enabled</th>
+    <th>Signup enabled</th>
+    <th>Insider only</th>
+    <th>Testing</th>
+    <th>Speed factor</th>
+    <th>Estimated duration min</th>
+    <th>Estimated duration max</th>
+    <th>Multi language</th>
+    <th>Language codes</th>
+    <th>Max players</th>
+    <th>Present players</th>
+    <th>Hidden</th>
+    <th>Hidden for non insiders</th>
+    <th>Restriction country codes</th>
+    <th>Restriction language codes</th>
+    <th>Restriction latitude</th>
+    <th>Restriction longitude</th>
+    <th>Restriction latitude max</th>
+    <th>Restriction longitude max</th>
+    <th>Restriction distance to position</th>
+    <th>Restriction postal code</th>
+    <th>Server types</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @game_game_instances.each do |game_game_instance| %>
+  <tr>
+    <td><%= game_game_instance.game_id %></td>
+    <td><%= game_game_instance.scope %></td>
+    <td><%= game_game_instance.number %></td>
+    <td><%= game_game_instance.name %></td>
+    <td><%= game_game_instance.localized_name %></td>
+    <td><%= game_game_instance.description %></td>
+    <td><%= game_game_instance.localized_description %></td>
+    <td><%= game_game_instance.available_since %></td>
+    <td><%= game_game_instance.started_at %></td>
+    <td><%= game_game_instance.ended_at %></td>
+    <td><%= game_game_instance.signin_enabled %></td>
+    <td><%= game_game_instance.signup_enabled %></td>
+    <td><%= game_game_instance.insider_only %></td>
+    <td><%= game_game_instance.testing %></td>
+    <td><%= game_game_instance.speed_factor %></td>
+    <td><%= game_game_instance.estimated_duration_min %></td>
+    <td><%= game_game_instance.estimated_duration_max %></td>
+    <td><%= game_game_instance.multi_language %></td>
+    <td><%= game_game_instance.language_codes %></td>
+    <td><%= game_game_instance.max_players %></td>
+    <td><%= game_game_instance.present_players %></td>
+    <td><%= game_game_instance.hidden %></td>
+    <td><%= game_game_instance.hidden_for_non_insiders %></td>
+    <td><%= game_game_instance.restriction_country_codes %></td>
+    <td><%= game_game_instance.restriction_language_codes %></td>
+    <td><%= game_game_instance.restriction_latitude %></td>
+    <td><%= game_game_instance.restriction_longitude %></td>
+    <td><%= game_game_instance.restriction_latitude_max %></td>
+    <td><%= game_game_instance.restriction_longitude_max %></td>
+    <td><%= game_game_instance.restriction_distance_to_position %></td>
+    <td><%= game_game_instance.restriction_postal_code %></td>
+    <td><%= game_game_instance.server_types %></td>
+    <td><%= link_to 'Show', game_game_instance %></td>
+    <td><%= link_to 'Edit', edit_game_game_instance_path(game_game_instance) %></td>
+    <td><%= link_to 'Destroy', game_game_instance, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Game instance', new_game_game_instance_path %>

@@ -1,0 +1,145 @@
+<%= form_for(@game_game_instance) do |f| %>
+  <% if @game_game_instance.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@game_game_instance.errors.count, "error") %> prohibited this game_game_instance from being saved:</h2>
+
+      <ul>
+      <% @game_game_instance.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :game_id %><br />
+    <%= f.number_field :game_id %>
+  </div>
+  <div class="field">
+    <%= f.label :scope %><br />
+    <%= f.text_field :scope %>
+  </div>
+  <div class="field">
+    <%= f.label :number %><br />
+    <%= f.number_field :number %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :localized_name %><br />
+    <%= f.text_area :localized_name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :localized_description %><br />
+    <%= f.text_area :localized_description %>
+  </div>
+  <div class="field">
+    <%= f.label :available_since %><br />
+    <%= f.datetime_select :available_since %>
+  </div>
+  <div class="field">
+    <%= f.label :started_at %><br />
+    <%= f.datetime_select :started_at %>
+  </div>
+  <div class="field">
+    <%= f.label :ended_at %><br />
+    <%= f.datetime_select :ended_at %>
+  </div>
+  <div class="field">
+    <%= f.label :signin_enabled %><br />
+    <%= f.check_box :signin_enabled %>
+  </div>
+  <div class="field">
+    <%= f.label :signup_enabled %><br />
+    <%= f.check_box :signup_enabled %>
+  </div>
+  <div class="field">
+    <%= f.label :insider_only %><br />
+    <%= f.check_box :insider_only %>
+  </div>
+  <div class="field">
+    <%= f.label :testing %><br />
+    <%= f.check_box :testing %>
+  </div>
+  <div class="field">
+    <%= f.label :speed_factor %><br />
+    <%= f.text_field :speed_factor %>
+  </div>
+  <div class="field">
+    <%= f.label :estimated_duration_min %><br />
+    <%= f.number_field :estimated_duration_min %>
+  </div>
+  <div class="field">
+    <%= f.label :estimated_duration_max %><br />
+    <%= f.number_field :estimated_duration_max %>
+  </div>
+  <div class="field">
+    <%= f.label :multi_language %><br />
+    <%= f.check_box :multi_language %>
+  </div>
+  <div class="field">
+    <%= f.label :language_codes %><br />
+    <%= f.text_area :language_codes %>
+  </div>
+  <div class="field">
+    <%= f.label :max_players %><br />
+    <%= f.number_field :max_players %>
+  </div>
+  <div class="field">
+    <%= f.label :present_players %><br />
+    <%= f.check_box :present_players %>
+  </div>
+  <div class="field">
+    <%= f.label :hidden %><br />
+    <%= f.check_box :hidden %>
+  </div>
+  <div class="field">
+    <%= f.label :hidden_for_non_insiders %><br />
+    <%= f.check_box :hidden_for_non_insiders %>
+  </div>
+  <div class="field">
+    <%= f.label :restriction_country_codes %><br />
+    <%= f.text_area :restriction_country_codes %>
+  </div>
+  <div class="field">
+    <%= f.label :restriction_language_codes %><br />
+    <%= f.text_area :restriction_language_codes %>
+  </div>
+  <div class="field">
+    <%= f.label :restriction_latitude %><br />
+    <%= f.text_field :restriction_latitude %>
+  </div>
+  <div class="field">
+    <%= f.label :restriction_longitude %><br />
+    <%= f.text_field :restriction_longitude %>
+  </div>
+  <div class="field">
+    <%= f.label :restriction_latitude_max %><br />
+    <%= f.text_field :restriction_latitude_max %>
+  </div>
+  <div class="field">
+    <%= f.label :restriction_longitude_max %><br />
+    <%= f.text_field :restriction_longitude_max %>
+  </div>
+  <div class="field">
+    <%= f.label :restriction_distance_to_position %><br />
+    <%= f.text_field :restriction_distance_to_position %>
+  </div>
+  <div class="field">
+    <%= f.label :restriction_postal_code %><br />
+    <%= f.text_field :restriction_postal_code %>
+  </div>
+  <div class="field">
+    <%= f.label :server_types %><br />
+    <%= f.text_field :server_types %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,57 @@
+<%= form_for(@game_server) do |f| %>
+  <% if @game_server.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@game_server.errors.count, "error") %> prohibited this game_server from being saved:</h2>
+
+      <ul>
+      <% @game_server.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :game_instance_id %><br />
+    <%= f.number_field :game_instance_id %>
+  </div>
+  <div class="field">
+    <%= f.label :type_string %><br />
+    <%= f.text_field :type_string %>
+  </div>
+  <div class="field">
+    <%= f.label :hostname %><br />
+    <%= f.text_field :hostname %>
+  </div>
+  <div class="field">
+    <%= f.label :port %><br />
+    <%= f.number_field :port %>
+  </div>
+  <div class="field">
+    <%= f.label :protocol %><br />
+    <%= f.text_field :protocol %>
+  </div>
+  <div class="field">
+    <%= f.label :namespace %><br />
+    <%= f.text_field :namespace %>
+  </div>
+  <div class="field">
+    <%= f.label :ip %><br />
+    <%= f.text_field :ip %>
+  </div>
+  <div class="field">
+    <%= f.label :online %><br />
+    <%= f.check_box :online %>
+  </div>
+  <div class="field">
+    <%= f.label :available_since %><br />
+    <%= f.datetime_select :available_since %>
+  </div>
+  <div class="field">
+    <%= f.label :ended_at %><br />
+    <%= f.datetime_select :ended_at %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

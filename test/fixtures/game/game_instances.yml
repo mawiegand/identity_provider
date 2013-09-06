@@ -1,0 +1,69 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  game_id: 1
+  scope: MyString
+  number: 1
+  name: MyString
+  localized_name: MyText
+  description: MyText
+  localized_description: MyText
+  available_since: 2013-09-06 22:57:22
+  started_at: 2013-09-06 22:57:22
+  ended_at: 2013-09-06 22:57:22
+  signin_enabled: false
+  signup_enabled: false
+  insider_only: false
+  testing: false
+  speed_factor: 9.99
+  estimated_duration_min: 1
+  estimated_duration_max: 1
+  multi_language: false
+  language_codes: MyText
+  max_players: 1
+  present_players: false
+  hidden: false
+  hidden_for_non_insiders: false
+  restriction_country_codes: MyText
+  restriction_language_codes: MyText
+  restriction_latitude: 9.99
+  restriction_longitude: 9.99
+  restriction_latitude_max: 9.99
+  restriction_longitude_max: 9.99
+  restriction_distance_to_position: 9.99
+  restriction_postal_code: MyString
+  server_types: MyString
+
+two:
+  game_id: 1
+  scope: MyString
+  number: 1
+  name: MyString
+  localized_name: MyText
+  description: MyText
+  localized_description: MyText
+  available_since: 2013-09-06 22:57:22
+  started_at: 2013-09-06 22:57:22
+  ended_at: 2013-09-06 22:57:22
+  signin_enabled: false
+  signup_enabled: false
+  insider_only: false
+  testing: false
+  speed_factor: 9.99
+  estimated_duration_min: 1
+  estimated_duration_max: 1
+  multi_language: false
+  language_codes: MyText
+  max_players: 1
+  present_players: false
+  hidden: false
+  hidden_for_non_insiders: false
+  restriction_country_codes: MyText
+  restriction_language_codes: MyText
+  restriction_latitude: 9.99
+  restriction_longitude: 9.99
+  restriction_latitude_max: 9.99
+  restriction_longitude_max: 9.99
+  restriction_distance_to_position: 9.99
+  restriction_postal_code: MyString
+  server_types: MyString
