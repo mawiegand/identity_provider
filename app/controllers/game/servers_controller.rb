@@ -1,4 +1,8 @@
 class Game::ServersController < ApplicationController
+
+  before_filter :authenticate                    
+  before_filter :authorize_staff   
+
   # GET /game/servers
   # GET /game/servers.json
   def index

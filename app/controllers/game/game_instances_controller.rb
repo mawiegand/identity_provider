@@ -1,12 +1,30 @@
 class Game::GameInstancesController < ApplicationController
+
+# before_filter :authenticate                    
+  before_filter :authorize_staff,                  :except     => [:index, :show]       # only these pages can be accessed by non-staff 
+
   # GET /game/game_instances
   # GET /game/game_instances.json
   def index
-    @game_game_instances = Game::GameInstance.all
+    @game_game_instances = if admin? || staff?
+      Game::GameInstance.all
+    else
+      if !current_identity.nil? && current_identity.insider?
+        Game::GameInstance.available.visible
+      else 
+        Game::GameInstance.available.visible_to_non_insiders
+      end
+    end
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @game_game_instances }
+      format.json do
+        if !current_identity.nil?
+          render json: @game_game_instances, :methods => [:random_selected_servers]
+        else
+          render json: @game_game_instances, :methods => [:random_selected_servers]
+        end
+      end
     end
   end
 

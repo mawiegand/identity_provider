@@ -1,4 +1,8 @@
 class Game::ScheduledGameDowntimesController < ApplicationController
+  
+  before_filter :authenticate                    
+  before_filter :authorize_staff      
+  
   # GET /game/scheduled_game_downtimes
   # GET /game/scheduled_game_downtimes.json
   def index
