@@ -21,7 +21,7 @@ class CreateGameGameInstances < ActiveRecord::Migration
       t.boolean :multi_language,          default: true,  null: false
       t.text :language_codes
       t.integer :max_players
-      t.boolean :present_players,         default: 0,     null: false
+      t.integer :present_players,         default: 0,     null: false
       t.boolean :hidden,                  default: true,  null: false
       t.boolean :hidden_for_non_insiders, default: false, null: false
       t.text :restriction_country_codes
