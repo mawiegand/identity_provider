@@ -20,9 +20,9 @@ class Game::GameInstancesController < ApplicationController
       format.html # index.html.erb
       format.json do
         if !current_identity.nil?
-          render json: @game_game_instances, :methods => [:random_selected_servers]
+          render json: @game_game_instances, :methods => [:random_selected_servers, :has_player_joined?, :default_game?]
         else
-          render json: @game_game_instances, :methods => [:random_selected_servers]
+          render json: @game_game_instances, :methods => [:random_selected_servers, :default_game?]
         end
       end
     end
