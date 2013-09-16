@@ -1,6 +1,6 @@
 class Game::GameInstancesController < ApplicationController
 
-# before_filter :authenticate                    
+  before_filter :authenticate                    
   before_filter :authorize_staff,                  :except     => [:index, :show]       # only these pages can be accessed by non-staff 
 
   # GET /game/game_instances
@@ -12,7 +12,7 @@ class Game::GameInstancesController < ApplicationController
       if !current_identity.nil? && current_identity.insider?
         Game::GameInstance.available.visible
       else 
-        Game::GameInstance.available.visible_to_non_insiders
+        Game::GameInstance.available.visible.visible_to_non_insiders
       end
     end
 
