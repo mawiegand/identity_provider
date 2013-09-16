@@ -28,7 +28,7 @@ class Game::GameInstance < ActiveRecord::Base
   end
   
   def has_player_joined?
-    !current_identity.nil? && GrantedScope.where(identity_id: current_identity.id).where("scopes LIKE '%#{self.scope}%'").count > 0
+    !current_identity.nil? && current_identity.grants.where("scopes LIKE '%#{self.scope}%'").count > 0
   end
   
   def started?
