@@ -2,7 +2,6 @@ class Game::GameInstance < ActiveRecord::Base
   
   belongs_to :game,          :class_name => "Resource::Game",  :foreign_key => :game_id,          :inverse_of => :instances
   has_many   :servers,       :class_name => "Game::Server",    :foreign_key => :game_instance_id, :inverse_of => :game_instance
-  has_many   :grants,        :class_name => "GrantedScope",    :conditions => proc { "scopes LIKE '%#{self.scope}%'" }
   
   scope      :visible_to_non_insiders, where(hidden_for_non_insiders: false)
   scope      :visible,                 where(hidden: false)
@@ -29,7 +28,7 @@ class Game::GameInstance < ActiveRecord::Base
   end
   
   def has_player_joined?
-    !current_identity.nil? && self.grants.where(identity_id: current_identity.id)
+    !current_identity.nil? && GrantedScope.where(identity_id: current_identity.id).where("scopes LIKE '%#{self.scope}%'").count > 0
   end
   
   def started?
