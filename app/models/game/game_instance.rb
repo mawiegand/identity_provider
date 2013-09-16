@@ -2,13 +2,15 @@ class Game::GameInstance < ActiveRecord::Base
   
   belongs_to :game,          :class_name => "Resource::Game",  :foreign_key => :game_id,          :inverse_of => :instances
   has_many   :servers,       :class_name => "Game::Server",    :foreign_key => :game_instance_id, :inverse_of => :game_instance
-  has_many   :grants,        :class_name => "GrantedScope",    :foreign_key => :scopes,           :conditions => proc { "scopes LIKE '%#{self.scope}%'" }
+  has_many   :grants,        :class_name => "GrantedScope",    :conditions => proc { "scopes LIKE '%#{self.scope}%'" }
   
   scope      :visible_to_non_insiders, where(hidden_for_non_insiders: false)
   scope      :visible,                 where(hidden: false)
   scope      :available,               where(['available_since < ? AND ended_at > ?', DateTime.now, DateTime.now])
   scope      :running,                 where(['started_at < ? AND ended_at > ?', DateTime.now, DateTime.now])
   scope      :non_insider,             where(insider_only: false)
+  
+  attr_accessor :current_identity
   
   def self.most_recent_running_public_game
     return Game::GameInstance.visible_to_non_insiders.visible.running.non_insider.order('started_at DESC').limit(1).first
