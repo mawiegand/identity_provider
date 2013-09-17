@@ -1,6 +1,6 @@
 class Game::GameInstancesController < ApplicationController
 
-# before_filter :authenticate                    
+  before_filter :authenticate                    
   before_filter :authorize_staff,                  :except     => [:index, :show]       # only these pages can be accessed by non-staff 
 
   # GET /game/game_instances
@@ -12,7 +12,7 @@ class Game::GameInstancesController < ApplicationController
       if !current_identity.nil? && current_identity.insider?
         Game::GameInstance.available.visible
       else 
-        Game::GameInstance.available.visible_to_non_insiders
+        Game::GameInstance.available.visible.visible_to_non_insiders
       end
     end
 
@@ -20,9 +20,10 @@ class Game::GameInstancesController < ApplicationController
       format.html # index.html.erb
       format.json do
         if !current_identity.nil?
-          render json: @game_game_instances, :methods => [:random_selected_servers]
+          @game_game_instances.each { |instance| instance.current_identity = current_identity }
+          render json: @game_game_instances, :methods => [:random_selected_servers, :has_player_joined?, :default_game?]
         else
-          render json: @game_game_instances, :methods => [:random_selected_servers]
+          render json: @game_game_instances, :methods => [:random_selected_servers, :default_game?]
         end
       end
     end
