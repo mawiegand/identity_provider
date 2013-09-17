@@ -55,6 +55,9 @@ class IdentitiesController < ApplicationController
     respond_to do |format|
       format.json { 
         @attributes = @identity.sanitized_hash(role)           # only those, that may be read by present user
+
+        logger.debug "-----> role #{role} #{@attributes}"
+
         @attributes[:gravatar_hash] = @identity.gravatar_hash
         render :json => include_root(@attributes.delete_if { |k,v| v.nil? }, :identity) # first compact the return string to non-blank attrs, then possible re-include the correct root (for RESTKIT access)
       }      
@@ -307,7 +310,19 @@ class IdentitiesController < ApplicationController
     elsif !params[:identity][:insider].nil? && params[:identity][:insider].to_i == 0 && Identity.accessible_attributes(role).include?(:insider_since)
       @identity.insider_since = nil
     end
-    
+
+    if params[:identity][:platinum_lifetime] && params[:identity][:platinum_lifetime].to_i == 1 && @identity.platinum_lifetime_since.nil?
+      params[:identity][:platinum_lifetime_since] = DateTime.now
+    elsif !params[:identity][:platinum_lifetime].nil? && params[:identity][:platinum_lifetime].to_i == 0 && Identity.accessible_attributes(role).include?(:platinum_lifetime_since)
+      @identity.platinum_lifetime_since = nil
+    end
+
+    if params[:identity][:supporter] && params[:identity][:supporter].to_i == 1 && @identity.supporter_since.nil?
+      params[:identity][:supporter_since] = DateTime.now
+    elsif !params[:identity][:supporter].nil? && params[:identity][:supporter].to_i == 0 && Identity.accessible_attributes(role).include?(:supporter_since)
+      @identity.supporter_since = nil
+    end
+
     # assign everything, but handle email specifically
     @identity.assign_attributes params[:identity].delete_if { |k,v| v.nil? }.except(:email), :as => role      
     

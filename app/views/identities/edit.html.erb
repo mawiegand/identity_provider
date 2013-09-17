@@ -57,6 +57,19 @@
     </div>
   <% end %>
 
+  <% if @accessible_attributes.include?(:platinum_lifetime_since)%>
+    <div class="field">
+      <%= f.label I18n.t 'identities.edit.form.platinum_lifetime_since' %><br/>
+      <%= f.check_box :platinum_lifetime? %>
+    </div>
+  <% end %>
+
+  <% if @accessible_attributes.include?(:supporter_since)%>
+    <div class="field">
+      <%= f.label I18n.t 'identities.edit.form.supporter_since' %><br/>
+      <%= f.check_box :supporter? %>
+    </div>
+  <% end %>
 
   <% if @accessible_attributes.include?(:banned)%>
   <div class="field">
