@@ -71,6 +71,13 @@
     </div>
   <% end %>
 
+  <% if @accessible_attributes.include?(:image_set_id)%>
+    <div class="field">
+      <%= f.label I18n.t 'identities.edit.form.image_set_id' %><br/>
+      <%= f.number_field :image_set_id %>
+    </div>
+  <% end %>
+
   <% if @accessible_attributes.include?(:banned)%>
   <div class="field">
     <%= f.label I18n.t 'identities.edit.form.banned' %><br/>

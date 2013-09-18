@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130917122540) do
+ActiveRecord::Schema.define(:version => 20130918113856) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -178,6 +178,7 @@ ActiveRecord::Schema.define(:version => 20130917122540) do
     t.datetime "first_payment"
     t.datetime "platinum_lifetime_since"
     t.datetime "supporter_since"
+    t.integer  "image_set_id"
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true

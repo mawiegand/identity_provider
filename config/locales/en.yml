@@ -36,6 +36,7 @@ en:
       messages: Messages
       grants: Grants
       keys: Keys
+      game: Game
       games: Games
       signups: Signups
       properties: Properties
