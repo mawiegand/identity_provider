@@ -5,8 +5,8 @@ class Game::GameInstance < ActiveRecord::Base
   
   scope      :visible_to_non_insiders, where(hidden_for_non_insiders: false)
   scope      :visible,                 where(hidden: false)
-  scope      :available,               where(['available_since < ? AND ended_at > ?', DateTime.now, DateTime.now])
-  scope      :running,                 where(['started_at < ? AND ended_at > ?', DateTime.now, DateTime.now])
+  scope      :available,               lambda { where(['available_since < ? AND ended_at > ?', DateTime.now, DateTime.now]) }
+  scope      :running,                 lambda { where(['started_at < ? AND ended_at > ?', DateTime.now, DateTime.now]) }
   scope      :non_insider,             where(insider_only: false)
   
   attr_accessor :current_identity
