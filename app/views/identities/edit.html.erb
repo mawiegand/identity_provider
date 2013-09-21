@@ -64,10 +64,10 @@
     </div>
   <% end %>
 
-  <% if @accessible_attributes.include?(:supporter_since)%>
+  <% if @accessible_attributes.include?(:divine_supporter_since)%>
     <div class="field">
-      <%= f.label I18n.t 'identities.edit.form.supporter_since' %><br/>
-      <%= f.check_box :supporter? %>
+      <%= f.label I18n.t 'identities.edit.form.divine_supporter_since' %><br/>
+      <%= f.check_box :divine_supporter? %>
     </div>
   <% end %>
 

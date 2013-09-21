@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130918113856) do
+ActiveRecord::Schema.define(:version => 20130921162256) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -177,7 +177,7 @@ ActiveRecord::Schema.define(:version => 20130918113856) do
     t.decimal  "chargeback_costs",          :default => 0.0,   :null => false
     t.datetime "first_payment"
     t.datetime "platinum_lifetime_since"
-    t.datetime "supporter_since"
+    t.datetime "divine_supporter_since"
     t.integer  "image_set_id"
   end
 

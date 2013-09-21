@@ -100,7 +100,8 @@ en:
         email: Email
         insider_since: Insider since
         platinum_lifetime_since: Platinum Lifetime Account since
-        supporter_since: Supporter since
+        divine_supporter_since: Divine Supporter since
+        image_set_id: Image Set
         password: Password
         password_confirmation: Password confirmation
         submit_button: Submit

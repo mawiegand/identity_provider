@@ -107,7 +107,7 @@ class InstallTracking::Device < ActiveRecord::Base
     advertiser_token = device_information[:advertiser_token]
     hardware_token   = device_information[:hardware_token]
     
-    last_user = nil;
+    last_user = nil
     
     unless device_token.nil?
       InstallTracking::Device.device_token(device_token).descending.each do |device|

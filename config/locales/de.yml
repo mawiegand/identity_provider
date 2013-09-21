@@ -94,7 +94,8 @@ de:
         email: Email
         insider_since: Insider seit
         platinum_lifetime_since: Platinum Lifetime Account seit
-        supporter_since: Supporter seit
+        divine_supporter_since: Göttlicher Supporter seit
+        image_set_id: Image Set
         password: Passwort
         password_confirmation: Passwortbestätigung
         submit_button: Absenden

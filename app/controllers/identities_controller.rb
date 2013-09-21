@@ -317,10 +317,10 @@ class IdentitiesController < ApplicationController
       @identity.platinum_lifetime_since = nil
     end
 
-    if params[:identity][:supporter] && params[:identity][:supporter].to_i == 1 && @identity.supporter_since.nil?
-      params[:identity][:supporter_since] = DateTime.now
-    elsif !params[:identity][:supporter].nil? && params[:identity][:supporter].to_i == 0 && Identity.accessible_attributes(role).include?(:supporter_since)
-      @identity.supporter_since = nil
+    if params[:identity][:divine_supporter] && params[:identity][:divine_supporter].to_i == 1 && @identity.divine_supporter_since.nil?
+      params[:identity][:divine_supporter_since] = DateTime.now
+    elsif !params[:identity][:divine_supporter].nil? && params[:identity][:divine_supporter].to_i == 0 && Identity.accessible_attributes(role).include?(:divine_supporter_since)
+      @identity.divine_supporter_since = nil
     end
 
     # assign everything, but handle email specifically
@@ -330,7 +330,7 @@ class IdentitiesController < ApplicationController
       # staff & admin may change every email, owner and game only generic emails (set email once and change never again)
       raise ForbiddenError.new('Write access to email forbidden.')  if !staff? && !((role == :game || role == :owner) && @identity.generic_email?)
       
-      identity = Identity.find(:first, :conditions => ["lower(email) = lower(?) AND (deleted IS NULL OR NOT deleted)", params[:identity][:email]])  
+      identity = Identity.where("lower(email) = lower(?) AND (deleted IS NULL OR NOT deleted)", params[:identity][:email]).first
       raise ConflictError.new('Email already taken.')      if !identity.nil? && identity != @identity
       
       @identity.email = params[:identity][:email]

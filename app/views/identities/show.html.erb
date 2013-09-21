@@ -11,7 +11,7 @@
         <%="Lived for #{ time_span_in_natural_language @options[:lifetime]}." if !@options[:lifetime].nil? && @options[:lifetime] >= 1.0 %><br/>
         <%="Insider since #{time_ago_in_words @attributes[:insider_since]}" if @attributes[:insider_since] %><br />
         <%="Platinum Lifetime since #{time_ago_in_words @attributes[:platinum_lifetime_since]}" if @attributes[:platinum_lifetime_since] %><br />
-        <%="Supporter since #{time_ago_in_words @attributes[:supporter_since]}" if @attributes[:supporter_since] %><br />
+        <%="Divine Supporter since #{time_ago_in_words @attributes[:divine_supporter_since]}" if @attributes[:divine_supporter_since] %><br />
         <%="Custon Icon Set: #{@attributes[:image_set_id]}" if @attributes[:image_set_id] %><br />
         <%="Password Token: #{@attributes[:password_token]}" if @attributes[:password_token] %><br />
         <%="GameCenter ID: #{@attributes[:gc_player_id]}" if @attributes[:gc_player_id] %><br />
