@@ -17,6 +17,7 @@ class InstallTracking::Device < ActiveRecord::Base
 
   scope     :descending, order('created_at DESC')
   
+  
   def self.find_by_hardware_string_os_and_device_token(hw_string, os, token)
     devices = if token.blank?
       self.no_device_token.hardware(hw_string).operating_system(os)
@@ -94,6 +95,71 @@ class InstallTracking::Device < ActiveRecord::Base
     end
     
     last_user
+  end
+
+
+  def self.find_main_user_on_device_with_corresponding_device_information(device_information)
+    device_information = device_information || {}
+  
+    device_token     = device_information[:device_token]
+    old_token        = device_information[:old_token]
+    vendor_token     = device_information[:vendor_token]
+    advertiser_token = device_information[:advertiser_token]
+    hardware_token   = device_information[:hardware_token]
+    
+    main_user = nil
+    
+    unless device_token.nil?
+      InstallTracking::Device.device_token(device_token).descending.each do |device|
+        duser = device.device_users.top_user.first
+        if !duser.nil? && (main_user.nil? || main_user.auth_count < duser.auth_count)
+          main_user = duser
+        end
+      end
+    end
+    
+    unless vendor_token.nil? || vendor_token.blank?
+      InstallTracking::Device.vendor_token(vendor_token).descending.each do |device|
+        duser = device.device_users.top_user.first
+        if !duser.nil? && (main_user.nil? || main_user.auth_count < duser.auth_count)
+          main_user = duser
+        end
+      end
+    end
+    
+    unless advertiser_token.nil? || advertiser_token.blank?
+      InstallTracking::Device.advertiser_token(advertiser_token).descending.each do |device|
+        duser = device.device_users.top_user.first
+        if !duser.nil? && (main_user.nil? || main_user.auth_count < duser.auth_count)
+          main_user = duser
+        end
+      end
+    end
+    
+    # only use old methods in case we haven't found a suitable user, yet.
+    if !main_user.nil? && main_user.auth_count > 10
+      return main_user
+    end
+    
+    unless hardware_token.nil?  || hardware_token.blank?
+      InstallTracking::Device.hardware_token(hardware_token).descending.each do |device|
+        duser = device.device_users.top_user.first
+        if !duser.nil? && (main_user.nil? || main_user.auth_count < duser.auth_count)
+          main_user = duser
+        end
+      end
+    end
+    
+    unless old_token.nil? || old_token.blank?
+      InstallTracking::Device.device_token(old_token).descending.each do |device|
+        duser = device.device_users.top_user.first
+        if !duser.nil? && (main_user.nil? || main_user.auth_count < duser.auth_count)
+          main_user = duser
+        end
+      end
+    end
+
+    return main_user.nil? ? nil : main_user.identity;    
   end
   
   

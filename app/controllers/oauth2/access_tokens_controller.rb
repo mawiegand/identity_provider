@@ -123,7 +123,8 @@ module Oauth2
         # lookup with device token
         di = params[:device_information] || {}
                 
-        ident = InstallTracking::Device.find_last_user_on_device_with_corresponding_device_information(di) 
+        # ident = InstallTracking::Device.find_last_user_on_device_with_corresponding_device_information(di) 
+        ident = InstallTracking::Device.find_main_user_on_device_with_corresponding_device_information(di) 
                 
         if ident && !ident.portable?
           ident.password              = params[:password]
@@ -132,7 +133,6 @@ module Oauth2
           ident.save
         end
         
-        ident.portable? ? nil : ident 
       elsif !(params[:gc_player_id]).blank?
         Identity.find_by_gc_player_id(params[:gc_player_id])                      # no authentication for game-center....
       else
