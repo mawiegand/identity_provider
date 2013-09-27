@@ -7,6 +7,12 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'envi
 
 puts "Start updating stats"
 
+puts "Updating Money Transactions"
+
+CreditShop::BytroShop.update_money_transactions
+
+puts "Updating Churn"
+
 Identity.all.each do |identity|
   latest_sign_in = identity.auth_successes.latest.first
   
