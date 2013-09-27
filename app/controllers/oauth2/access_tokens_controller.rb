@@ -133,6 +133,7 @@ module Oauth2
           ident.save
         end
         
+        ident
       elsif !(params[:gc_player_id]).blank?
         Identity.find_by_gc_player_id(params[:gc_player_id])                      # no authentication for game-center....
       else
