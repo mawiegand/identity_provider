@@ -4,6 +4,7 @@
 #
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+require 'credit_shop'
 
 puts "Start updating stats"
 
