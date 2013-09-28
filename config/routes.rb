@@ -70,7 +70,8 @@ IdentityProvider::Application.routes.draw do
       end
       
       namespace :oauth2 do
-        match :access_token, :to => 'access_tokens#create'
+        match :access_token,    :to => 'access_tokens#create'
+        match :fb_access_token, :to => 'fb_access_tokens#create'
         match :redirect_test_start, :to => 'access_tokens#redirect_test_start'
         match :redirect_test_end,   :to => 'access_tokens#redirect_test_end'
         resources :access_tokens,   :only => [ :index, :show, :delete ] # routes for administering issued access tokens
