@@ -101,9 +101,22 @@ module Oauth2
       # c) portable users are authenticated by sending username or email AND password
       
       identity = if !(params[:fb_player_id]).blank?
-        Identity.find_by_fb_player_id(params[:fb_player_id])                      # no authentication for game-center....
+        ident = Identity.find_by_fb_player_id(params[:fb_player_id])                      # no authentication for game-center....
+     
+        if ident.nil?  # signup player
+          agent       = request.env["HTTP_USER_AGENT"]
+          referer     = request.env["HTTP_X_ALT_REFERER"]
+          request_url = request.env["HTTP_X_ALT_REQUEST"]
+
+          logger.debug "Trying to signup facebook user with user agent #{agent}, referer #{referer} and request url #{request_url}."
+
+          LogEntry.create_signup_attempt(params, current_identity, request.remote_ip, agent, referer, request_url)
+          Identity.create_with_fb_player_id(params[:fb_player_id])
+        end
+  
+        ident
       else
-        nil # sign up!
+        nil
       end
       
       if !identity
