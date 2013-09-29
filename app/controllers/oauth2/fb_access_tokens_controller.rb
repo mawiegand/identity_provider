@@ -111,7 +111,7 @@ module Oauth2
           logger.debug "Trying to signup facebook user with user agent #{agent}, referer #{referer} and request url #{request_url}."
 
           LogEntry.create_signup_attempt(params, current_identity, request.remote_ip, agent, referer, request_url)
-          Identity.create_with_fb_player_id_and_client(params[:fb_player_id], client)
+          ident = Identity.create_with_fb_player_id_and_client(params[:fb_player_id], client)
         end
   
         ident
