@@ -236,6 +236,8 @@ class Identity < ActiveRecord::Base
       # try to signup the identity for the cient's scopes
       client.signup_existing_identity(identity, params[:invitation], params[:referer], params[:request_url])
     end
+    
+    identity
   end
 
 
