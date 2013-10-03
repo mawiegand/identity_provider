@@ -36,6 +36,7 @@ GEM
     activesupport (3.1.10)
       multi_json (>= 1.0, < 1.3)
     ansi (1.4.1)
+    apns (1.1.0)
     arel (2.2.3)
     builder (3.0.4)
     capistrano (2.14.2)
@@ -150,6 +151,7 @@ PLATFORMS
 
 DEPENDENCIES
   annotate!
+  apns
   capistrano (~> 2.14.0)
   coffee-rails (~> 3.1.1)
   faker

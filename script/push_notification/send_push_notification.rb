@@ -13,7 +13,7 @@ APNS.pem  = './script/push_notification/apns-prod.pem'
 
 APNS.port = 2195
 
-device_token = 'c6e55543ffc00c85cf235e481b7b78e074c3a1d6c2d5a5f5b743cac9ecfbf5c1'
+device_token = 'b2cb5b615220a526c776b873a511b27d25317d982c32ff6bb07fa4da82b2299b'
 text = 'Runde 4 soeben gestartet: Sei jetzt von Anfang an dabei!'
 
 APNS.send_notification(device_token, text)
