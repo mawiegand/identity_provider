@@ -19,6 +19,9 @@ class Stats::OverviewController < ApplicationController
     
     @retention    = [ 1.0 ]
     
+    @total_net_earnings  = Stats::MoneyTransaction.total_net_earnings
+    @total_chargebacks   = Stats::MoneyTransaction.total_chargebacks
+    
     for i in 1..30
       living = Identity.where(['age_days >= ?', i]).count
       @retention << (living/total_users)

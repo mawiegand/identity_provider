@@ -8,44 +8,25 @@ module Oauth2
   # This controller implements an access token endpoint according to the specifications
   # of OAuth 2.0 as well as a basic administration interface, to list, inspect and
   # revoke individual grants (basically to revoke refresh tokens). 
-  class AccessTokensController < ApplicationController
+  class FbAccessTokensController < ApplicationController
     skip_before_filter :verify_authenticity_token, :only => [ :create, :redirect_test_start, :redirect_test_end ] # this prevents setting a session key on a post to the access token endpoint
-  
-    before_filter :authenticate,    :except => [ :create, :redirect_test_start, :redirect_test_end  ]
-    before_filter :authorize_staff, :except => [ :create, :redirect_test_start, :redirect_test_end   ]
-    
+      
     @@default_scope    = IDENTITY_PROVIDER_CONFIG['default_scope']    || ['5dentity']
     @@token_expiration = IDENTITY_PROVIDER_CONFIG['token_expiration'] || 3600
       
-    # Implementes the POST method endpoint for obtaining an access token.
-    # Presently it only implements the 'resource owner password credentials' flow.
-    # See the OAuth 2.0 draft specification for further details. 
-    #
-    # The endpoint can be tested easily using curl, e.g.:
-    #  curl -v --data "client_id=XYZ-v0.1&grant_type=password&scope=5dentity%20wackadoo&username=Egbert&password=sonnen" localhost:3000/oauth2/access_token
-    # to get an access point for identity Egbert on protected resources in scopes
-    # 5dentity and wackadoo. The +client_id+ must be a client identifier of a 
-    # known client (has been registered with the identity provider) and may
-    # have a version-string for debugging purposes attached, using '-' to 
-    # separate it.
+    # Implementes the POST method endpoint for obtaining an access token from our facebook app.
     def create
                       
-      logger.debug('Request for access-token with params: ' + params.inspect)
+      logger.debug('Request for fb-access-token with params: ' + params.inspect)
       logger.debug(IDENTITY_PROVIDER_CONFIG.inspect)      
             
       # check method; only post allowed
-      if !request.post? && !IDENTITY_PROVIDER_CONFIG['allow_jsonp']
+      if !request.post?
         render_endpoint_error params[:client_id], :invalid_request, "This endpoint only supports POST. " +
           "Your request used HTTP #{ request.method }.";
         return 
       end
-      
-      if (!request.post? && params[:callback].blank?)
-        render_endpoint_error params[:client_id], :invalid_request, "This endpoint only supports JSONP via GET. " +
-          "Your request used HTTP #{ request.method } but did not send a callback.";
-        return 
-      end
-      
+            
       # check encoding for post requests (don't care for JSONP via GET)
       if (request.post? && request.content_type() != "application/x-www-form-urlencoded")
         render_endpoint_error params[:client_id], :invalid_request, "The Content-Type of the message must be " +
@@ -58,9 +39,9 @@ module Oauth2
       if !params[:grant_type] 
         render_endpoint_error params[:client_id], :invalid_request, "Your request is missing the grant_type.";
         return 
-      elsif (params[:grant_type].downcase != 'password') 
+      elsif (params[:grant_type].downcase != 'fb-player-id') 
         render_endpoint_error params[:client_id], :unsupported_grant_type, "This endpoint only supports the following "+
-          "grant types: password. Please use one of those.";
+          "grant types: fb-player-id. Please use one of those.";
         return 
       end
             
@@ -108,8 +89,8 @@ module Oauth2
       end
       
       # check username and password
-      if (params[:username].blank? || params[:password].blank?) && params[:gc_player_id].blank? && params[:restore_with_device_token].blank?
-        render_endpoint_error params[:client_id], :invalid_request, "The request is missing the username and / or password."
+      if params[:fb_player_id].blank?
+        render_endpoint_error params[:client_id], :invalid_request, "The request is missing the fb_player_id."
         return 
       end
       
@@ -119,25 +100,23 @@ module Oauth2
       # b) game-center connected users may be authenticated just by sending the game center id  (we trust the installed app)
       # c) portable users are authenticated by sending username or email AND password
       
-      identity = if !(params[:restore_with_device_token]).blank?
-        # lookup with device token
-        di = params[:device_information] || {}
-                
-        # ident = InstallTracking::Device.find_last_user_on_device_with_corresponding_device_information(di) 
-        ident = InstallTracking::Device.find_main_user_on_device_with_corresponding_device_information(di) 
-                
-        if ident && !ident.portable?
-          ident.password              = params[:password]
-          ident.password_confirmation = params[:password_confirmation]
-          ident.generic_password      = true
-          ident.save
+      identity = if !(params[:fb_player_id]).blank?
+        ident = Identity.find_by_fb_player_id(params[:fb_player_id])                      # no authentication for game-center....
+     
+        if ident.nil?  # signup player
+          agent       = request.env["HTTP_USER_AGENT"]
+          referer     = request.env["HTTP_X_ALT_REFERER"]
+          request_url = request.env["HTTP_X_ALT_REQUEST"]
+
+          logger.debug "Trying to signup facebook user with user agent #{agent}, referer #{referer} and request url #{request_url}."
+
+          LogEntry.create_signup_attempt(params, current_identity, request.remote_ip, agent, referer, request_url)
+          ident = Identity.create_with_fb_player_id_and_client(params[:fb_player_id], client)
         end
-        
+  
         ident
-      elsif !(params[:gc_player_id]).blank?
-        Identity.find_by_gc_player_id(params[:gc_player_id])                      # no authentication for game-center....
       else
-        Identity.authenticate(params[:username], params[:password])
+        nil
       end
       
       if !identity
@@ -212,7 +191,7 @@ module Oauth2
       }
             
       logger.debug "Response Body #{ body.inspect }."
-      LogEntry.create_auth_token_success(params[:username], identity, params[:client_id], request.remote_ip)
+      LogEntry.create_auth_token_success(params[:fb_player_id], identity, params[:client_id], request.remote_ip)
 
       if !params[:device_information].nil?
         InstallTracking.handle_install_usage(identity, client, params[:device_information])
@@ -252,17 +231,7 @@ module Oauth2
       });
     end
     
-    # enables staff and adminitrators to revoke access tokens
-    def destroy
-    end
-    
-    def show
-    end
-  
-    def index
-      return 'Generate a list of all handed out access tokens and provide functionallity to revoke individual or all tokens.'
-    end
-  
+      
     protected
       
       def render_endpoint_error(client_id, error_code, error_description = nil, error_uri = nil)
@@ -273,7 +242,7 @@ module Oauth2
           :error_uri         => error_uri
         }
         
-        LogEntry.create_auth_token_failure(params[:username], current_identity, params[:client_id], error_code, error_description, request.remote_ip)
+        LogEntry.create_auth_token_failure(params[:fb_player_id], current_identity, params[:client_id], error_code, error_description, request.remote_ip)
 
         if (!request.post? && !params[:callback].blank?) # JSONP
           render :status => :bad_request, :json => JSON.pretty_generate(body.delete_if { |k,v| v.blank? }), :callback => params[:callback]
@@ -284,7 +253,7 @@ module Oauth2
         headers['Pragma'] = 'no-cache'
         headers['Connection'] = 'close'
         
-        logger.info("OAuth2 #{ error_code.to_s } error for client #{ client_id } from #{ request.remote_ip }: #{ error_description }")
+        logger.info("FBAuth #{ error_code.to_s } error for client #{ client_id } from #{ request.remote_ip }: #{ error_description }")
         
         # NOTE: add to tests:
         # does include an error attribute with a valid error code

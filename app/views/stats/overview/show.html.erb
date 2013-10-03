@@ -2,6 +2,13 @@
 
 <h1><%= @title %></h1>
 
+<p>
+  <b>Net Earnings:</b> <%= number_to_currency @total_net_earnings, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %>&nbsp;&nbsp;
+  <b>Chargebacks:</b>  <%= number_to_currency @total_chargebacks, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %>&nbsp;&nbsp;
+  <br/>
+  <b>Details:</b> <%= link_to "Transactions", stats_money_transactions_path %>
+</p>
+
 <p><b>Average Age in Days:</b> <%= @average_age %></p>
 <p><b>Churn Rate During Month 1 / 2 / 3:</b> 
   <%= (@churn_month1 * 100.0).round %>% / 

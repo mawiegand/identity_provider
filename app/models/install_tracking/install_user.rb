@@ -36,6 +36,7 @@ class InstallTracking::InstallUser < ActiveRecord::Base
           logger.error "corresponding device user for install_user #{self.id} is missing!"
         else
           device_user.last_use_at = self.last_use_at
+          device_user.auth_count = (device_user.auth_count || 0) +1
           device_user.save
         end
       end

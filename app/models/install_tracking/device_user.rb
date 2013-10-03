@@ -6,4 +6,7 @@ class InstallTracking::DeviceUser < ActiveRecord::Base
   scope :first_use_ascending, order('first_use_at ASC')
   scope :last_use_descending, order('last_use_at DESC')
   
+  scope :most_auths_first,    order('auth_count DESC')
+  scope :top_user,            order('auth_count DESC').limit(1)
+  
 end

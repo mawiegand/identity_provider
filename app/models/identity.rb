@@ -158,6 +158,87 @@ class Identity < ActiveRecord::Base
     
     return identity
   end
+  
+  
+  def self.create_with_fb_player_id_and_client(fb_player_id, client, params = {})
+    raise BadRequestError.new("No valid facebook user id") if fb_player_id.nil?
+    raise BadRequestError.new("No valid client") if client.nil?
+    raise BadRequestError.new("Client's scope not valid")             if not client.scopes.include?('5dentity')
+    raise BadRequestError.new(I18n.translate "error.fbplayerid")        if Identity.find_by_fb_player_id(fb_player_id)
+    
+    i = 0
+        
+    # STEP ONE: create identity
+        
+    saved = false
+    nickname = params[:nickname]
+        
+    begin
+      base_name = if !nickname.blank? && !(nickname =~ /^[^\d\s]+[^\s]*$/i).nil?
+        nickname
+      else
+        "WackyUser"
+      end
+          
+      disambiguated_name = base_name
+          
+      # OPTIMIZE: the following is a very simple algorithm and should be replaced
+      # at some point in time.
+      while !Identity.find(:first, :conditions => [ "lower(nickname) = ?", disambiguated_name.downcase ]).nil?
+        if i == 0 
+          disambiguated_name = "#{ base_name }#{(Identity.count || 0)}"
+        else
+          disambiguated_name = "#{ base_name }#{((Identity.count || 0) + i).to_s}"
+        end
+        i = i+1
+      end
+      
+      password = if !params[:password].blank?
+        params[:password]
+      else 
+        (0...8).map{ ('a'..'z').to_a[rand(26)] }.join
+      end
+      
+      password_confirmation = password
+          
+      email = "generic_fb_#{(0...8).map{ ('a'..'z').to_a[rand(26)] }.join}_#{Identity.maximum(:id).to_i + 1}@5dlab.com"
+          
+      identity = Identity.new
+      identity.nickname = disambiguated_name
+      identity.email = email
+      identity.locale = I18n.locale
+      identity.referer = params[:referer].blank? ? "facebook_canvas" : params[:referer][0..250]
+      identity.password = password
+      identity.password_confirmation = password_confirmation
+      identity.generic_nickname = params[:nickname].blank?
+      identity.generic_email    = params[:email].blank?
+      identity.generic_password = params[:password].blank? 
+      identity.sign_up_with_client_id = client.id
+
+      if !fb_player_id.nil? 
+        identity.connect_to_facebook(fb_player_id)
+      end
+          
+      if !identity.valid?
+        logger.error "ERROR DURING SIGNUP: identity is invalid #{ identity.nickname }, #{ identity.identifier }, #{ identity.email }, #{ identity.password}==#{ identity.password_confirmation } with params #{ params.inspect }."
+        logger.error "ERROR: validity of nickname #{ Identity.valid_nickname?(identity.nickname) }"
+        raise BadRequestError.new(I18n.translate "error.identityInvalid")
+      end
+                  
+      saved = identity.save          
+    end while !identity.errors.messages[:nickname].nil?    # did save fail due to duplicate nickname? 
+        
+    # STEP TWO: now 'sign up' the identity to the client's scopes (that is, grant the corresponding scopes to the identity)
+        
+    if saved
+      LogEntry.create_signup_success(params, identity, params[:remote_ip])
+          
+      # try to signup the identity for the cient's scopes
+      client.signup_existing_identity(identity, params[:invitation], params[:referer], params[:request_url])
+    end
+    
+    identity
+  end
 
 
   def gc_rejected?

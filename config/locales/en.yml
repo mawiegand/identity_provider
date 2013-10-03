@@ -25,6 +25,7 @@ en:
   application:
     layout:
       dashboard: Dashboard
+      stats: Stats
       profile: Profile
       signin: Sign In
       signout: Sign Out

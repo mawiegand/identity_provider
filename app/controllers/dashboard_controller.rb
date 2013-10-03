@@ -32,6 +32,12 @@ class DashboardController < ApplicationController
       due_activations:     Identity.where(['activated IS NULL AND created_at < ?', Time.now - 3.days]).count,
     }
     
+    @total_net_earnings  = Stats::MoneyTransaction.total_net_earnings
+    total_users   = Identity.count.to_f
+    num_users_after_month1 = Identity.where(['age_days >= 30']).count
+    @retention30 = num_users_after_month1 / [total_users, 1].max.to_f
+    
+    
     # TODO: this is a wack-a-doo hack. need to generalize it to all clients in the system
     @wackadoo_client = Client.find_by_identifier('WACKADOOHTML5')
     

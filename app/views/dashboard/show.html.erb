@@ -25,6 +25,14 @@
   <b>On waiting lists:</b> <%= @user_stats[:on_waiting_lists] %><br/>
   <p><b>Latest User</b>: signed up <b><%= time_ago_in_words @latest_identity.created_at %></b> ago<br/>
      <%= link_to @latest_identity.address_informal, @latest_identity %> (<%= @latest_identity.email %>)</p>
+     
+  <p>
+    <b>Net Earnings:</b> <%= number_to_currency @total_net_earnings, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %>&nbsp;&nbsp; 
+     (<%= link_to "Details", stats_money_transactions_path %>)<br/>
+    <b>30-Days Retention:</b> <%= (@retention30 * 100.0).round %>% &nbsp;&nbsp; 
+        (<%= link_to "Details", stats_overview_path %>)
+  </p>
+     
   
   <div class="waiting-list">
     <h1>Waiting Lists</h1>
