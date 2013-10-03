@@ -13,9 +13,16 @@ APNS.pem  = './script/push_notification/apns-prod.pem'
 
 APNS.port = 2195
 
-device_token = 'b2cb5b615220a526c776b873a511b27d25317d982c32ff6bb07fa4da82b2299b'
 text = 'Runde 4 soeben gestartet: Sei jetzt von Anfang an dabei!'
 
-APNS.send_notification(device_token, text)
+Identity.all.each do |identity|
+  push_token = identity.push_tokens.order('updated_at').last
+  unless push_token.nil?
+    parsed_token = push_token.push_notification_token.sub(/</, '').sub(/>/, '').sub(/ /, '').sub(/ /, '').sub(/ /, '').sub(/ /, '').sub(/ /, '').sub(/ /, '').sub(/ /, '')
+    puts "send token to #{identity.nickname} #{identity.email} #{parsed_token}"
+    #APNS.send_notification(parsed_token, text)
+    sleep 1
+  end
+end
 
 puts "Done."
