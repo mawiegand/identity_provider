@@ -70,7 +70,9 @@ class Identity < ActiveRecord::Base
   
   has_many  :install_users,         :class_name => "InstallTracking::InstallUser", :foreign_key => :identity_id,  :inverse_of => :identity
   has_many  :installs,              :through    => :install_users,                                                :inverse_of => :identities
-  
+
+  has_many  :push_tokens,           :class_name => "InstallTracking::PushNotificationToken", :primary_key => :identifier, :foreign_key => :identifier, :inverse_of => :identity
+
   has_many  :sign_ins,              :class_name => "LogEntry",                     :foreign_key => :identity_id,  :conditions => {:event_type => 'signin_success'}, :order => 'created_at DESC'
   has_many  :auth_successes,        :class_name => "LogEntry",                     :foreign_key => :identity_id,  :conditions => "event_type ='signin_success' OR event_type = 'auth_token_success'", :order => 'created_at DESC'
 
