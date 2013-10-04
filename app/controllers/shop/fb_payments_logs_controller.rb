@@ -5,6 +5,8 @@ class Shop::FbPaymentsLogsController < ApplicationController
   before_filter :deny_api,                        :except => [ :create, :index ]
 
   FB_VERIFY_TOKEN  = 'UKUKvzHHAg8gjXynx3hioFX7nC8KLa'
+  FB_APP_ID        = '127037377498922'
+  FB_APP_SECRET    = 'f88034e6df205b5aa3854e0b92638754'
 
   # GET /shop/fb_payments_logs
   # GET /shop/fb_payments_logs.json
@@ -55,26 +57,37 @@ class Shop::FbPaymentsLogsController < ApplicationController
   def create
     @shop_fb_payments_log = Shop::FbPaymentsLog.new
 
-    identity = Identity.find_by_fb_player_id(params['user'] && params['user']['id'])
-
     logger.debug "params: #{params.inspect}"
+    payment_id = params['entry'] && params['entry'][0] && params['entry'][0]['id']
 
-    @shop_fb_payments_log.identity_id = identity.id unless identity.nil?
-    @shop_fb_payments_log.payment_id = params['id']
-    @shop_fb_payments_log.username = params['user'] && params['user']['name']
-    @shop_fb_payments_log.fb_user_id = params['user'] && params['user']['id']
-    @shop_fb_payments_log.action_type = params['actions'] && params['actions']['type']
-    @shop_fb_payments_log.status = params['actions'] && params['actions']['status']
-    @shop_fb_payments_log.currency = params['actions'] && params['actions']['currency']
-    @shop_fb_payments_log.amount = params['actions'] && params['actions']['amount']
-    @shop_fb_payments_log.time_created = params['actions'] && params['actions']['time_created']
-    @shop_fb_payments_log.time_updated = params['actions'] && params['actions']['time_updated']
-    @shop_fb_payments_log.product_url = params['items'] && params['items'][0] && params['items'][0]['product']
-    @shop_fb_payments_log.quantity = params['items'] && params['items'][0] && params['items'][0]['quantity']
-    @shop_fb_payments_log.country = params['country']
-    @shop_fb_payments_log.sandbox = params['test']
-    @shop_fb_payments_log.fraud_status = params['fraud_status']
-    @shop_fb_payments_log.payout_foreign_exchange_rate = params['payout_foreign_exchange_rate']
+    if !payment_id.nil?
+      response = HTTParty.get("https://graph.facebook.com/#{payment_id}", :query => {access_token: "#{FB_APP_ID}|#{FB_APP_SECRET}"})
+
+      if response.code == 200
+
+        payment = response.parsed_response
+        fb_user_id = payment['user'] && payment['user']['id']
+        identity = Identity.find_by_fb_player_id(fb_user_id)
+
+        @shop_fb_payments_log.identity_id = identity.id unless identity.nil?
+        @shop_fb_payments_log.payment_id = payment_id
+        @shop_fb_payments_log.username = payment['user'] && payment['user']['name']
+        @shop_fb_payments_log.fb_user_id = fb_user_id
+        @shop_fb_payments_log.action_type = payment['actions'] && payment['actions']['type']
+        @shop_fb_payments_log.status = payment['actions'] && payment['actions']['status']
+        @shop_fb_payments_log.currency = payment['actions'] && payment['actions']['currency']
+        @shop_fb_payments_log.amount = payment['actions'] && payment['actions']['amount']
+        @shop_fb_payments_log.time_created = payment['actions'] && payment['actions']['time_created']
+        @shop_fb_payments_log.time_updated = payment['actions'] && payment['actions']['time_updated']
+        @shop_fb_payments_log.product_url = payment['items'] && payment['items'][0] && payment['items'][0]['product']
+        @shop_fb_payments_log.quantity = payment['items'] && payment['items'][0] && payment['items'][0]['quantity']
+        @shop_fb_payments_log.country = payment['country']
+        @shop_fb_payments_log.sandbox = payment['test']
+        @shop_fb_payments_log.fraud_status = payment['fraud_status']
+        @shop_fb_payments_log.payout_foreign_exchange_rate = payment['payout_foreign_exchange_rate']
+      end
+    end
+
 
     respond_to do |format|
       if @shop_fb_payments_log.save
