@@ -39,7 +39,7 @@ class Shop::CallbackController < ApplicationController
               data = {
                 userID:      identity.identifier,
                 method:      'bytro',
-                offerID:     '248',
+                offerID:     '249',
                 scaleFactor: FB_CREDIT_AMOUNT.to_s,
                 tstamp:      Time.now.to_i.to_s,
                 comment:     '1',
