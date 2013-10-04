@@ -65,7 +65,7 @@ IdentityProvider::Application.routes.draw do
       end
 
       namespace :shop do
-        resources :fb_payments_logs
+        resources :fb_payments_logs, :defaults => { :format => 'text' }
       end
 
       namespace :stats do
