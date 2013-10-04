@@ -57,6 +57,8 @@ class Shop::FbPaymentsLogsController < ApplicationController
 
     identity = Identity.find_by_fb_player_id(params['user'] && params['user']['id'])
 
+    logger.debug "params: #{params.inspect}"
+
     @shop_fb_payments_log.identity_id = identity.id unless identity.nil?
     @shop_fb_payments_log.payment_id = params['id']
     @shop_fb_payments_log.username = params['user'] && params['user']['name']
