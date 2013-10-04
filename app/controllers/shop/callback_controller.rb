@@ -13,7 +13,8 @@ class Shop::CallbackController < ApplicationController
 
   def fb_callback
     if params['hub.verify_token'] == FB_VERIFY_TOKEN
-
+      render text: params['hub.challenge']
+    else
       logger.debug "#{params}"
 
       payment_id = params['entry'] && params['entry'][0] && params['entry'][0]['id']
@@ -59,7 +60,7 @@ class Shop::CallbackController < ApplicationController
                 api_response = http_response.parsed_response
                 api_response = JSON.parse(api_response) if api_response.is_a?(String)
                 if api_response['resultCode'] === 0
-                  render text: params['hub.challenge']
+                  render json: :ok
                 end
               end
             end
@@ -67,9 +68,7 @@ class Shop::CallbackController < ApplicationController
         end
       end
 
-      render text: params['hub.challenge']
-    else
-      render text: 'error'
+      render json: :ok
     end
   end
 
