@@ -57,15 +57,18 @@ class Shop::FbPaymentsLogsController < ApplicationController
   def create
     @shop_fb_payments_log = Shop::FbPaymentsLog.new
 
-    logger.debug "params: #{params.inspect}"
+    logger.debug "---> params: #{params.inspect}"
     payment_id = params['entry'] && params['entry'][0] && params['entry'][0]['id']
 
     if !payment_id.nil?
       response = HTTParty.get("https://graph.facebook.com/#{payment_id}", :query => {access_token: "#{FB_APP_ID}|#{FB_APP_SECRET}"})
 
+      logger.debug "---> response: #{response.inspect}"
+
       if response.code == 200
 
         payment = response.parsed_response
+        logger.debug "---> payment: #{payment.inspect}"
         fb_user_id = payment['user'] && payment['user']['id']
         identity = Identity.find_by_fb_player_id(fb_user_id)
 
