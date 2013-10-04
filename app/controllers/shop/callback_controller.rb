@@ -1,4 +1,5 @@
 require 'httparty'
+require 'credit_shop'
 
 class Shop::CallbackController < ApplicationController
 
@@ -51,10 +52,10 @@ class Shop::CallbackController < ApplicationController
                 eID:    'api',
                 key:    BYTRO_KEY,
                 action: 'processPayment',
-                data:   encoded_data(data),
+                data:   CreditShop::BytroShop.encoded_data(data),
               }
 
-              query = add_hash(query)
+              query = CreditShop::BytroShop.add_hash(query)
               http_response = HTTParty.post(BYTRO_URL_BASE, :query => query)
 
               if http_response.code === 200
@@ -97,22 +98,5 @@ class Shop::CallbackController < ApplicationController
       render json: {:status => 'unknown offerID'}, status: :created
     end
   end
-
-  protected
-
-    def self.encoded_data(data)
-      url_encoded_data = {}
-      data.each do |k, v|
-        url_encoded_data[k] = CGI.escape(v)
-      end
-      base64_encoded_data = Base64.encode64(url_encoded_data.to_param)
-      base64_encoded_data.gsub(/[\n\r ]/,'')
-    end
-
-    def self.add_hash(query)
-      hash_base = query[:key] + query[:action] + CGI.escape(query[:data]) + BYTRO_SHARED_SECRET
-      query[:hash] = Digest::SHA1.hexdigest(hash_base)
-      query
-    end
 
 end
