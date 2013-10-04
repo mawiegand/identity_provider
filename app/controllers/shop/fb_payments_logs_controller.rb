@@ -19,7 +19,6 @@ class Shop::FbPaymentsLogsController < ApplicationController
 
     respond_to do |format|
       format.html { render layout: 'raw', text: return_value }
-      format.text { render text: return_value }
       format.json { render json: @shop_fb_payments_logs }
     end
   end
