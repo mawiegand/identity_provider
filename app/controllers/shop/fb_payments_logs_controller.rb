@@ -1,7 +1,7 @@
 class Shop::FbPaymentsLogsController < ApplicationController
 
-  before_filter :authenticate,                    :except => [ :create ]
-  before_filter :authorize_staff,                 :except => [ :create ]
+  before_filter :authenticate,                    :except => [ :create, :index ]
+  before_filter :authorize_staff,                 :except => [ :create, :index ]
   before_filter :deny_api,                        :except => [ :create ]
 
   FB_VERIFY_TOKEN  = 'UKUKvzHHAg8gjXynx3hioFX7nC8KLa'
