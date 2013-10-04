@@ -35,6 +35,8 @@ end
 gem 'faker'
 gem 'jquery-rails'
 
+gem 'apns'
+
 # gem 'actionmailer-with-request', '~> 0.4.0'
 
 # To use ActiveModel has_secure_password
