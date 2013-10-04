@@ -14,52 +14,57 @@ class Shop::CallbackController < ApplicationController
   def fb_callback
     if params['hub.verify_token'] == FB_VERIFY_TOKEN
 
-      payment_id = params['entry'][0]['id']
-      response = HTTParty.get("https://graph.facebook.com/#{payment_id}", :query => {access_token: "#{FB_APP_ID}|#{FB_APP_SECRET}"})
+      payment_id = params['entry'] && params['entry'][0] && params['entry'][0]['id']
 
-      if response.code == 200
+      if !payment_id.nil?
+        response = HTTParty.get("https://graph.facebook.com/#{payment_id}", :query => {access_token: "#{FB_APP_ID}|#{FB_APP_SECRET}"})
 
-        action = response.parsed_response['actions'][0]
+        if response.code == 200
 
-        if action['status'] == 'completed'
+          action = response.parsed_response['actions'][0]
 
-          fb_user_id = parsed_response['user']['id']
-          identity = Identity.find_by_fb_player_id(fb_user_id)
+          if action['status'] == 'completed'
 
-          unless identity.nil?
-            data = {
-              userID:      identity.identifier,
-              method:      'bytro',
-              offerID:     '248',
-              scaleFactor: FB_CREDIT_AMOUNT.to_s,
-              tstamp:      Time.now.to_i.to_s,
-              comment:     '1',
-              # comment: Base64.encode64(virtual_bank_transaction[:transaction_id].to_s).gsub(/[\n\r ]/,'')  # Hack!
-            }
+            fb_user_id = parsed_response['user']['id']
+            identity = Identity.find_by_fb_player_id(fb_user_id)
 
-            query = {
-              eID:    'api',
-              key:    BYTRO_KEY,
-              action: 'processPayment',
-              data:   encoded_data(data),
-            }
+            unless identity.nil?
+              data = {
+                userID:      identity.identifier,
+                method:      'bytro',
+                offerID:     '248',
+                scaleFactor: FB_CREDIT_AMOUNT.to_s,
+                tstamp:      Time.now.to_i.to_s,
+                comment:     '1',
+                # comment: Base64.encode64(virtual_bank_transaction[:transaction_id].to_s).gsub(/[\n\r ]/,'')  # Hack!
+              }
 
-            query = add_hash(query)
-            http_response = HTTParty.post(BYTRO_URL_BASE, :query => query)
+              query = {
+                eID:    'api',
+                key:    BYTRO_KEY,
+                action: 'processPayment',
+                data:   encoded_data(data),
+              }
 
-            if http_response.code === 200
-              api_response = http_response.parsed_response
-              api_response = JSON.parse(api_response) if api_response.is_a?(String)
-              if api_response['resultCode'] === 0
-                render text: params['hub.challenge']
+              query = add_hash(query)
+              http_response = HTTParty.post(BYTRO_URL_BASE, :query => query)
+
+              if http_response.code === 200
+                api_response = http_response.parsed_response
+                api_response = JSON.parse(api_response) if api_response.is_a?(String)
+                if api_response['resultCode'] === 0
+                  render text: params['hub.challenge']
+                end
               end
             end
           end
         end
       end
-    end
 
-    render text: 'error'
+      render text: params['hub.challenge']
+    else
+      render text: 'error'
+    end
   end
 
 
