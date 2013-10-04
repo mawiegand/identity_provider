@@ -1,6 +1,8 @@
 IdentityProvider::Application.routes.draw do
 
 
+  namespace :shop do resources :fb_payments_logs end
+
   # all resources and paths are scoped in an optional path_prefix determining the
   # locale to use. Presently only available: en, de
 

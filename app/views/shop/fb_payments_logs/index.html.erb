@@ -1,0 +1,53 @@
+<h1>Listing shop_fb_payments_logs</h1>
+
+<table>
+  <tr>
+    <th>Identity</th>
+    <th>Payment</th>
+    <th>Username</th>
+    <th>Fb user</th>
+    <th>Action type</th>
+    <th>Status</th>
+    <th>Currency</th>
+    <th>Amount</th>
+    <th>Time created</th>
+    <th>Time updated</th>
+    <th>Product url</th>
+    <th>Quantity</th>
+    <th>Country</th>
+    <th>Sandbox</th>
+    <th>Fraud status</th>
+    <th>Payout foreign exchange rate</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @shop_fb_payments_logs.each do |shop_fb_payments_log| %>
+  <tr>
+    <td><%= shop_fb_payments_log.identity_id %></td>
+    <td><%= shop_fb_payments_log.payment_id %></td>
+    <td><%= shop_fb_payments_log.username %></td>
+    <td><%= shop_fb_payments_log.fb_user_id %></td>
+    <td><%= shop_fb_payments_log.action_type %></td>
+    <td><%= shop_fb_payments_log.status %></td>
+    <td><%= shop_fb_payments_log.currency %></td>
+    <td><%= shop_fb_payments_log.amount %></td>
+    <td><%= shop_fb_payments_log.time_created %></td>
+    <td><%= shop_fb_payments_log.time_updated %></td>
+    <td><%= shop_fb_payments_log.product_url %></td>
+    <td><%= shop_fb_payments_log.quantity %></td>
+    <td><%= shop_fb_payments_log.country %></td>
+    <td><%= shop_fb_payments_log.sandbox %></td>
+    <td><%= shop_fb_payments_log.fraud_status %></td>
+    <td><%= shop_fb_payments_log.payout_foreign_exchange_rate %></td>
+    <td><%= link_to 'Show', shop_fb_payments_log %></td>
+    <td><%= link_to 'Edit', edit_shop_fb_payments_log_path(shop_fb_payments_log) %></td>
+    <td><%= link_to 'Destroy', shop_fb_payments_log, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Fb payments log', new_shop_fb_payments_log_path %>

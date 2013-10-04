@@ -1,0 +1,81 @@
+<%= form_for(@shop_fb_payments_log) do |f| %>
+  <% if @shop_fb_payments_log.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@shop_fb_payments_log.errors.count, "error") %> prohibited this shop_fb_payments_log from being saved:</h2>
+
+      <ul>
+      <% @shop_fb_payments_log.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :identity_id %><br />
+    <%= f.number_field :identity_id %>
+  </div>
+  <div class="field">
+    <%= f.label :payment_id %><br />
+    <%= f.number_field :payment_id %>
+  </div>
+  <div class="field">
+    <%= f.label :username %><br />
+    <%= f.text_field :username %>
+  </div>
+  <div class="field">
+    <%= f.label :fb_user_id %><br />
+    <%= f.number_field :fb_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :action_type %><br />
+    <%= f.text_field :action_type %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br />
+    <%= f.text_field :status %>
+  </div>
+  <div class="field">
+    <%= f.label :currency %><br />
+    <%= f.text_field :currency %>
+  </div>
+  <div class="field">
+    <%= f.label :amount %><br />
+    <%= f.text_field :amount %>
+  </div>
+  <div class="field">
+    <%= f.label :time_created %><br />
+    <%= f.text_field :time_created %>
+  </div>
+  <div class="field">
+    <%= f.label :time_updated %><br />
+    <%= f.text_field :time_updated %>
+  </div>
+  <div class="field">
+    <%= f.label :product_url %><br />
+    <%= f.text_field :product_url %>
+  </div>
+  <div class="field">
+    <%= f.label :quantity %><br />
+    <%= f.number_field :quantity %>
+  </div>
+  <div class="field">
+    <%= f.label :country %><br />
+    <%= f.text_field :country %>
+  </div>
+  <div class="field">
+    <%= f.label :sandbox %><br />
+    <%= f.number_field :sandbox %>
+  </div>
+  <div class="field">
+    <%= f.label :fraud_status %><br />
+    <%= f.text_field :fraud_status %>
+  </div>
+  <div class="field">
+    <%= f.label :payout_foreign_exchange_rate %><br />
+    <%= f.text_field :payout_foreign_exchange_rate %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
