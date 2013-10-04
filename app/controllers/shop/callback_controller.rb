@@ -2,6 +2,67 @@ require 'httparty'
 
 class Shop::CallbackController < ApplicationController
 
+  FB_VERIFY_TOKEN  = 'UKUKvzHHAg8gjXynx3hioFX7nC8KLa'
+  FB_APP_ID        = '127037377498922'
+  FB_APP_SECRET    = 'f88034e6df205b5aa3854e0b92638754'
+  FB_CREDIT_AMOUNT = 30
+
+  BYTRO_URL_BASE       = 'https://secure.bytro.com/index.php'
+  BYTRO_SHARED_SECRET  = 'jfwjhgflhg254tp9824ghqlkgjh25pg8hgljkgh5896ogihdgjh24uihg9p8zgagjh2p895ghfsjgh312g09hjdfghj'
+  BYTRO_KEY            = 'wackadoo'
+
+  def fb_callback
+    if params['hub.verify_token'] == FB_VERIFY_TOKEN
+
+      payment_id = params['entry'][0]['id']
+      response = HTTParty.get("https://graph.facebook.com/#{payment_id}", :query => {access_token: "#{FB_APP_ID}|#{FB_APP_SECRET}"})
+
+      if response.code == 200
+
+        action = response.parsed_response['actions'][0]
+
+        if action['status'] == 'completed'
+
+          fb_user_id = parsed_response['user']['id']
+          identity = Identity.find_by_fb_player_id(fb_user_id)
+
+          unless identity.nil?
+            data = {
+              userID:      identity.identifier,
+              method:      'bytro',
+              offerID:     '248',
+              scaleFactor: FB_CREDIT_AMOUNT.to_s,
+              tstamp:      Time.now.to_i.to_s,
+              comment:     '1',
+              # comment: Base64.encode64(virtual_bank_transaction[:transaction_id].to_s).gsub(/[\n\r ]/,'')  # Hack!
+            }
+
+            query = {
+              eID:    'api',
+              key:    BYTRO_KEY,
+              action: 'processPayment',
+              data:   encoded_data(data),
+            }
+
+            query = add_hash(query)
+            http_response = HTTParty.post(BYTRO_URL_BASE, :query => query)
+
+            if http_response.code === 200
+              api_response = http_response.parsed_response
+              api_response = JSON.parse(api_response) if api_response.is_a?(String)
+              if api_response['resultCode'] === 0
+                render text: params['hub.challenge']
+              end
+            end
+          end
+        end
+      end
+    end
+
+    render text: 'error'
+  end
+
+
   def redirect
 
     logger.debug "POST PARAMS " + request.request_parameters.inspect
@@ -25,4 +86,22 @@ class Shop::CallbackController < ApplicationController
       render json: {:status => 'unknown offerID'}, status: :created
     end
   end
+
+  protected
+
+    def self.encoded_data(data)
+      url_encoded_data = {}
+      data.each do |k, v|
+        url_encoded_data[k] = CGI.escape(v)
+      end
+      base64_encoded_data = Base64.encode64(url_encoded_data.to_param)
+      base64_encoded_data.gsub(/[\n\r ]/,'')
+    end
+
+    def self.add_hash(query)
+      hash_base = query[:key] + query[:action] + CGI.escape(query[:data]) + BYTRO_SHARED_SECRET
+      query[:hash] = Digest::SHA1.hexdigest(hash_base)
+      query
+    end
+
 end
