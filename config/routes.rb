@@ -12,6 +12,7 @@ IdentityProvider::Application.routes.draw do
       
       resources :identities,    :only => [:new, :create, :show, :index, :edit, :destroy, :update] do
         resources :messages 
+        resources :facebook,    :only => [:update]
       end
       
       resources :game_center, :only => [:show, :update]
