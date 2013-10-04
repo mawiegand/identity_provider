@@ -38,7 +38,7 @@ class FacebookController < ApplicationController
     
     respond_to do |format|
       format.json {
-        render :status => :ok, :json => {}, :location => current_identity  
+        render :status => :ok, :json => {}, :location => identity  
       }
       format.html {
         redirect_to current_identity

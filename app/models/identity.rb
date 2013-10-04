@@ -85,7 +85,7 @@ class Identity < ActiveRecord::Base
   attr_accessible *accessible_attributes(:owner), :email, :gc_player_id, :fb_player_id, :as => :creator # fields accesible during creation
   attr_accessible :nickname, :firstname, :surname, :activated, :deleted, :staff, :insider_since, :platinum_lifetime_since, :divine_supporter_since, :image_set_id, :banned, :ban_reason, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :fb_player_id, :fb_rejected_at, :fb_player_id_connected_at, :as => :staff
   attr_accessible *accessible_attributes(:staff), :email, :admin, :password, :password_confirmation, :as => :admin
-  attr_accessible :nickname, :password, :password_confirmation, :platinum_lifetime_since, :divine_supporter_since, :image_set_id, :as => :game
+  attr_accessible :nickname, :password, :password_confirmation, :platinum_lifetime_since, :divine_supporter_since, :image_set_id, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :fb_player_id, :fb_rejected_at, :fb_player_id_connected_at, :as => :game
 
   attr_readable :identifier, :nickname, :id, :insider_since, :admin, :staff,               :as => :default
   attr_readable *readable_attributes(:default), :created_at,                               :as => :user
