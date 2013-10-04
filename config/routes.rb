@@ -1,8 +1,5 @@
 IdentityProvider::Application.routes.draw do
 
-
-  namespace :shop do resources :fb_payments_logs end
-
   # all resources and paths are scoped in an optional path_prefix determining the
   # locale to use. Presently only available: en, de
 
@@ -66,7 +63,11 @@ IdentityProvider::Application.routes.draw do
         resources :servers
         resources :game_instances 
       end
-      
+
+      namespace :shop do
+        resources :fb_payments_logs
+      end
+
       namespace :stats do
         resource :overview, :controller => :overview
         resources :money_transactions
@@ -89,7 +90,6 @@ IdentityProvider::Application.routes.draw do
       match '/send_password_token', :to => 'identities#send_password_token'
       match '/send_password',       :to => 'identities#send_password'
 
-      match '/shop/fb_callback',    :to => 'shop/callback#fb_callback'
       match '/shop/callback',       :to => 'shop/callback#redirect'
 
     end

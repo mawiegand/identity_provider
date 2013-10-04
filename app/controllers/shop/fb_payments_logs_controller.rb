@@ -14,7 +14,7 @@ class Shop::FbPaymentsLogsController < ApplicationController
     if !params['hub.verify_token'].blank? && params['hub.verify_token'] == FB_VERIFY_TOKEN
       return_value = params['hub.challenge']
     else
-      return_value = "verify_token does't match"
+      return_value = "verify_token doesn't match"
     end
 
     respond_to do |format|
