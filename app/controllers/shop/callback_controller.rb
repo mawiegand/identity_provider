@@ -26,9 +26,10 @@ class Shop::CallbackController < ApplicationController
 
         if response.code == 200
 
-          action = response.parsed_response['actions'][0]
+          parsed_response = response.parsed_response
+          action = parsed_response['actions'][0]
 
-          logger.debug "#{response.parsed_response}"
+          logger.debug "#{parsed_response}"
 
           if action['status'] == 'completed'
 
