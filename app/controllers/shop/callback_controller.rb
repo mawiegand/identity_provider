@@ -13,24 +13,22 @@ class Shop::CallbackController < ApplicationController
   BYTRO_KEY            = 'wackadoo'
 
   def fb_callback
-    if params['hub.verify_token'] == FB_VERIFY_TOKEN
-      render text: params['hub.challenge']
+    if !params['hub.verify_token'].blank?
+      if params['hub.verify_token'] == FB_VERIFY_TOKEN
+        render text: params['hub.challenge']
+      else
+        render text: "verify_token does't match"
+      end
     else
-      logger.debug "#{params}"
-
       payment_id = params['entry'] && params['entry'][0] && params['entry'][0]['id']
 
       if !payment_id.nil?
         response = HTTParty.get("https://graph.facebook.com/#{payment_id}", :query => {access_token: "#{FB_APP_ID}|#{FB_APP_SECRET}"})
 
-        logger.debug "#{response}"
-
         if response.code == 200
 
           parsed_response = response.parsed_response
           action = parsed_response['actions'][0]
-
-          logger.debug "#{parsed_response}"
 
           if action['status'] == 'completed'
 
@@ -63,6 +61,7 @@ class Shop::CallbackController < ApplicationController
                 api_response = JSON.parse(api_response) if api_response.is_a?(String)
                 if api_response['resultCode'] === 0
                   render json: :ok
+                  return
                 end
               end
             end
