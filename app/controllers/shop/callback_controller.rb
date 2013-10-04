@@ -14,18 +14,24 @@ class Shop::CallbackController < ApplicationController
   def fb_callback
     if params['hub.verify_token'] == FB_VERIFY_TOKEN
 
+      logger.debug "#{params}"
+
       payment_id = params['entry'] && params['entry'][0] && params['entry'][0]['id']
 
       if !payment_id.nil?
         response = HTTParty.get("https://graph.facebook.com/#{payment_id}", :query => {access_token: "#{FB_APP_ID}|#{FB_APP_SECRET}"})
 
+        logger.debug "#{response}"
+
         if response.code == 200
 
           action = response.parsed_response['actions'][0]
 
+          logger.debug "#{response.parsed_response}"
+
           if action['status'] == 'completed'
 
-            fb_user_id = parsed_response['user']['id']
+            fb_user_id = parsed_response['user'] && parsed_response['user']['id']
             identity = Identity.find_by_fb_player_id(fb_user_id)
 
             unless identity.nil?
