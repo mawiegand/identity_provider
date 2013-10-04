@@ -1,8 +1,8 @@
 class Shop::FbPaymentsLogsController < ApplicationController
 
   before_filter :authenticate,                    :except => [ :create, :index ]
-  before_filter :authorize_staff,                 :except => [ :create, :index ]
-  before_filter :deny_api,                        :except => [ :create ]
+  before_filter :authorize_staff,                 :except => [ :create ]
+  before_filter :deny_api,                        :except => [ :create, :index ]
 
   FB_VERIFY_TOKEN  = 'UKUKvzHHAg8gjXynx3hioFX7nC8KLa'
 
@@ -53,7 +53,7 @@ class Shop::FbPaymentsLogsController < ApplicationController
   # POST /shop/fb_payments_logs
   # POST /shop/fb_payments_logs.json
   def create
-    @shop_fb_payments_log = Shop::FbPaymentsLog.new(params[:shop_fb_payments_log])
+    @shop_fb_payments_log = Shop::FbPaymentsLog.new
 
     identity = Identity.find_by_fb_player_id(params['user'] && params['user']['id'])
 
