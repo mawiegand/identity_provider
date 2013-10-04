@@ -26,8 +26,8 @@ class FacebookController < ApplicationController
     raise BadRequestError.new ("missing access token")                                    if current_identity.nil? && params[:facebook].nil? || params[:facebook][:access_token].blank?
     raise BadRequestError.new ("missing identity_id")                                     if current_identity.nil? && params[:identity_id].nil?
     
-    identity = current_identity || Identity.find_by_id(params[:identity_id])
-    raise NotFoundError.new ('identity not found')                                        if Identity.nil?
+    identity = current_identity || Identity.find_by_id_identifier_or_nickname(params[:identity_id])
+    raise NotFoundError.new ('identity not found')                                        if identity.nil?
     
     raise ConflictError.new   ("id already taken")                                        if !Identity.find_by_fb_player_id(params[:id]).nil?
     raise ForbiddenError.new  ("identity is already connected to another fb_player_id")   if !identity.fb_player_id.blank?
