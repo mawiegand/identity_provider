@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131004210426) do
+ActiveRecord::Schema.define(:version => 20131005131829) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -384,7 +384,7 @@ ActiveRecord::Schema.define(:version => 20131004210426) do
     t.integer  "identity_id"
     t.integer  "payment_id"
     t.string   "username"
-    t.integer  "fb_user_id",                   :limit => 255
+    t.string   "fb_user_id"
     t.string   "action_type"
     t.string   "status"
     t.string   "currency"
