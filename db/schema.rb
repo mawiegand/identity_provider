@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130927122604) do
+ActiveRecord::Schema.define(:version => 20131005131829) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -200,7 +200,7 @@ ActiveRecord::Schema.define(:version => 20130927122604) do
     t.integer  "hardware_id"
     t.string   "operating_system"
     t.string   "device_token"
-    t.boolean  "suspicious"
+    t.boolean  "suspicious",          :default => false, :null => false
     t.text     "note"
     t.datetime "banned_at"
     t.text     "ban_reason"
@@ -315,27 +315,6 @@ ActiveRecord::Schema.define(:version => 20130927122604) do
     t.datetime "updated_at"
   end
 
-  create_table "resource_device_users", :force => true do |t|
-    t.integer  "identity_id"
-    t.integer  "platform_id",      :default => 0, :null => false
-    t.integer  "hardware_id"
-    t.string   "gc_player_id"
-    t.string   "os"
-    t.string   "device_token"
-    t.datetime "first_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.integer  "sign_in_count",    :default => 0, :null => false
-    t.string   "last_ip_address"
-    t.string   "last_latitude"
-    t.string   "last_longitude"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "client_id"
-    t.string   "version"
-    t.string   "hardware_string"
-    t.string   "client_token"
-  end
-
   create_table "resource_games", :force => true do |t|
     t.string   "name"
     t.string   "scopes"
@@ -397,6 +376,27 @@ ActiveRecord::Schema.define(:version => 20130927122604) do
     t.integer  "identity_id"
     t.integer  "key_id"
     t.string   "ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "shop_fb_payments_logs", :force => true do |t|
+    t.integer  "identity_id"
+    t.integer  "payment_id"
+    t.string   "username"
+    t.string   "fb_user_id"
+    t.string   "action_type"
+    t.string   "status"
+    t.string   "currency"
+    t.string   "amount"
+    t.string   "time_created"
+    t.string   "time_updated"
+    t.string   "product_url"
+    t.integer  "quantity"
+    t.string   "country"
+    t.integer  "sandbox"
+    t.string   "fraud_status"
+    t.decimal  "payout_foreign_exchange_rate"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
