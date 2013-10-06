@@ -138,7 +138,7 @@ class InstallTracking::Device < ActiveRecord::Base
     
     # only use old methods in case we haven't found a suitable user, yet.
     if !main_user.nil? && main_user.auth_count > 10
-      return main_user
+      return main_user.identity
     end
     
     unless hardware_token.nil?  || hardware_token.blank?
