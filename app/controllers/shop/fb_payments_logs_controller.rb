@@ -1,8 +1,8 @@
 class Shop::FbPaymentsLogsController < ApplicationController
 
-  before_filter :authenticate,                    :except => [ :create, :index ]
-  before_filter :authorize_staff,                 :except => [ :create, :index ]
-  before_filter :deny_api,                        :except => [ :create, :index ]
+  before_filter :authenticate,          :except => [ :create, :index ]
+  before_filter :authorize_staff,       :except => [ :create, :index ]
+  before_filter :deny_api,              :except => [ :create, :index ]
 
   FB_VERIFY_TOKEN  = 'UKUKvzHHAg8gjXynx3hioFX7nC8KLa'
   FB_APP_ID        = '127037377498922'
@@ -11,12 +11,15 @@ class Shop::FbPaymentsLogsController < ApplicationController
   # GET /shop/fb_payments_logs
   # GET /shop/fb_payments_logs.json
   def index
-    @shop_fb_payments_logs = Shop::FbPaymentsLog.all
-
-    if !params['hub.verify_token'].blank? && params['hub.verify_token'] == FB_VERIFY_TOKEN
-      return_value = params['hub.challenge']
+    if staff?
+      @shop_fb_payments_logs = Shop::FbPaymentsLog.all
     else
-      return_value = "verify_token doesn't match"
+      @shop_fb_payments_logs = []
+      if !params['hub.verify_token'].blank? && params['hub.verify_token'] == FB_VERIFY_TOKEN
+        return_value = params['hub.challenge']
+      else
+        return_value = "verify_token doesn't match"
+      end
     end
 
     respond_to do |format|
