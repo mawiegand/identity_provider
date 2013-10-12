@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131005131829) do
+ActiveRecord::Schema.define(:version => 20131012210436) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -182,6 +182,7 @@ ActiveRecord::Schema.define(:version => 20131005131829) do
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true
+  add_index "identities", ["identifier"], :name => "index_identities_on_identifier", :unique => true
 
   create_table "install_tracking_device_users", :force => true do |t|
     t.integer  "identity_id"
@@ -194,13 +195,15 @@ ActiveRecord::Schema.define(:version => 20131005131829) do
     t.integer  "auth_count",   :default => 0, :null => false
   end
 
+  add_index "install_tracking_device_users", ["auth_count"], :name => "index_install_tracking_device_users_on_auth_count"
+
   create_table "install_tracking_devices", :force => true do |t|
     t.integer  "platform_id"
     t.string   "hardware_string"
     t.integer  "hardware_id"
     t.string   "operating_system"
     t.string   "device_token"
-    t.boolean  "suspicious",          :default => false, :null => false
+    t.boolean  "suspicious"
     t.text     "note"
     t.datetime "banned_at"
     t.text     "ban_reason"
@@ -278,6 +281,8 @@ ActiveRecord::Schema.define(:version => 20131005131829) do
     t.string   "ip"
   end
 
+  add_index "log_entries", ["created_at"], :name => "index_log_entries_on_created_at"
+  add_index "log_entries", ["event_type"], :name => "index_log_entries_on_event_type"
   add_index "log_entries", ["event_type"], :name => "index_log_entries_on_type"
   add_index "log_entries", ["identity_id"], :name => "index_log_entries_on_identity_id"
 
@@ -313,6 +318,27 @@ ActiveRecord::Schema.define(:version => 20131005131829) do
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "resource_device_users", :force => true do |t|
+    t.integer  "identity_id"
+    t.integer  "platform_id",      :default => 0, :null => false
+    t.integer  "hardware_id"
+    t.string   "gc_player_id"
+    t.string   "os"
+    t.string   "device_token"
+    t.datetime "first_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.integer  "sign_in_count",    :default => 0, :null => false
+    t.string   "last_ip_address"
+    t.string   "last_latitude"
+    t.string   "last_longitude"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "client_id"
+    t.string   "version"
+    t.string   "hardware_string"
+    t.string   "client_token"
   end
 
   create_table "resource_games", :force => true do |t|
@@ -382,7 +408,7 @@ ActiveRecord::Schema.define(:version => 20131005131829) do
 
   create_table "shop_fb_payments_logs", :force => true do |t|
     t.integer  "identity_id"
-    t.integer  "payment_id"
+    t.string   "payment_id"
     t.string   "username"
     t.string   "fb_user_id"
     t.string   "action_type"
