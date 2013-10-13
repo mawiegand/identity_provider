@@ -539,7 +539,7 @@ class Identity < ActiveRecord::Base
   def self.update_stats_of_all_identities
     Identity.all.each do |identity|
       identity.update_all_stats
-      identity.save
+      identity.save(:validate => false)
     end
   end
   
