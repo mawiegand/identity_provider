@@ -34,12 +34,12 @@ class Stats::OverviewController < ApplicationController
     for i in 1..30
       living = Identity.where(['age_days >= ?', i]).count
       @retention << (living/total_users)
-      @churn << (1-living/[living_last, 1].max)
+      @churn << (1-living.to_f/[living_last, 1].max)
       living_last = living
 
       living_60 = Identity.since_date(60.days.ago).where(['age_days >= ?', i]).count
       @retention_60 << (living_60/total_users_60)
-      @churn_60 << (1-living_60/[living_last_60, 1].max)
+      @churn_60 << (1-living_60.to_f/[living_last_60, 1].max)
       living_last_60 = living_60
     end
   end
