@@ -11,9 +11,9 @@
 
 <p>
   <b>Num Paying Users:</b> <%= @paying_users %> <br/>
-  <b>Earnings:</b> <%= @earnings %> EUR <br/>
-  <b>Life Time Value:</b> <%= @lv %> EUR (earnings / users) <br/>
-  <b>Customer Life Time Value:</b> <%= @clv %> EUR (earnings / paying users)
+  <b>Earnings:</b> <%= number_to_currency @earnings, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %> <br/>
+  <b>Life Time Value:</b> <%= number_to_currency @lv, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %> (earnings / users) <br/>
+  <b>Customer Life Time Value:</b> <%= number_to_currency @clv, format: '%n %u', unit: 'EUR', delimiter: ' ', separator: ',' %> (earnings / paying users)
 </p>
 
 <p><b>Average Age in Days:</b> <%= @average_age %></p>
