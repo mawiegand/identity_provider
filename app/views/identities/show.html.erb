@@ -17,6 +17,10 @@
         <%="GameCenter ID: #{@attributes[:gc_player_id]}" if @attributes[:gc_player_id] %><br />
         <%="Facebook ID: #{@attributes[:fb_player_id]}" if @attributes[:fb_player_id] %><br />
 
+        <%="Earnings: #{@attributes[:earnings]} EUR" if !@attributes[:earnings].blank? && @attributes[:earnings] != 0 %> 
+        <%="Number of Payments: #{@attributes[:num_payments]}" if !@attributes[:num_payments].blank? && @attributes[:num_payments] > 0  %><br />
+
+
         <%="Banned until #{@attributes[:ban_ended_at]} for #{@attributes[:ban_reason]}" if @attributes[:banned] %><br />
   </div>
         
