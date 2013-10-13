@@ -24,5 +24,5 @@ Identity.all.each do |identity|
     identity.age_in_hours = (latest_sign_in.created_at - identity.created_at) / 3600
     identity.age_days     = (latest_sign_in.created_at.beginning_of_day - identity.created_at.beginning_of_day) / (3600*24)
   end
-  identity.save
+  identity.save(:validate => false)
 end
