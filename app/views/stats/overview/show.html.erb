@@ -9,6 +9,13 @@
   <b>Details:</b> <%= link_to "Transactions", stats_money_transactions_path %>
 </p>
 
+<p>
+  <b>Num Paying Users:</b> <%= @paying_users %> <br/>
+  <b>Earnings:</b> <%= @earnings %> EUR <br/>
+  <b>Life Time Value:</b> <%= @lv %> EUR (earnings / users) <br/>
+  <b>Customer Life Time Value:</b> <%= @clv %> EUR (earnings / paying users)
+</p>
+
 <p><b>Average Age in Days:</b> <%= @average_age %></p>
 <p><b>Churn Rate During Month 1 / 2 / 3:</b> 
   <%= (@churn_month1 * 100.0).round %>% / 

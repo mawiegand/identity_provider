@@ -5,6 +5,9 @@ class Stats::OverviewController < ApplicationController
   before_filter :deny_api
   
   def show
+    
+    # user related stuff, retention and churn
+    
     total_users    = Identity.count.to_f
     total_users_60 = [Identity.since_date(60.days.ago).count.to_f, 1.0].max
     
@@ -42,6 +45,15 @@ class Stats::OverviewController < ApplicationController
       @churn_60 << (1-living_60.to_f/[living_last_60, 1].max)
       living_last_60 = living_60
     end
+    
+    
+    # earnings, LV, CLV etc.
+    
+    @earnings     = Identity.sum(:earnings)
+    @paying_users = Identity.where('earnings > 0').count
+    @lv           = @earnings / [total_users, 1].max
+    @clv          = @earnings / [@paying_users, 1].max
+    
   end
    
 end
