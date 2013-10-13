@@ -16,6 +16,8 @@
   <%= (@churn_month3 * 100.0).round %>% </p>
 
 
+
+<h2>Retention Overal</h2>
 <div class="retention_chart" style="width: 1240px; height: 200px; background-color: rgba(255,255,255,0.5); border: 1px solid white;">
 <%entries = @retention.count.to_f 
   i = -1;
@@ -30,6 +32,59 @@
 <% end %>
 </div>
 
+<div class="clear"></div>
+
+<h2>Churn Overal</h2>
+<div class="retention_chart" style="width: 1240px; height: 200px; background-color: rgba(255,255,255,0.5); border: 1px solid white;">
+<%entries = @churn.count.to_f 
+  i = -1;
+  @churn.each do |percentage| %>
+    <div class="retention_chart-bar-frame" style="width: <%= 100.0/entries %>%; height: 100%; float: left;">
+      <div class="retention_chart-bar-spacer" style="width: 100%; height: <%= ((1.0-percentage) * 100.0).round %>%;">
+      </div>
+      <div class="retention_chart-bar-cell" style="background-color: #AAF; width: 100%; height: <%= (percentage * 100.0).round %>%; border: 1px solid white; margin: -1px;">
+        <div class="bar-caption" style="margin-top: -18px; text-align: center;"><%= (percentage*100).round %>%</div>
+      </div>
+    </div>
+<% end %>
+</div>
+
+<div class="clear"></div>
+
+
+
+<h2>Retention Last 60 days</h2>
+<div class="retention_chart" style="width: 1240px; height: 200px; background-color: rgba(255,255,255,0.5); border: 1px solid white;">
+<%entries = @retention_60.count.to_f 
+  i = -1;
+  @retention_60.each do |percentage| %>
+    <div class="retention_chart-bar-frame" style="width: <%= 100.0/entries %>%; height: 100%; float: left;">
+      <div class="retention_chart-bar-spacer" style="width: 100%; height: <%= ((1.0-percentage) * 100.0).round %>%;">
+      </div>
+      <div class="retention_chart-bar-cell" style="background-color: #AAF; width: 100%; height: <%= (percentage * 100.0).round %>%; border: 1px solid white; margin: -1px;">
+        <div class="bar-caption" style="margin-top: -18px; text-align: center;"><%= (percentage*100).round %>%</div>
+      </div>
+    </div>
+<% end %>
+</div>
+
+<div class="clear"></div>
+
+
+<h2>Churn Last 60 days</h2>
+<div class="retention_chart" style="width: 1240px; height: 200px; background-color: rgba(255,255,255,0.5); border: 1px solid white;">
+<%entries = @churn_60.count.to_f 
+  i = -1;
+  @churn_60.each do |percentage| %>
+    <div class="retention_chart-bar-frame" style="width: <%= 100.0/entries %>%; height: 100%; float: left;">
+      <div class="retention_chart-bar-spacer" style="width: 100%; height: <%= ((1.0-percentage) * 100.0).round %>%;">
+      </div>
+      <div class="retention_chart-bar-cell" style="background-color: #AAF; width: 100%; height: <%= (percentage * 100.0).round %>%; border: 1px solid white; margin: -1px;">
+        <div class="bar-caption" style="margin-top: -18px; text-align: center;"><%= (percentage*100).round %>%</div>
+      </div>
+    </div>
+<% end %>
+</div>
 
 </div>
 

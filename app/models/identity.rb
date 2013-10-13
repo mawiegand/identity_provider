@@ -78,6 +78,8 @@ class Identity < ActiveRecord::Base
 
   has_many  :payments,              :class_name => "Stats::MoneyTransaction",      :foreign_key => :identity_id,  :inverse_of => :identity
 
+  default_scope :order => 'identities.email ASC'
+  scope         :since_date,  lambda { |date| where(['created_at > ?', date]) }
     
   attr_accessor :password
   
@@ -123,7 +125,6 @@ class Identity < ActiveRecord::Base
   validates :identifier, :uniqueness => { :case_sensitive => true }
   
   
-  default_scope :order => 'identities.email ASC'
                                               
   before_save :set_encrypted_password, :set_unique_identifier
   
