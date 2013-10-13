@@ -17,7 +17,7 @@
 
 
 
-<h2>Retention Overal</h2>
+<h2>N-day Retention Overal</h2>
 <div class="retention_chart" style="width: 1240px; height: 200px; background-color: rgba(255,255,255,0.5); border: 1px solid white;">
 <%entries = @retention.count.to_f 
   i = -1;
@@ -34,7 +34,7 @@
 
 <div class="clear"></div>
 
-<h2>Churn Overal</h2>
+<h2>Churn on Day X Overal</h2>
 <div class="retention_chart" style="width: 1240px; height: 200px; background-color: rgba(255,255,255,0.5); border: 1px solid white;">
 <%entries = @churn.count.to_f 
   i = -1;
@@ -53,7 +53,7 @@
 
 
 
-<h2>Retention Last 60 days</h2>
+<h2>N-day Retention Last 60 days</h2>
 <div class="retention_chart" style="width: 1240px; height: 200px; background-color: rgba(255,255,255,0.5); border: 1px solid white;">
 <%entries = @retention_60.count.to_f 
   i = -1;
@@ -71,7 +71,7 @@
 <div class="clear"></div>
 
 
-<h2>Churn Last 60 days</h2>
+<h2>Churn on day X Last 60 days</h2>
 <div class="retention_chart" style="width: 1240px; height: 200px; background-color: rgba(255,255,255,0.5); border: 1px solid white;">
 <%entries = @churn_60.count.to_f 
   i = -1;
