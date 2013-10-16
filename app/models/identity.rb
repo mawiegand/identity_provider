@@ -161,14 +161,32 @@ class Identity < ActiveRecord::Base
     
     return identity
   end
+  
+  def self.find_by_email_case_insensitive(email)
+    Identity.find(:first, :conditions => ["lower(email) = lower(?) AND (deleted IS NULL OR NOT deleted)", email])
+  end
 
   def self.create_with_fb_player_id_access_token_and_client(fb_player_id, fb_access_token, client, params = {})
     begin
       fb_user = FbGraph::User.me(fb_access_token)
       fb_user = fb_user.fetch
-    
+      
+      if !fb_user.email.blank?  # make sure the email is unique; try to return (sign in) the already existing user otherwise.
+        ident = Identity.find_by_email_case_insensitive(fb_user.email)
+        if !ident.nil?
+          if ident.fb_player_id.nil?
+            ident.connect_to_facebook(fb_player_id)
+            return ident        # have already another user with that email address. access that particular user.
+          else
+            logger.error "ERROR DURING SIGNUP: there is already another facebook user with the same email address #{ fb_user.email }."
+            # use a generic email address to signup this new fb-user
+          end
+        else     # email not found
+          params[:email]  = fb_user.email       
+        end
+      end
+      
       params[:nickname] = fb_user.first_name     unless fb_user.first_name.blank?
-      params[:email]    = fb_user.email          unless fb_user.email.blank?
     rescue
       logger.error "ERROR DURING SIGNUP: Failed to fetch and process facebook open graph /me. Due to invalid access token? FbPlayerId: #{fb_player_id} Token: #{ fb_access_token }"
     end
@@ -216,6 +234,15 @@ class Identity < ActiveRecord::Base
       end
       
       password_confirmation = password
+          
+      email = if !params[:email].blank?
+        params[:email]
+      elsif client.signup_without_email?
+        "generic_#{(0...8).map{ ('a'..'z').to_a[rand(26)] }.join}_#{Identity.maximum(:id).to_i + 1}@5dlab.com"
+      else
+        nil
+      end
+          
           
       email = "generic_fb_#{(0...8).map{ ('a'..'z').to_a[rand(26)] }.join}_#{Identity.maximum(:id).to_i + 1}@5dlab.com"
           
