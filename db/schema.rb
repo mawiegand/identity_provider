@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131012210436) do
+ActiveRecord::Schema.define(:version => 20131016114946) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -179,6 +179,7 @@ ActiveRecord::Schema.define(:version => 20131012210436) do
     t.datetime "platinum_lifetime_since"
     t.datetime "divine_supporter_since"
     t.integer  "image_set_id"
+    t.string   "gender"
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true
@@ -203,7 +204,7 @@ ActiveRecord::Schema.define(:version => 20131012210436) do
     t.integer  "hardware_id"
     t.string   "operating_system"
     t.string   "device_token"
-    t.boolean  "suspicious"
+    t.boolean  "suspicious",          :default => false, :null => false
     t.text     "note"
     t.datetime "banned_at"
     t.text     "ban_reason"
@@ -318,27 +319,6 @@ ActiveRecord::Schema.define(:version => 20131012210436) do
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "resource_device_users", :force => true do |t|
-    t.integer  "identity_id"
-    t.integer  "platform_id",      :default => 0, :null => false
-    t.integer  "hardware_id"
-    t.string   "gc_player_id"
-    t.string   "os"
-    t.string   "device_token"
-    t.datetime "first_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.integer  "sign_in_count",    :default => 0, :null => false
-    t.string   "last_ip_address"
-    t.string   "last_latitude"
-    t.string   "last_longitude"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "client_id"
-    t.string   "version"
-    t.string   "hardware_string"
-    t.string   "client_token"
   end
 
   create_table "resource_games", :force => true do |t|
