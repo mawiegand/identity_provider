@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.10'
+gem 'rails', '3.1.12'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -16,7 +16,9 @@ gem 'gravatar_image_tag'
 gem 'will_paginate'
 gem 'ruby-prof'
 gem 'thin'
-gem 'httparty'
+gem 'httparty',   '>= 0.12'
+gem 'fb_graph',   '>= 2.6.1'
+gem 'multi_json', '>= 1.3'
 
 gem 'rb-readline' 
 
