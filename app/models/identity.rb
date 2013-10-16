@@ -238,14 +238,11 @@ class Identity < ActiveRecord::Base
       email = if !params[:email].blank?
         params[:email]
       elsif client.signup_without_email?
-        "generic_#{(0...8).map{ ('a'..'z').to_a[rand(26)] }.join}_#{Identity.maximum(:id).to_i + 1}@5dlab.com"
+        "generic_fb_#{(0...8).map{ ('a'..'z').to_a[rand(26)] }.join}_#{Identity.maximum(:id).to_i + 1}@5dlab.com"
       else
         nil
       end
-          
-          
-      email = "generic_fb_#{(0...8).map{ ('a'..'z').to_a[rand(26)] }.join}_#{Identity.maximum(:id).to_i + 1}@5dlab.com"
-          
+
       identity = Identity.new
       identity.nickname = disambiguated_name
       identity.email = email
