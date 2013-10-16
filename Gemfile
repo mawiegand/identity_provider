@@ -16,11 +16,11 @@ gem 'gravatar_image_tag'
 gem 'will_paginate'
 gem 'ruby-prof'
 gem 'thin'
-gem 'httparty',   '>= 0.12'
+gem 'httparty'   
 gem 'fb_graph',   '>= 2.6.1'
-gem 'multi_json', '>= 1.3'
+gem 'multi_json'
 
-gem 'rb-readline' 
+gem 'rb-readline',  '~> 0.4.2'
 
 # Gems used only for assets and not required
 # in production environments by default.
