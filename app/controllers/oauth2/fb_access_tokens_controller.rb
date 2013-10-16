@@ -94,6 +94,12 @@ module Oauth2
         return 
       end
       
+      if params[:fb_access_token].blank?
+        logger.error "DEPRECATION WARNING: fb_access_token missing in request. Due to the security risks, sending it will soon become a must."
+      end
+      
+      
+      
       
       # 3 methods for authentication:
       # a) generic users may be authenticated just by sending the device token  (we trust them)
@@ -111,7 +117,11 @@ module Oauth2
           logger.debug "Trying to signup facebook user with user agent #{agent}, referer #{referer} and request url #{request_url}."
 
           LogEntry.create_signup_attempt(params, current_identity, request.remote_ip, agent, referer, request_url)
-          ident = Identity.create_with_fb_player_id_and_client(params[:fb_player_id], client)
+          if params[:fb_access_token].blank?
+            ident = Identity.create_with_fb_player_id_and_client(params[:fb_player_id], client)
+          else
+            ident = Identity.create_with_fb_player_id_access_token_and_client(params[:fb_player_id] ,params[:fb_access_token],  client)
+          end
         end
   
         ident

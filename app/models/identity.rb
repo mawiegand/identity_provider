@@ -161,7 +161,20 @@ class Identity < ActiveRecord::Base
     
     return identity
   end
-  
+
+  def self.create_with_fb_player_id_access_token_and_client(fb_player_id, fb_access_token, client, params = {})
+    begin
+      fb_user = FbGraph::User.me(fb_access_token)
+      fb_user = fb_user.fetch
+    
+      params[:nickname] = fb_user.first_name     unless fb_user.first_name.blank?
+      params[:email]    = fb_user.email          unless fb_user.email.blank?
+    rescue
+      logger.error "ERROR DURING SIGNUP: Failed to fetch and process facebook open graph /me. Due to invalid access token? FbPlayerId: #{fb_player_id} Token: #{ fb_access_token }"
+    end
+    
+    Identity.create_with_fb_player_id_and_client(fb_player_id, client, params)
+  end  
   
   def self.create_with_fb_player_id_and_client(fb_player_id, client, params = {})
     raise BadRequestError.new("No valid facebook user id") if fb_player_id.nil?
