@@ -92,8 +92,8 @@ class Identity < ActiveRecord::Base
   attr_readable :identifier, :nickname, :id, :insider_since, :admin, :staff,               :as => :default
   attr_readable *readable_attributes(:default), :created_at,                               :as => :user
   attr_readable *readable_attributes(:default), :insider_since, :platinum_lifetime_since, :divine_supporter_since, :image_set_id, :created_at, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :fb_player_id, :fb_rejected_at, :fb_player_id_connected_at,  :as => :game
-  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :activated, :updated_at, :deleted,                         :ban_reason, :banned, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :fb_player_id, :fb_rejected_at, :fb_player_id_connected_at,   :as => :owner
-  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :activated, :updated_at, :deleted, :salt, :password_token, :ban_reason, :banned, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :fb_player_id, :fb_rejected_at, :fb_player_id_connected_at, :num_payments, :first_payment, :earnings, :num_chargebacks, :chargeback_costs, :platinum_lifetime_since, :divine_supporter_since, :image_set_id,  :as => :staff
+  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :gender, :activated, :updated_at, :deleted,                         :ban_reason, :banned, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :fb_player_id, :fb_rejected_at, :fb_player_id_connected_at,   :as => :owner
+  attr_readable *readable_attributes(:user),    :email, :firstname, :surname, :gender, :activated, :updated_at, :deleted, :salt, :password_token, :ban_reason, :banned, :ban_ended_at, :generic_email, :generic_nickname, :generic_password, :gc_player_id, :gc_rejected_at, :gc_player_id_connected_at, :fb_player_id, :fb_rejected_at, :fb_player_id_connected_at, :num_payments, :first_payment, :earnings, :num_chargebacks, :chargeback_costs, :platinum_lifetime_since, :divine_supporter_since, :image_set_id,  :as => :staff
   attr_readable *readable_attributes(:staff),   :as => :admin
   
   @email_regex      = /(?:[a-z0-9!#$\%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$\%&'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i
@@ -448,8 +448,8 @@ class Identity < ActiveRecord::Base
   # matching the present user. If gender is unkown, returns something
   # in the line of "Mr. or Mrs. Lange".
   def address_prefix
-    return I18n.translate('general.address.mr') if gender? == :male
-    return I18n.translate('general.address.mrs') if gender? == :unknwon
+    return I18n.translate('general.address.mr') if gender? == 'male'
+    return I18n.translate('general.address.mrs') if gender? == 'female'
     return I18n.translate('general.address.mrmrs') 
   end
   
