@@ -70,7 +70,7 @@ class Shop::FbPaymentsLogsController < ApplicationController
 
       if response.code == 200
 
-        payment = response.parsed_response
+        payment = JSON.parse(response.parsed_response)
         logger.debug "---> payment: #{payment.inspect}"
         fb_user_id = payment['user'] && payment['user']['id']
         identity = Identity.find_by_fb_player_id(fb_user_id)
