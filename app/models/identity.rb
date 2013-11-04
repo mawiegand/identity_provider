@@ -169,7 +169,7 @@ class Identity < ActiveRecord::Base
   def self.create_with_fb_player_id_access_token_and_client(fb_player_id, fb_access_token, client, params = {})
     begin
       fb_user = FbGraph::User.me(fb_access_token)
-      fb_user = fb_user.fetch
+      fb_user = fb_user.fetch(:fields => "age_range,gender,username,email,name,first_name,birthday,locale") # wanna know age-range and birthday
       
       if !fb_user.email.blank?  # make sure the email is unique; try to return (sign in) the already existing user otherwise.
         ident = Identity.find_by_email_case_insensitive(fb_user.email)
@@ -186,8 +186,13 @@ class Identity < ActiveRecord::Base
         end
       end
       
-      params[:nickname] = fb_user.first_name     unless fb_user.first_name.blank?
-      params[:gender]   = fb_user.gender         unless fb_user.gender.blank?
+      params[:nickname]     = fb_user.first_name   unless fb_user.first_name.blank?
+      params[:gender]       = fb_user.gender       unless fb_user.gender.blank?
+      params[:fb_name]      = fb_user.name         unless fb_user.name.blank?
+      params[:fb_age_range] = fb_user.age_range    unless fb_user.age_range.blank?
+      params[:fb_birthday]  = fb_user.birthday     unless fb_user.birthday.blank?
+      params[:fb_username]  = fb_user.username     unless fb_user.username.blank?
+      
     rescue
       logger.error "ERROR DURING SIGNUP: Failed to fetch and process facebook open graph /me. Due to invalid access token? FbPlayerId: #{fb_player_id} Token: #{ fb_access_token }"
     end
@@ -260,6 +265,11 @@ class Identity < ActiveRecord::Base
       if !fb_player_id.nil? 
         identity.connect_to_facebook(fb_player_id)
       end
+
+      identity.fb_name      = params[:fb_name]         unless params[:fb_name].blank?
+      identity.fb_age_range = params[:fb_age_range]    unless params[:fb_age_range].blank?
+      identity.fb_brithday  = params[:fb_brithday]     unless params[:fb_brithday].blank?
+      identity.fb_username  = params[:fb_username]     unless params[:fb_username].blank?
           
       if !identity.valid?
         logger.error "ERROR DURING SIGNUP: identity is invalid #{ identity.nickname }, #{ identity.identifier }, #{ identity.email }, #{ identity.password}==#{ identity.password_confirmation } with params #{ params.inspect }."
