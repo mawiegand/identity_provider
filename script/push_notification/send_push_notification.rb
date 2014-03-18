@@ -18,7 +18,7 @@ APNS.pem  = './script/push_notification/apns-prod.pem'
 
 APNS.port = 2195
 
-text = 'Runde 4 soeben gestartet: Sei jetzt von Anfang an dabei!'
+text = 'Runde 5 soeben gestartet: Sei jetzt von Anfang an dabei!'
 
 Identity.all.each do |identity|
   push_token = identity.push_tokens.order('updated_at').last
