@@ -5,7 +5,7 @@ class TrackingCallbacksController < ApplicationController
   # GET /tracking_callbacks
   # GET /tracking_callbacks.json
   def index
-    @tracking_callbacks = TrackingCallback.all
+    @tracking_callbacks = TrackingCallback.descending
 
     respond_to do |format|
       format.html # index.html.erb
@@ -17,7 +17,7 @@ class TrackingCallbacksController < ApplicationController
     @tracking_callback = TrackingCallback.new({
       service:      'adjust',    # presently no other service
       remote_ip:    request.remote_ip,
-      http_request: request.url,
+      http_request: "#{request.protocol}#{request.host_with_port}#{request.fullpath}",
       device_id:    params[:device_id] || params[:deviceid],
       refid:        params[:refid] || params[:ref_id],
       subid:        params[:subid] || params[:sub_id],

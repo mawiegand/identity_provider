@@ -12,10 +12,14 @@ class InstallTracking::Device < ActiveRecord::Base
   scope     :advertiser_token, lambda { |string| where(['advertiser_token = ?', string]) }
   scope     :hardware_token,   lambda { |string| where(['hardware_token = ?',   string]) }
   scope     :app_token,        lambda { |string| where(['app_token = ?',        string]) }
+  
+  scope     :created_since,    lambda { |date|   where(['created_at >= ?', date]) }
 
   scope     :no_device_token,  where('device_token IS NULL')
 
   scope     :descending, order('created_at DESC')
+  
+  before_create :attribute_device
   
   
   def self.find_by_hardware_string_os_and_device_token(hw_string, os, token)
@@ -96,7 +100,16 @@ class InstallTracking::Device < ActiveRecord::Base
     
     last_user
   end
-
+  
+  def self.find_last_user_on_device_with_advertiser_token(advertiser_token)
+    last_user = nil;
+    
+    InstallTracking::Device.advertiser_token(advertiser_token).descending.each do |device|
+      last_user = last_user || device.last_user
+    end
+    
+    last_user
+  end
 
   def self.find_main_user_on_device_with_corresponding_device_information(device_information)
     device_information = device_information || {}
@@ -222,6 +235,31 @@ class InstallTracking::Device < ActiveRecord::Base
   # returns all tracking events that belong to this particular device
   def tracking_events
     InstallTracking::TrackingEvent.where(['device_token = ? OR old_token = ? OR device_token = ?', self.device_token || "NONE", self.device_token || "NONE", self.hardware_token || "NONE"]);
+  end
+  
+  def ios?
+    true
+  end
+  
+  def android?
+    false
+  end
+  
+  def windows?
+    false
+  end
+  
+  def attribute_device
+    if self.ref_id.nil?
+      token = ios? ? self.advertiser_token : self.device_id
+      matching_tracking_callback = TrackingCallback::find_latest_by_device_id(token)
+      unless matching_tracking_callback.nil?
+        self.ref_id = matching_tracking_callback.refid
+        self.sub_id = matching_tracking_callback.subid
+      end
+    end
+    
+    true
   end
   
 end

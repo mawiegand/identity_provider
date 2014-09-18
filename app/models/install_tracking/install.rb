@@ -18,9 +18,5 @@ class InstallTracking::Install < ActiveRecord::Base
   # find install      or create it
   #  find release     or create it
   # find install user or create it
-  # update last use
-  
-  
-
-  
+  # update last use  
 end

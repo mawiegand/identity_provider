@@ -9,21 +9,17 @@
     <th>Refid</th>
     <th>Subid</th>
     <th>Connected at</th>
-    <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @tracking_callbacks.each do |tracking_callback| %>
   <tr>
     <td><%= tracking_callback.service %></td>
     <td><%= tracking_callback.remote_ip %></td>
-    <td><%= tracking_callback.request %></td>
+    <td><%= tracking_callback.http_request %></td>
     <td><%= tracking_callback.device_id %></td>
     <td><%= tracking_callback.refid %></td>
     <td><%= tracking_callback.subid %></td>
     <td><%= tracking_callback.connected_at %></td>
-    <td><%= link_to 'Destroy', tracking_callback, confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
 </table>

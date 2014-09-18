@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140918143954) do
+ActiveRecord::Schema.define(:version => 20140918160129) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -184,6 +184,8 @@ ActiveRecord::Schema.define(:version => 20140918143954) do
     t.string   "fb_birthday"
     t.string   "fb_age_range"
     t.string   "fb_username"
+    t.string   "ref_id"
+    t.string   "sub_id"
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true
@@ -219,6 +221,8 @@ ActiveRecord::Schema.define(:version => 20140918143954) do
     t.string   "vendor_token"
     t.string   "advertiser_token"
     t.string   "hardware_token"
+    t.string   "ref_id"
+    t.string   "sub_id"
   end
 
   create_table "install_tracking_install_users", :force => true do |t|

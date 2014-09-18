@@ -69,6 +69,14 @@ module InstallTracking
       return nil
     end
     
+    ### attribute user !
+    if identity.created_at.utc > 5.minutes.ago.utc && identity.ref_id.nil? && !device.ref_id.nil?
+      identity.ref_id = device.ref_id
+      identity.sub_id = device.sub_id
+      identity.save
+      
+      logger.info     "ATTRIBUTION: #{ identity.nickname } | #{ identity.identifier } was attributed to #{ identity.ref_id, identity.sub_id }"
+    end
 
     # ########################################################################
     #
