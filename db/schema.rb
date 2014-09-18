@@ -468,11 +468,11 @@ ActiveRecord::Schema.define(:version => 20140918143954) do
   create_table "tracking_callbacks", :force => true do |t|
     t.string   "service"
     t.string   "remote_ip"
-    t.text     "request"
+    t.text     "http_request"
     t.string   "device_id"
     t.string   "refid"
     t.string   "subid"
-    t.datetime "connected_at"
+    t.datetime "connected_at", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

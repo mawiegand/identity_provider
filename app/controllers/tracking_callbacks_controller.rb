@@ -1,4 +1,7 @@
 class TrackingCallbacksController < ApplicationController
+  before_filter :authenticate,    :except   => [:track, :create]   # these pages can be seen without logging-in
+  before_filter :authorize_staff, :except   => [:track, :create]   # only staff can access these pages
+
   # GET /tracking_callbacks
   # GET /tracking_callbacks.json
   def index
@@ -9,32 +12,19 @@ class TrackingCallbacksController < ApplicationController
       format.json { render json: @tracking_callbacks }
     end
   end
-
-  # GET /tracking_callbacks/1
-  # GET /tracking_callbacks/1.json
-  def show
-    @tracking_callback = TrackingCallback.find(params[:id])
-
+  
+  def track
+    @tracking_callback = TrackingCallback.new()
+    
     respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @tracking_callback }
+      if @tracking_callback.save
+        format.html { render text: "OK", status: :created }
+        format.json { render json: @tracking_callbacks }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @tracking_callback.errors, status: :unprocessable_entity }
+      end  
     end
-  end
-
-  # GET /tracking_callbacks/new
-  # GET /tracking_callbacks/new.json
-  def new
-    @tracking_callback = TrackingCallback.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @tracking_callback }
-    end
-  end
-
-  # GET /tracking_callbacks/1/edit
-  def edit
-    @tracking_callback = TrackingCallback.find(params[:id])
   end
 
   # POST /tracking_callbacks
@@ -48,22 +38,6 @@ class TrackingCallbacksController < ApplicationController
         format.json { render json: @tracking_callback, status: :created, location: @tracking_callback }
       else
         format.html { render action: "new" }
-        format.json { render json: @tracking_callback.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PUT /tracking_callbacks/1
-  # PUT /tracking_callbacks/1.json
-  def update
-    @tracking_callback = TrackingCallback.find(params[:id])
-
-    respond_to do |format|
-      if @tracking_callback.update_attributes(params[:tracking_callback])
-        format.html { redirect_to @tracking_callback, notice: 'Tracking callback was successfully updated.' }
-        format.json { head :ok }
-      else
-        format.html { render action: "edit" }
         format.json { render json: @tracking_callback.errors, status: :unprocessable_entity }
       end
     end

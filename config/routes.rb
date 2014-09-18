@@ -1,7 +1,5 @@
 IdentityProvider::Application.routes.draw do
 
-  resources :tracking_callbacks
-
   # all resources and paths are scoped in an optional path_prefix determining the
   # locale to use. Presently only available: en, de
 
@@ -82,7 +80,10 @@ IdentityProvider::Application.routes.draw do
         match :redirect_test_end,   :to => 'access_tokens#redirect_test_end'
         resources :access_tokens,   :only => [ :index, :show, :delete ] # routes for administering issued access tokens
       end
-          
+      
+      resources :tracking_callbacks, :only => [ :index, :track, :delete ]
+      match '/track',   :to => 'tracking_callbacks#track'  
+        
       match '/signin',  :to => 'sessions#new'
       match '/signout', :to => 'sessions#destroy'
   

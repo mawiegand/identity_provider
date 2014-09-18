@@ -23,13 +23,9 @@
     <td><%= tracking_callback.refid %></td>
     <td><%= tracking_callback.subid %></td>
     <td><%= tracking_callback.connected_at %></td>
-    <td><%= link_to 'Show', tracking_callback %></td>
-    <td><%= link_to 'Edit', edit_tracking_callback_path(tracking_callback) %></td>
     <td><%= link_to 'Destroy', tracking_callback, confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
-
-<%= link_to 'New Tracking callback', new_tracking_callback_path %>
