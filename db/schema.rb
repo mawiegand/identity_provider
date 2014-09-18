@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131016114946) do
+ActiveRecord::Schema.define(:version => 20140918143954) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -180,6 +180,10 @@ ActiveRecord::Schema.define(:version => 20131016114946) do
     t.datetime "divine_supporter_since"
     t.integer  "image_set_id"
     t.string   "gender"
+    t.string   "fb_name"
+    t.string   "fb_birthday"
+    t.string   "fb_age_range"
+    t.string   "fb_username"
   end
 
   add_index "identities", ["email"], :name => "index_identities_on_email", :unique => true
@@ -459,6 +463,18 @@ ActiveRecord::Schema.define(:version => 20131016114946) do
     t.boolean  "sent_special_offer_alert"
     t.boolean  "recurring"
     t.boolean  "sandbox",                  :default => false, :null => false
+  end
+
+  create_table "tracking_callbacks", :force => true do |t|
+    t.string   "service"
+    t.string   "remote_ip"
+    t.text     "request"
+    t.string   "device_id"
+    t.string   "refid"
+    t.string   "subid"
+    t.datetime "connected_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end

@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Service:</b>
+  <%= @tracking_callback.service %>
+</p>
+
+<p>
+  <b>Remote ip:</b>
+  <%= @tracking_callback.remote_ip %>
+</p>
+
+<p>
+  <b>Request:</b>
+  <%= @tracking_callback.request %>
+</p>
+
+<p>
+  <b>Device:</b>
+  <%= @tracking_callback.device_id %>
+</p>
+
+<p>
+  <b>Refid:</b>
+  <%= @tracking_callback.refid %>
+</p>
+
+<p>
+  <b>Subid:</b>
+  <%= @tracking_callback.subid %>
+</p>
+
+<p>
+  <b>Connected at:</b>
+  <%= @tracking_callback.connected_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_tracking_callback_path(@tracking_callback) %> |
+<%= link_to 'Back', tracking_callbacks_path %>

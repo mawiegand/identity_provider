@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  service: MyString
+  remote_ip: MyString
+  request: MyText
+  device_id: MyString
+  refid: MyString
+  subid: MyString
+  connected_at: 2014-09-18 16:39:54
+
+two:
+  service: MyString
+  remote_ip: MyString
+  request: MyText
+  device_id: MyString
+  refid: MyString
+  subid: MyString
+  connected_at: 2014-09-18 16:39:54

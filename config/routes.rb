@@ -1,5 +1,7 @@
 IdentityProvider::Application.routes.draw do
 
+  resources :tracking_callbacks
+
   # all resources and paths are scoped in an optional path_prefix determining the
   # locale to use. Presently only available: en, de
 
