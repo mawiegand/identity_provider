@@ -14,14 +14,21 @@ class TrackingCallbacksController < ApplicationController
   end
   
   def track
-    @tracking_callback = TrackingCallback.new()
+    @tracking_callback = TrackingCallback.new({
+      service:      'adjust',    # presently no other service
+      remote_ip:    request.remote_ip,
+      http_request: request.url,
+      device_id:    params[:device_id] || params[:deviceid],
+      refid:        params[:refid] || params[:ref_id],
+      subid:        params[:subid] || params[:sub_id],
+    })
     
     respond_to do |format|
       if @tracking_callback.save
         format.html { render text: "OK", status: :created }
-        format.json { render json: @tracking_callbacks }
+        format.json { render json: {},   status: :created }
       else
-        format.html { render action: "new" }
+        format.html { render text: "FAILED", status: :unprocessable_entity }
         format.json { render json: @tracking_callback.errors, status: :unprocessable_entity }
       end  
     end

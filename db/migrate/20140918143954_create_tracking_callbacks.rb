@@ -7,7 +7,7 @@ class CreateTrackingCallbacks < ActiveRecord::Migration
       t.string   :device_id
       t.string   :refid
       t.string   :subid
-      t.datetime :connected_at, :default => false, :null => false
+      t.datetime :connected_at
 
       t.timestamps
     end

@@ -472,7 +472,7 @@ ActiveRecord::Schema.define(:version => 20140918143954) do
     t.string   "device_id"
     t.string   "refid"
     t.string   "subid"
-    t.datetime "connected_at", :null => false
+    t.datetime "connected_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
