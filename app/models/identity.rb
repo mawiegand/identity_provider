@@ -613,8 +613,8 @@ class Identity < ActiveRecord::Base
         event[:http_referrer] = self.referer       unless self.referer.blank?
 
         if !self.ref_id.blank? 
-          event.ad_referer   = self.ref_id
-          event.ad_campaign  = self.sub_id
+          event[:ad_referer]  = self.ref_id
+          event[:ad_campaign] = self.sub_id
         end
         
         begin
