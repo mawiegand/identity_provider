@@ -1,3 +1,5 @@
+require 'five_d'
+
 class Stats::MoneyTransaction < ActiveRecord::Base
 
   STATES = []
@@ -51,6 +53,17 @@ class Stats::MoneyTransaction < ActiveRecord::Base
   
   before_create :initialize_computed_attributes
   
+  before_save   :track_purchase
+  before_save   :track_chargeback
+  
+  def completed?
+    return transaction_state == 'completed'
+  end
+
+  def chargeback?
+    return (chargeback || 0) >= 0.5
+  end
+  
   # total gross excluding charged-back transactions, 
   # not considering costs for charge backs
   def self.total_gross
@@ -77,6 +90,57 @@ class Stats::MoneyTransaction < ActiveRecord::Base
   
   def self.total_sandbox
     Stats::MoneyTransaction.sandbox.completed.sum(:gross)
+  end
+  
+  def track_purchase
+    return true   if tracked?
+    return true   if chargeback?
+    return true   unless completed?
+    return true   if sandbox?
+
+    tracker = FiveD::EventTracker.new
+
+    tracker.track('purchase', 'revenue', {
+      user_id:              self.partner_user_id || nil,
+      pur_provider:         self.carrier,
+      pur_gross:            self.gross,
+      pur_currency:         self.gross_currency,
+      pur_country_code:     self.country,
+      pur_earnings:         self.earnings,
+      pur_product_sku:      self.offer_id,
+      pur_product_category: self.offer_category,
+      invoice_id:           self.invoice_id,
+      timestamp:            self.tstamp || DateTime.now
+    });
+
+    self.tracked = true
+
+    true
+  end
+
+  def track_chargeback
+    return true   if chargeback_tracked?
+    return true   unless chargeback?
+    return true   if sandbox?
+
+    tracker = FiveD::EventTracker.new
+
+    tracker.track('chargeback', 'revenue', {
+      user_id:              self.partner_user_id || nil,
+      pur_provider:         self.carrier,
+      pur_gross:            self.gross,
+      pur_currency:         self.gross_currency,
+      pur_country_code:     self.country,
+      pur_earnings:         self.earnings,
+      pur_product_sku:      self.offer_id,
+      pur_product_category: self.offer_category,
+      invoice_id:           self.invoice_id,
+      timestamp:            self.tstamp || DateTime.now
+    });
+
+    self.chargeback_tracked = true
+
+    true
   end
   
   private 
