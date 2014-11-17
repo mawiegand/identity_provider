@@ -618,7 +618,7 @@ class Identity < ActiveRecord::Base
         end
         
         begin
-          tracker.track('udpate', 'account', event);
+          tracker.track('update', 'account', event);
         rescue
           logger.error "Could not send account update event for user with identifier #{ self.identifier }."
         end
