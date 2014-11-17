@@ -25,10 +25,12 @@ devices.each do |device|
     url  = base + "/track?ref_id=" + ref + "&sub_id=" + sub + "&device_id=" + token
     HTTParty.get(url)
     
-    count++
+    count+=1
     
     if (count % 100 == 0)
       print "."
+    end
   end
-  puts
 end
+
+puts
