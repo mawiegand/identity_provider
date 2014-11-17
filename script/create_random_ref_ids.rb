@@ -12,7 +12,9 @@ base = 'https://wack-a-doo.de/identity_provider'
 refs = [ "test_1", "test_2", "test_3", "test_4", "test_5", "test_6", "test_7", "test_7", "test_8", "test_9"  ]
 subs = [ "01", "02", "03", "03", "03", "04", "05", "05"]
 
-devices = InstallTracking::Device.select('DISTINCT advertiser_token').limit(2)
+devices = InstallTracking::Device.select('DISTINCT advertiser_token').limit(20000)
+
+count = 0
 
 devices.each do |device|
   unless device[:advertiser_token].blank?
@@ -22,5 +24,11 @@ devices.each do |device|
 
     url  = base + "/track?ref_id=" + ref + "&sub_id=" + sub + "&device_id=" + token
     HTTParty.get(url)
+    
+    count++
+    
+    if (count % 100 == 0)
+      print "."
   end
+  puts
 end
