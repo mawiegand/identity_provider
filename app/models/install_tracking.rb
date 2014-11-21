@@ -51,7 +51,7 @@ module InstallTracking
     end
       
     if release.nil?   # fail due to inability to create a new release
-      logger.error    "ERROR: failed to create new release of client #{client} version #{version}."
+      Rails.logger.error    "ERROR: failed to create new release of client #{client} version #{version}."
       return nil
     end
 
@@ -65,7 +65,7 @@ module InstallTracking
     device = InstallTracking::Device.create_or_update(device_info)
     
     if device.nil?
-      logger.error    "ERROR: failed to create new device #{ device_hardware } os #{ device_os } token #{ device_token }."
+      Rails.logger.error    "ERROR: failed to create new device #{ device_hardware } os #{ device_os } token #{ device_token }."
       return nil
     end
     
@@ -75,7 +75,7 @@ module InstallTracking
       identity.sub_id = device.sub_id
       identity.save
       
-      logger.info     "ATTRIBUTION: #{ identity.nickname } | #{ identity.identifier } was attributed to #{ identity.ref_id } #{ identity.sub_id }."
+      Rails.logger.info     "ATTRIBUTION: #{ identity.nickname } | #{ identity.identifier } was attributed to #{ identity.ref_id } #{ identity.sub_id }."
     end
 
     # ########################################################################
@@ -93,7 +93,7 @@ module InstallTracking
     end
     
     if install.nil?
-      logger.error    "ERROR: failed to create new install #{ app_token } on device #{ device.id } for release #{ release.id }."
+      Rails.logger.error    "ERROR: failed to create new install #{ app_token } on device #{ device.id } for release #{ release.id }."
       return nil
     end
     
@@ -113,7 +113,7 @@ module InstallTracking
     end
     
     if install_user.nil?
-      logger.error    "ERROR: failed to create new install user for install #{ install.id } and identity #{ identity.id }."
+      Rails.logger.error    "ERROR: failed to create new install user for install #{ install.id } and identity #{ identity.id }."
       return nil
     end  
     
