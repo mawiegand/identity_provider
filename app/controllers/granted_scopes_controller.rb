@@ -6,7 +6,7 @@ class GrantedScopesController < ApplicationController
   # GET /granted_scopes
   # GET /granted_scopes.json
   def index
-    @granted_scopes = GrantedScope.all
+    @granted_scopes = GrantedScope.paginate(:page => params[:page], :per_page => 100)
 
     respond_to do |format|
       format.html # index.html.erb
