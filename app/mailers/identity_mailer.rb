@@ -25,8 +25,10 @@ class IdentityMailer < ActionMailer::Base
   
   def validation_email(identity)
     @identity = identity
-    @link = request.protocol + request.host
-    @validation_url = @link + "/identity_provider/identities/#{identity.id}/validation?code=#{identity.validation_code}"
+    if defined? request
+      @link = request.protocol + request.host
+      @validation_url = @link + "/identity_provider/identities/#{identity.id}/validation?code=#{identity.validation_code}"
+    end
     
     mail :to => identity.email, :subject => I18n.t('mailing.validation.subject') 
   end
