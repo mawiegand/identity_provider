@@ -29,7 +29,7 @@
     <td><%= client.identifier %></td>
     <td><%= client.name %></td>
     <td><% client.releases.each do |release|%>
-          <%= link_to "v%{release.version}", release %>
+          <%= link_to "v#{release.version}", release %>
         <% end %>
     <td><%= client.identity_id %></td>
     <td><%= client.password %></td>
