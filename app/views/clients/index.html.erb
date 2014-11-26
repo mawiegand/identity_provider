@@ -6,7 +6,6 @@
     <th>Identifier</th>
     <th>Name</th>
     <th>Identity</th>
-    <th>Password</th>
     <th>Grant types</th>
     <th>Signin Mode</th>
     <th>Signup Mode</th>
@@ -23,7 +22,6 @@
     <td><%= client.identifier %></td>
     <td><%= client.name %></td>
     <td><%= client.identity_id %></td>
-    <td><%= client.password %></td>
     <td><%= client.grant_types %></td>
     <td><%= Client::SIGNIN_MODES[client.signin_mode] %></td>
     <td><%= Client::SIGNUP_MODES[client.signup_mode] %></td>
@@ -34,7 +32,19 @@
     <td><%= link_to 'Destroy', client, confirm: 'Are you sure?', method: :delete %></td>
   </tr>
   <tr>
-    <td colspan="10">
+    <td></td>
+    <td colspan="8">
+      <b>Password</b>:
+      <td><%= client.password %></td>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td colspan="8">
+      <b>Scopes</b>:
       <%= client.scopes %>
     </td>
     <td></td>
@@ -42,7 +52,9 @@
     <td></td>
   </tr>
   <tr>
-    <td colspan="10">
+    <td></td>
+    <td colspan="8">
+      <b>Versions:</b>:
       <% client.releases.each do |release|%>
         <%= link_to "v#{release.version}", release %>
       <% end %>
@@ -52,7 +64,9 @@
     <td></td>
   </tr>
   <tr>
-    <td colspan="10">
+    <td></td>
+    <td colspan="8">
+      <b>Description:</b>:
       <%= client.description %>
     </td>  
     <td></td>
@@ -60,7 +74,9 @@
     <td></td>
   </tr>
   <tr>
-    <td colspan="10">
+    <td></td>
+    <td colspan="8">
+      <b>URLs</b>:
       <%= client.homepage %>
       <%= client.direct_backend_login_url %>
     </td>
@@ -68,9 +84,32 @@
     <td></td>
     <td></td>
   </tr>
+  <tr>
+    <td colspan="11">
+      &nbsp;
+    </td>
+  </tr>
 <% end %>
 </table>
 
 <br />
 
 <%= link_to 'New Client', new_client_path %>
+
+<h2>How To Use</h2>
+
+<p>Each available client needs an entry in this table, if it sends API calls to identity_provider, e.g. to sign up or sign in a player.
+   The client needs to send the identifier and password string as defined here to get authorized. Scopes define to what modules
+   (games, identity_provider, etc) the client is granted access. Usually, a client needs to have 5dentity and at least one round
+   like wackadoo-round7 in the scopes.</p>
+   
+<p>Furthermore, there are several flags and options to control sign up and sign in behaviour on a per-client basis, affecting
+   all ongoing rounds. Sing In Mode is either on (sign in with this client possible) or off (identity_provider will not create
+   access_tokens for users using this client). Sing Up Mode is similar concerning on and off, but also has a mode "invitation".
+   In invitation mode, users with an invitation can sign up and will enter the game immediately; other players will be put
+   on a waiting list and will not be able to enter the game.</p>
+   
+<p>Automatic Signup will add a missing grant to the user on the fly, if he signs in to a game and missing the necessary grant.
+   Think of an automatic sign up of an existing user account to a new game. This _must_ be on for the mobile clients, because
+   otherwise existing users will not be able to join a new round (existing clients always use sign-in, never sign-up call for
+   existing users).</p> 
