@@ -1,4 +1,6 @@
 require 'base64'
+require 'five_d'
+
 # Managing, authenticating and serving the identities is the main
 # purpose of the IdentityProvider. Each identity represents a 
 # registered user of the system, where the users register and
@@ -130,6 +132,8 @@ class Identity < ActiveRecord::Base
   
   before_save :update_facebook_on_manual_edit
   before_save :update_gamecenter_on_manual_edit
+  
+  after_save  :track_account_updates
   
   after_create :send_validation_email
   
@@ -593,6 +597,35 @@ class Identity < ActiveRecord::Base
   end
   
   private
+
+    def track_account_updates
+      if self.ref_id_changed? || self.sub_id_changed? || self.email_changed? || self.gender_changed? || self.fb_player_id_changed? || self.referer_changed?
+        tracker = FiveD::EventTracker.new
+
+        event = {
+          user_id:             self.identifier,
+          timestamp:           DateTime.now
+        }; 
+        
+        event[:email]         = self.email         unless self.email.blank?
+        event[:gender]        = self.gender        unless self.gender.blank?
+        event[:facebook_id]   = self.fb_player_id  unless self.fb_player_id.blank?
+        event[:http_referrer] = self.referer       unless self.referer.blank?
+
+        if !self.ref_id.blank? 
+          event[:ad_referer]  = self.ref_id
+          event[:ad_campaign] = self.sub_id
+        end
+        
+        begin
+          tracker.track('update', 'account', event);
+        rescue
+          logger.error "Could not send account update event for user with identifier #{ self.identifier }."
+        end
+      end
+      
+      true
+    end
 
     # adds a unique identifier to every newly created user that
     # must not match any existing nickname 

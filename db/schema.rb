@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140918160129) do
+ActiveRecord::Schema.define(:version => 20141117141547) do
 
   create_table "client_names", :force => true do |t|
     t.string   "lang"
@@ -467,6 +467,8 @@ ActiveRecord::Schema.define(:version => 20140918160129) do
     t.boolean  "sent_special_offer_alert"
     t.boolean  "recurring"
     t.boolean  "sandbox",                  :default => false, :null => false
+    t.boolean  "tracked",                  :default => false, :null => false
+    t.boolean  "chargeback_tracked",       :default => false, :null => false
   end
 
   create_table "tracking_callbacks", :force => true do |t|

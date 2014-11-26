@@ -16,11 +16,13 @@ gem 'gravatar_image_tag'
 gem 'will_paginate'
 gem 'ruby-prof'
 gem 'thin'
-gem 'httparty'   
+gem 'httparty',   '~> 0.13'
 gem 'fb_graph',   '>= 2.6.1'
 gem 'multi_json'
 
 gem 'rb-readline',  '~> 0.4.2'
+
+gem 'sampl', '~> 0.0.2'     # PSIORI event tracking
 
 # Gems used only for assets and not required
 # in production environments by default.

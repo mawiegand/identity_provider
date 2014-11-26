@@ -156,6 +156,8 @@ class IdentitiesController < ApplicationController
           identity.email = email
           identity.locale = I18n.locale
           identity.referer = referer.blank? ? "none" : referer[0..250]
+          identity.ref_id = params[:refid] || params[:ref_id] 
+          identity.sub_id = params[:subid] || params[:sub_id]
           identity.password = params[:password]
           identity.password_confirmation = params[:password_confirmation]
           identity.generic_nickname = params[:nickname].blank?

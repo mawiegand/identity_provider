@@ -13,6 +13,8 @@ class InstallTracking::Device < ActiveRecord::Base
   scope     :hardware_token,   lambda { |string| where(['hardware_token = ?',   string]) }
   scope     :app_token,        lambda { |string| where(['app_token = ?',        string]) }
   
+  scope     :by_token,         lambda { |string| where(['vendor_token = ? OR advertiser_token = ? OR device_token = ? OR app_token = ?', string, string, string, string]) }
+  
   scope     :created_since,    lambda { |date|   where(['created_at >= ?', date]) }
 
   scope     :no_device_token,  where('device_token IS NULL')
@@ -251,7 +253,7 @@ class InstallTracking::Device < ActiveRecord::Base
   
   def attribute_device
     if self.ref_id.nil?
-      token = ios? ? self.advertiser_token : self.device_id
+      token = ios? ? self.advertiser_token : self.device_token
       matching_tracking_callback = TrackingCallback::find_latest_by_device_id(token)
       unless matching_tracking_callback.nil?
         self.ref_id = matching_tracking_callback.refid

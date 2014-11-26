@@ -13,7 +13,7 @@ class MessagesController < ApplicationController
       raise NotFoundError.new('Could not find identity.')    if @identity.nil?
       @messages = @identity.received_messages
     else
-      @messages = Message.all
+      @messages = Message.paginate(:page => params[:page], :per_page => 100)
     end
 
     respond_to do |format|
