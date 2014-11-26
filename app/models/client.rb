@@ -1,6 +1,6 @@
 class Client < ActiveRecord::Base
   
-  has_many  :grants,                :class_name => "GrantedScope",                :foreign_key => :client_id,    :inverse_of => :client
+  has_many  :grants,                :class_name => "GrantedScope",                :foreign_key => :client_id,    :inverse_of => :client, :dependent => :delete_all
   has_many  :keys,                  :class_name => "Key",                         :foreign_key => :client_id,    :inverse_of => :client
   has_many  :waiting_list_entries,  :class_name => "Resource::WaitingList",       :foreign_key => :client_id,    :inverse_of => :client
   has_many  :names,                 :class_name => "ClientName",                  :foreign_key => :client_id,    :inverse_of => :client
