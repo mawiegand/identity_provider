@@ -5,15 +5,9 @@
     <th>ID</th>
     <th>Identifier</th>
     <th>Name</th>
-    <th>Versions</th>
     <th>Identity</th>
     <th>Password</th>
-    <th>Refresh token secret</th>
-    <th>Description</th>
-    <th>Homepage</th>
-    <th>Direct Backend URL</th>
     <th>Grant types</th>
-    <th>Scopes</th>
     <th>Signin Mode</th>
     <th>Signup Mode</th>
     <th>Automatic Signup</th>
@@ -25,20 +19,12 @@
 
 <% @clients.each do |client| %>
   <tr>
-    <td><%= client.id %></td>
+    <td><%= link_to "#{client.id}", client %></td>
     <td><%= client.identifier %></td>
     <td><%= client.name %></td>
-    <td><% client.releases.each do |release|%>
-          <%= link_to "v#{release.version}", release %>
-        <% end %>
     <td><%= client.identity_id %></td>
     <td><%= client.password %></td>
-    <td><%= client.refresh_token_secret %></td>
-    <td><%= client.description %></td>
-    <td><%= client.homepage %></td>
-    <td><%= client.direct_backend_login_url %></td>
     <td><%= client.grant_types %></td>
-    <td><%= client.scopes %></td>
     <td><%= Client::SIGNIN_MODES[client.signin_mode] %></td>
     <td><%= Client::SIGNUP_MODES[client.signup_mode] %></td>
     <td><%= client.automatic_signup %></td>
@@ -46,6 +32,41 @@
     <td><%= link_to 'Show', client %></td>
     <td><%= link_to 'Edit', edit_client_path(client) %></td>
     <td><%= link_to 'Destroy', client, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+  <tr>
+    <td colspan="10">
+      <%= client.scopes %>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td colspan="10">
+      <% client.releases.each do |release|%>
+        <%= link_to "v#{release.version}", release %>
+      <% end %>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td colspan="10">
+      <%= client.description %>
+    </td>  
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td colspan="10">
+      <%= client.homepage %>
+      <%= client.direct_backend_login_url %>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
   </tr>
 <% end %>
 </table>
