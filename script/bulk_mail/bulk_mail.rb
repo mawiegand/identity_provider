@@ -11,10 +11,11 @@ count = 0
 
 file = File.new(File.join(Rails.root, "sent_emails.txt"), 'w' );
 
-Identity.where("locale = 'de' AND (banned IS NULL OR banned = ?) AND email NOT LIKE '%deleted%' AND email NOT LIKE '%5dlab.com' AND email NOT LIKE '%pfox.eu'", false).all do |identity|
+#Identity.where("locale = 'de' AND (banned IS NULL OR banned = ?) AND email NOT LIKE '%deleted%' AND email NOT LIKE '%5dlab.com' AND email NOT LIKE '%pfox.eu'", false).all do |identity|
 #Identity.where("email LIKE '%pfox.eu'").each do |identity|
+Identity.where("email LIKE 'sascha@5dlab.com'").each do |identity|
   
-  IdentityMailer.all_players_notice_email(identity, "Wack-A-Doo: Runde 5 gestartet").deliver
+  IdentityMailer.all_players_notice_email(identity, "Wack-A-Doo 2.0: Runde 7 gestartet!").deliver
   count = count + 1
   
   file.write("#{identity.email},\n")
