@@ -39,7 +39,7 @@ class DashboardController < ApplicationController
     
     
     # TODO: this is a wack-a-doo hack. need to generalize it to all clients in the system
-    @wackadoo_client = Client.find_by_identifier('WACKADOOHTML5')
+    @wackadoo_client = Client.find_by_identifier('WACKADOO-HTML5')
     
     @wackadoo_grant = {
       client_id: @wackadoo_client.id,
