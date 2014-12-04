@@ -173,8 +173,7 @@ class Identity < ActiveRecord::Base
   def self.create_with_fb_player_id_access_token_and_client(fb_player_id, fb_access_token, client, params = {})
     begin
       fb_user = FbGraph::User.me(fb_access_token)
-      # fb_user = fb_user.fetch(:fields => "age_range,gender,username,email,name,first_name,birthday,locale") # wanna know age-range and birthday
-      fb_user = fb_user.fetch
+      fb_user = fb_user.fetch(:fields => "age_range,gender,username,email,name,first_name,birthday,locale") # wanna know age-range and birthday
 
       if !fb_user.email.blank?  # make sure the email is unique; try to return (sign in) the already existing user otherwise.
         ident = Identity.find_by_email_case_insensitive(fb_user.email)
