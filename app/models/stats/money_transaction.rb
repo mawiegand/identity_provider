@@ -101,16 +101,17 @@ class Stats::MoneyTransaction < ActiveRecord::Base
     tracker = FiveD::EventTracker.new
 
     tracker.track('purchase', 'revenue', {
-      user_id:              self.partner_user_id || nil,
-      pur_provider:         self.carrier,
-      pur_gross:            self.gross,
-      pur_currency:         self.gross_currency,
-      pur_country_code:     self.country,
-      pur_earnings:         self.earnings,
-      pur_product_sku:      self.offer_id,
-      pur_product_category: self.offer_category,
-      invoice_id:           self.invoice_id,
-      timestamp:            self.tstamp || DateTime.now
+      user_id:                self.partner_user_id || nil,
+      pur_provider:           self.carrier,
+      pur_gross:              self.gross,
+      pur_currency:           self.gross_currency,
+      pur_country_code:       self.country,
+      pur_earnings:           self.earnings,
+      pur_product_sku:        self.offer_id,
+      pur_product_category:   self.offer_category,
+      invoice_id:             self.invoice_id,
+      pur_receipt_identifier: self.payment_transaction_uid,
+      timestamp:              self.tstamp || DateTime.now
     });
 
     self.tracked = true
@@ -126,16 +127,17 @@ class Stats::MoneyTransaction < ActiveRecord::Base
     tracker = FiveD::EventTracker.new
 
     tracker.track('chargeback', 'revenue', {
-      user_id:              self.partner_user_id || nil,
-      pur_provider:         self.carrier,
-      pur_gross:            self.gross,
-      pur_currency:         self.gross_currency,
-      pur_country_code:     self.country,
-      pur_earnings:         self.earnings,
-      pur_product_sku:      self.offer_id,
-      pur_product_category: self.offer_category,
-      invoice_id:           self.invoice_id,
-      timestamp:            self.tstamp || DateTime.now
+      user_id:                self.partner_user_id || nil,
+      pur_provider:           self.carrier,
+      pur_gross:              self.gross,
+      pur_currency:           self.gross_currency,
+      pur_country_code:       self.country,
+      pur_earnings:           self.earnings,
+      pur_product_sku:        self.offer_id,
+      pur_product_category:   self.offer_category,
+      invoice_id:             self.invoice_id,
+      pur_receipt_identifier: self.payment_transaction_uid,
+      timestamp:              self.tstamp || DateTime.now
     });
 
     self.chargeback_tracked = true
