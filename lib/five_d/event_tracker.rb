@@ -5,7 +5,7 @@ module FiveD
   class EventTracker
     include Sampl
      
-    app_token 'wad-rt82-fhjk-18'
+    app_token 'fsRrapvL'
         
     def track(event_name, event_category, arguments)
       self.class.track(event_name, event_category, arguments)
