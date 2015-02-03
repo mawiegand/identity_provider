@@ -35,6 +35,9 @@ class TrackingCallback < ActiveRecord::Base
         device.ref_id = self.refid
         device.sub_id = self.subid
         device.save
+        
+        self.connected_at = DateTime.now
+        self.save
       end
     end
     
@@ -45,6 +48,11 @@ class TrackingCallback < ActiveRecord::Base
       user.ref_id = refid
       user.sub_id = subid
       user.save
+      
+      if self.connected_at.nil?
+        self.connected_at = DateTime.now
+        self.save
+      end
     end
     
     true

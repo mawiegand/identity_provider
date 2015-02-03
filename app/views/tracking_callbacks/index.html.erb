@@ -9,6 +9,7 @@
     <th>Refid</th>
     <th>Subid</th>
     <th>Connected at</th>
+    <th>Created at</th>
   </tr>
 
 <% @tracking_callbacks.each do |tracking_callback| %>
@@ -20,6 +21,7 @@
     <td><%= tracking_callback.refid %></td>
     <td><%= tracking_callback.subid %></td>
     <td><%= tracking_callback.connected_at %></td>
+    <td><%= tracking_callback.created_at %></td>
   </tr>
 <% end %>
 </table>
