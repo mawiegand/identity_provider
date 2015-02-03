@@ -25,6 +25,10 @@ class TrackingCallback < ActiveRecord::Base
   # the user / device was created during the LAST 30 DAYS
   # the user / device is not already attributed to another origin.
   def attribute_device_and_user
+    
+    # do not attribute organic traffic (adjust sends a callback with "Organic__" in this case.)
+    return true    if self.refid.downcase.start_with?("organic")
+    
     # attribute matching devices to referrer (could be more than one, in case vendor_token did change due to reinstallation etc.)
     InstallTracking::Device.advertiser_token(device_id).created_since(30.days.ago.utc).each do |device|
       if device.ref_id.nil?
