@@ -29,7 +29,7 @@ Identity.all.each do |identity|
     # add frog bonus amount
     Resource::CharacterProperty.create(game_id: 1,
                                        identity_id: identity.id,
-                                       data: {"start_resource_bonus"=>[{"resource_type_id"=>"3", "amount"=>"#{frog_bonus_amount}"}]}
+                                       data: {start_resource_bonus: [{resource_type_id: 3, amount: frog_bonus_amount}]}
     )
   end
 end
