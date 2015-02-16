@@ -5,8 +5,6 @@
 
 require File.expand_path(File.join(File.dirname(__FILE__), '../..', 'config', 'environment'))
 
-STDOUT.sync = true
-
 
 ##
 # global constants
@@ -29,12 +27,12 @@ identities = Identity.unscoped
 puts "Found #{identities.count} identities."
 
 # PRODUCES THE FOLLOWING SQL:
-# SELECT DISTINCT(identity.id) FROM "identities" LEFT OUTER JOIN log_entries ON log_entries.identity_id = identities.id WHERE (log_entries.identity_id IS NOT NULL AND (event_type ='signin_success' OR event_type = 'auth_token_success')) AND (log_entries.created_at > '2014-12-18 17:59:08')
+# SELECT DISTINCT(identities.id) FROM "identities" LEFT OUTER JOIN log_entries ON log_entries.identity_id = identities.id WHERE (log_entries.identity_id IS NOT NULL AND (event_type ='signin_success' OR event_type = 'auth_token_success')) AND (log_entries.created_at > '2014-12-18 17:59:08')
 
 
 # for each identity
 identities.each do |identity|
-  puts "Identity: #{identity.id}, #{identity.email}"
+  puts "Identity: #{identity.id}"
     
     # add frog bonus amount
    #  Resource::CharacterProperty.create(game_id: 1,
