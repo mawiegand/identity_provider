@@ -26,11 +26,13 @@ Identity.all.each do |identity|
 
   # if user signed in last round
   if !latest_sign_in.nil? && latest_sign_in.created_at >= last_round_start_date
+    puts "Identity: #{identity.nickname}"
+    
     # add frog bonus amount
-    Resource::CharacterProperty.create(game_id: 1,
-                                       identity_id: identity.id,
-                                       data: {start_resource_bonus: [{resource_type_id: 3, amount: frog_bonus_amount}]}
-    )
+   #  Resource::CharacterProperty.create(game_id: 1,
+   #                                     identity_id: identity.id,
+  #                                     data: {client_identifier: "wackadoo", start_resource_bonus: [{resource_type_id: 3, amount: frog_bonus_amount}]}
+  #  )
   end
 end
 
