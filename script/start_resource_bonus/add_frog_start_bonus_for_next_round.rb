@@ -35,10 +35,11 @@ identities.each do |identity|
   puts "Identity: #{identity.id}"
     
     # add frog bonus amount
-   #  Resource::CharacterProperty.create(game_id: 1,
-   #                                     identity_id: identity.id,
-  #                                     data: {client_identifier: "wackadoo", start_resource_bonus: [{resource_type_id: 3, amount: frog_bonus_amount}]}
-  #  )
+   Resource::CharacterProperty.create(game_id: 1,
+                                      identity_id: identity.id,
+                                      data: { "client_identifier" => "wackadoo", 
+                                              "start_resource_bonus" => [{ "resource_type_id" => 3, "amount" => frog_bonus_amount}]}
+   )
 end
 
 puts "Finished."
