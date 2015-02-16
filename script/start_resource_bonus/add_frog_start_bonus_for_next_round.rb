@@ -20,10 +20,11 @@ last_round_start_date = game_instance.started_at # round start date for comparis
 
 puts "Adding #{frog_bonus_amount} frogs to all identities which signed in during round #{number_of_last_round} (after #{last_round_start_date})."
 
-identities = Identity.joins("LEFT OUTER JOIN log_entries ON log_entries.identity_id = identities.id")
+identities = Identity.unscoped
+             .joins("LEFT OUTER JOIN log_entries ON log_entries.identity_id = identities.id")
              .where("log_entries.identity_id IS NOT NULL AND (event_type ='signin_success' OR event_type = 'auth_token_success')")
              .where(["log_entries.created_at > ?", last_round_start_date-1.days])
-             .select("DISTINCT(identity.id), identities.email")
+             .select("DISTINCT(identities.id)")
              
 puts "Found #{identities.count} identities."
 
