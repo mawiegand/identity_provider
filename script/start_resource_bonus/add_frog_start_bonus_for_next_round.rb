@@ -20,13 +20,18 @@ last_round_start_date = game_instance.started_at # round start date for comparis
 
 puts "Adding #{frog_bonus_amount} frogs to all identities which signed in during round #{number_of_last_round} (after #{last_round_start_date})."
 
-# for each identity
-Identity.all.each do |identity|
-  latest_sign_in = identity.auth_successes.latest.first
+identities = Identity.joins("LEFT OUTER JOIN log_entries ON log_entries.identity_id = identities.id")
+             .where("log_entries.identity_id IS NOT NULL AND (event_type ='signin_success' OR event_type = 'auth_token_success')")
+             .where(["log_entries.created_at > ?", last_round_start_date-1.days])
+             .select("DISTINCT(identity.id)")
 
-  # if user signed in last round
-  if !latest_sign_in.nil? && latest_sign_in.created_at >= last_round_start_date
-    puts "Identity: #{identity.nickname}"
+# PRODUCES THE FOLLOWING SQL:
+# SELECT DISTINCT(identity.id) FROM "identities" LEFT OUTER JOIN log_entries ON log_entries.identity_id = identities.id WHERE (log_entries.identity_id IS NOT NULL AND (event_type ='signin_success' OR event_type = 'auth_token_success')) AND (log_entries.created_at > '2014-12-18 17:59:08')
+
+
+# for each identity
+identities.each do |identity|
+  puts "Identity: #{identity.id}"
     
     # add frog bonus amount
    #  Resource::CharacterProperty.create(game_id: 1,
