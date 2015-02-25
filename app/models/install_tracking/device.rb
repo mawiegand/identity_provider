@@ -255,7 +255,7 @@ class InstallTracking::Device < ActiveRecord::Base
     if self.ref_id.nil?
       token = ios? ? self.advertiser_token : self.device_token
       matching_tracking_callback = TrackingCallback::find_latest_by_device_id(token)
-      unless matching_tracking_callback.nil?
+      if !matching_tracking_callback.nil? && !matching_tracking_callback.ignore?
         self.ref_id = matching_tracking_callback.refid
         self.sub_id = matching_tracking_callback.subid
       end
