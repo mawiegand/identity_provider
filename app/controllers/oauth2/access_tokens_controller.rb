@@ -117,7 +117,7 @@ module Oauth2
       begin
         if !params[:device_information].nil?
           if params[:device_information][:device_token].blank? 
-            if !params[:device_information][:operating_system].nil? && params[:device_information][:device_token].include?('ndroid')
+            if !params[:device_information][:operating_system].nil? && params[:device_information][:operating_system].include?('ndroid')
               params[:device_information][:device_token] = params[:device_information][:advertiser_token]
             end
           end
