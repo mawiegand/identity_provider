@@ -113,6 +113,20 @@ module Oauth2
         return 
       end
       
+      # SERVER-SIDE FIX for Android bug: fill device_token with advertiser token, iff empty!
+      begin
+        if !params[:device_information].nil?
+          if params[:device_information][:device_token].blank? 
+            if !params[:device_information][:operating_system].nil? && params[:device_information][:device_token].include?('ndroid')
+              params[:device_information][:device_token] = params[:device_information][:advertiser_token]
+            end
+          end
+        end
+      rescue
+        logger.error "ERROR: Server-side fix for empty device_token on Android did cause an exception."
+      end
+      # END SERVER-SIDE FIX
+      
       
       # 3 methods for authentication:
       # a) generic users may be authenticated just by sending the device token  (we trust them)

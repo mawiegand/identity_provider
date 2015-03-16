@@ -25,17 +25,22 @@ class InstallTracking::Device < ActiveRecord::Base
   
   
   def self.find_by_hardware_string_os_and_device_token(hw_string, os, token)
-    devices = if token.blank?
-      self.no_device_token.hardware(hw_string).operating_system(os)
+    device = if token.blank?
+      # this is actually a bug. Two devices with same hardware and OS will be treated as ONE device!
+      self.no_device_token.hardware(hw_string).operating_system(os).first
     else
-      self.device_token(token).hardware(hw_string).operating_system(os)      
+      self.device_token(token).hardware(hw_string).operating_system(os).first    
     end
     
-    devices.nil? || devices.empty? ? nil : devices.first
+    # the following is a server-side fix for an error in the Android client, where we didn't send an device token.
+    device ||= self.no_device_token.advertiser_token(token).hardware(hw_string).operating_system(os).first
+    
+    device
   end
 
 
   def self.create_or_update_with_identity(identity, hash)
+    # TODO: this seems to be NOT implemented!
     devices = self.find_by_identity_hardware_string_os_and_device_token(identity, hash['hardware_string'], hash['operating_system'], hash['device_token'])
     device = nil
     
@@ -67,7 +72,9 @@ class InstallTracking::Device < ActiveRecord::Base
   
     
   def self.create_or_update(hash)
-    device = self.find_by_hardware_string_os_and_device_token(hash['hardware_string'], hash['operating_system'], hash['device_token'])
+    token = hash['device_token'] || hash['advertiser_token'] || hash['vendor_token']
+    
+    device = self.find_by_hardware_string_os_and_device_token(hash['hardware_string'], hash['operating_system'], token)
     
     if device.nil?
       device = InstallTracking::Device.new({
@@ -81,10 +88,10 @@ class InstallTracking::Device < ActiveRecord::Base
       device.old_token        = hash['old_token']   unless hash['old_token'].blank? 
       device.save
     else
-      device.vendor_token     = hash['vendor_token']
-      device.advertiser_token = hash['advertiser_token']
+      device.vendor_token     = hash['vendor_token']     unless hash['vendor_token'].blank?
+      device.advertiser_token = hash['advertiser_token'] unless hash['advertiser_token'].blank? || hash['vendor_token'] == hash['advertiser_token'] # equality : server-side fix for android client bug
       device.hardware_token   = hash['hardware_token']
-      device.old_token        = hash['old_token']   unless hash['old_token'].blank? 
+      device.old_token        = hash['old_token']        unless hash['old_token'].blank? 
     
       device.save
     end
