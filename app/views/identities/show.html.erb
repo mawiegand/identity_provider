@@ -74,6 +74,8 @@
   </end>
   
   <% if staff? %>
+    <p><b>Channel: </b> <%= @identity.ref_id %> - <%= @identity.sub_id %></p>
+  
     <% if !@devices.nil? && @devices.count > 0 %>
       <h3>Devices</h3>
       <ul>
