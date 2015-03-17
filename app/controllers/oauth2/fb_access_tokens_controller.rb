@@ -203,6 +203,20 @@ module Oauth2
       logger.debug "Response Body #{ body.inspect }."
       LogEntry.create_auth_token_success(params[:fb_player_id], identity, params[:client_id], request.remote_ip)
 
+      # SERVER-SIDE FIX for Android bug: fill device_token with advertiser token, iff empty!
+      begin
+        if !params[:device_information].nil?
+          if params[:device_information][:device_token].blank? 
+            if !params[:device_information][:operating_system].nil? && params[:device_information][:operating_system].include?('ndroid')
+              params[:device_information][:device_token] = params[:device_information][:advertiser_token]
+            end
+          end
+        end
+      rescue
+        logger.error "ERROR: Server-side fix for empty device_token on Android did cause an exception."
+      end
+      # END SERVER-SIDE FIX
+
       if !params[:device_information].nil?
         InstallTracking.handle_install_usage(identity, client, params[:device_information])
       end
