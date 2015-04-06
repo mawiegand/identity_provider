@@ -189,10 +189,11 @@ class Identity < ActiveRecord::Base
           params[:email]  = fb_user.email       
         end
       end
-      
+
+      I18n.locale = fb_user.locale[0,2] unless fb_user.locale.blank?
+
       params[:nickname]     = fb_user.first_name   unless fb_user.first_name.blank?
       params[:gender]       = fb_user.gender       unless fb_user.gender.blank?
-      params[:locale]       = fb_user.locale[0,2]  unless fb_user.locale.blank?
       params[:fb_name]      = fb_user.name         unless fb_user.name.blank?
       params[:fb_age_range] = fb_user.age_range    unless fb_user.age_range.blank?
       params[:fb_birthday]  = fb_user.birthday     unless fb_user.birthday.blank?
@@ -258,7 +259,7 @@ class Identity < ActiveRecord::Base
       identity.nickname = disambiguated_name
       identity.email = email
       identity.gender = params[:gender]
-      identity.locale = params[:locale] || I18n.locale
+      identity.locale = I18n.locale
       identity.referer = params[:referer].blank? ? "facebook_canvas" : params[:referer][0..250]
       identity.password = password
       identity.password_confirmation = password_confirmation
