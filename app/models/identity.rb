@@ -192,11 +192,12 @@ class Identity < ActiveRecord::Base
       
       params[:nickname]     = fb_user.first_name   unless fb_user.first_name.blank?
       params[:gender]       = fb_user.gender       unless fb_user.gender.blank?
+      params[:locale]       = fb_user.locale[0,2]  unless fb_user.locale.blank?
       params[:fb_name]      = fb_user.name         unless fb_user.name.blank?
       params[:fb_age_range] = fb_user.age_range    unless fb_user.age_range.blank?
       params[:fb_birthday]  = fb_user.birthday     unless fb_user.birthday.blank?
       params[:fb_username]  = fb_user.username     unless fb_user.username.blank?
-      
+
     rescue
       logger.error "ERROR DURING SIGNUP: Failed to fetch and process facebook open graph /me. Due to invalid access token? FbPlayerId: #{fb_player_id} Token: #{ fb_access_token }"
     end
@@ -257,7 +258,7 @@ class Identity < ActiveRecord::Base
       identity.nickname = disambiguated_name
       identity.email = email
       identity.gender = params[:gender]
-      identity.locale = I18n.locale
+      identity.locale = params[:locale] || I18n.locale
       identity.referer = params[:referer].blank? ? "facebook_canvas" : params[:referer][0..250]
       identity.password = password
       identity.password_confirmation = password_confirmation
