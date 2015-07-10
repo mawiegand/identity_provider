@@ -92,6 +92,8 @@ IdentityProvider::Application.routes.draw do
   
       match '/send_password_token', :to => 'identities#send_password_token'
       match '/send_password',       :to => 'identities#send_password'
+      
+      match '/change_password',       :to => 'identities#change_password'
 
       match '/shop/callback',       :to => 'shop/callback#redirect'
 

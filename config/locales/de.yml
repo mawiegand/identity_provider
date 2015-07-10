@@ -114,7 +114,11 @@ de:
       flash:
         error: Alarma!
       
-
+    changepassword:
+      password_too_short: Passwort is zu kurz
+      password_equal: Passwort ist gleich
+      could_not_login: Email oder Passwort falsch
+      
   sessions:
         
     signin:

@@ -125,7 +125,12 @@ en:
     update:
       flash:
         error: Cannot update profile!
-            
+    
+    changepassword:
+      password_too_short: Password too short
+      password_equal: Password is equal        
+      could_not_login: Could not login
+      
   sessions:
         
     signin:

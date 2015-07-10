@@ -6,7 +6,7 @@ require 'active_support/secure_random'
 # the system.
 class IdentitiesController < ApplicationController
 
-  before_filter :authenticate,                     :except   => [:new, :show, :create, :update, :validation, :send_password_token, :send_password]   # these pages can be seen without logging-in
+  before_filter :authenticate,                     :except   => [:new, :show, :create, :update, :validation, :send_password_token, :send_password, :change_password]   # these pages can be seen without logging-in
   before_filter :authorize_staff,                  :only     => [:index]                              # only staff can access these pages
   before_filter :authenticate_game_backend_or_api, :only     => [:update]                          
   
@@ -489,6 +489,47 @@ class IdentitiesController < ApplicationController
     
     render :status => :ok, :json => {}
   end
+  
+  def change_password
+    accessing_client = Client.find_by_id_or_identifier(params[:client_id])
+    raise ForbiddenError.new "Access forbidden. Client id not found." if accessing_client.nil?
+    raise ForbiddenError.new "Access forbidden. Wrong credentials."   if params[:client_password].nil? || params[:client_password] != accessing_client.password
+    raise ForbiddenError.new "Old password is nil."   if params[:password_old].nil?
+    raise ForbiddenError.new "New password is nil."   if params[:password_new].nil?
+    
+    identity = Identity.where('lower(email) = ?', params[:identifier].downcase).first    
+    raise NotFoundError.new "No identity found" if identity.nil?
+
+    old_password = params[:password_old]
+    new_password = params[:password_new]
+    
+    if identity.has_password?(old_password) == false
+      render :status => 420, :json => {error_description: I18n.t('identities.changepassword.could_not_login'), test: old_password}
+      return
+    end
+    
+    if new_password.length < 6
+      render :status => 420, :json => {error_description: I18n.t('identities.changepassword.password_too_short')}
+      return
+    end
+    
+    if old_password == new_password
+      render :status => 420, :json => {error_description: I18n.t('identities.changepassword.password_equal')}
+      return
+    end
+
+    # change password
+    identity.password = new_password
+    identity.password_confirmation = new_password
+    identity.password_token = nil
+    identity.save
+
+    # mail raushauen
+    IdentityMailer.password_email(identity, new_password).deliver    # send waiting-list email
+    
+    render :status => :ok, :json => {}
+  end
+  
   
   private
   
