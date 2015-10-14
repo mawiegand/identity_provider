@@ -15,7 +15,7 @@ Identity.where("locale = 'de' AND (banned IS NULL OR banned = ?) AND email NOT L
 #Identity.where("email LIKE '%pfox.eu'").each do |identity|
 #Identity.where("email LIKE 'jona@5dlab.com'").each do |identity|
   
-  IdentityMailer.all_players_notice_email(identity, "Wack-A-Doo 2.0: Runde 8 gestartet!").deliver
+  IdentityMailer.all_players_notice_email(identity, "Wack-A-Doo 2.0: Runde 9 gestartet!").deliver
   count = count + 1
   
   file.write("#{identity.email},\n")

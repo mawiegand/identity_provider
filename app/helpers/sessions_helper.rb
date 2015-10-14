@@ -2,7 +2,6 @@ module SessionsHelper
   
   
   def requested_json?
-    logger.debug "API request: #{ request.format == "application/json" }."
     return request.format == "application/json"
   end  
 
